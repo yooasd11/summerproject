@@ -20,7 +20,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	hThread_1 = (HANDLE)_beginthreadex(NULL, 0, ThreadFunction_1, (void*)&count, 0, (unsigned*)&dwThread_1);
 	hThread_2 = (HANDLE)_beginthreadex(NULL, 0, ThreadFunction_2, (void*)&count, 0, (unsigned*)&dwThread_2);
 
-
 	WaitForSingleObject(hThread_1, INFINITE);
 	WaitForSingleObject(hThread_2, INFINITE);
 
