@@ -73,6 +73,7 @@ unsigned WINAPI RecvMsg(void* s){
 unsigned WINAPI SendMsg(void* s){
 	SOCKET servSock = *((SOCKET*)s);
 	char* PktBuf;
+
 	while (1){
 		USHORT PktLen, PktType;
 		PktBuf = makePacket(&PktType, &PktLen);
@@ -149,6 +150,7 @@ void clntPktHandle(Packet& p)
 	if (PktType == ECHO){
 		fprintf(stdout, "%s\n", PktBody);
 	}
+
 	else if (PktType == ECHOLIST){
 		int size = -1;
 
@@ -167,17 +169,16 @@ void clntPktHandle(Packet& p)
 		}
 		fprintf(stdout, "\n");
 	}
+
 	else if (PktType == ECHOCHARACTER){
-		char name[NAMESIZE];
-		double x, y;
-		long long id;
+		Character character;
 
-		memcpy(name, PktBody, NAMESIZE);
-		memcpy(&x, PktBody + NAMESIZE, sizeof(double));
-		memcpy(&y, PktBody + NAMESIZE + sizeof(double), sizeof(double));
-		memcpy(&id, PktBody + NAMESIZE + 2 * sizeof(double), sizeof(long long));
+		memcpy(character.name, PktBody, NAMESIZE);
+		memcpy(&character.x, PktBody + NAMESIZE, sizeof(double));
+		memcpy(&character.y, PktBody + NAMESIZE + sizeof(double), sizeof(double));
+		memcpy(&character.id, PktBody + NAMESIZE + 2 * sizeof(double), sizeof(long long));
 
-		fprintf(stdout, "%s %lf %lf %lld\n", name, x, y, id);
+		fprintf(stdout, "%s %lf %lf %lld\n", character.name, character.x, character.y, character.id);
 	}
 }
 
