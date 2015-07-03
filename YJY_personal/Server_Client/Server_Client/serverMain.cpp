@@ -1,5 +1,6 @@
 #include "winsockstd.h"
 #include "Packet.h"
+#include "Character.h"
 
 void ErrorHandling(char *msg);
 void SendMsg(char* s, int);
@@ -39,21 +40,36 @@ void ErrorHandling(char *msg){
 
 
 unsigned WINAPI HandleClnt(void *s){
-	SOCKET clnt_sock = *((SOCKET*)s);
+	SOCKET clntSock = *((SOCKET*)s);
 	int str_len = 0, i;
-	Packet packet;
 
-	while ((str_len = recv(clnt_sock, (char*)&packet, PktLength, 0)) >= 0){
-		USHORT pktLength = packet.getLength();
-		USHORT pktType = packet.getType();
-		printf("Packet received : length(%d), type(%d)\n", pktLength, pktType);
-		if (pktType == ECHO)
-			SendMsg((char*)&packet, str_len);
+	char PktBuf[PKTLENGTH];
+
+	while (1){
+		int retRecv = recv(clntSock, PktBuf, 2 * sizeof(USHORT), 0);
+		if (retRecv == -1) return -1;	// 소켓이 끊어진 경우
+
+		USHORT PktLen, PktType;
+
+		memcpy(&PktLen, PktBuf, sizeof(USHORT));
+		memcpy(&PktType, PktBuf + sizeof(USHORT), sizeof(USHORT));
+
+		printf("Packet length(%d), type(%d) received\n", PktLen, PktType);
+
+		int rcvdPacketLength = PKTHEADERSIZE;
+		int totalSize = PKTHEADERSIZE + PktLen;
+		while (rcvdPacketLength < totalSize)
+		{
+			int retSuccessRevSize = recv(clntSock, PktBuf + rcvdPacketLength, PktLen, 0);
+			rcvdPacketLength += retSuccessRevSize;
+		}
+
+		SendMsg(PktBuf, totalSize);
 	}
 
 	KEY->LOCK();
 	for (i = 0; i < ClntCount; i++){
-		if (clnt_sock == clntSocks[i]){
+		if (clntSock == clntSocks[i]){
 			while (i++ < ClntCount - 1)
 				clntSocks[i] = clntSocks[i + 1];
 			break;
@@ -61,7 +77,7 @@ unsigned WINAPI HandleClnt(void *s){
 	}
 	ClntCount--;
 	KEY->UNLOCK();
-	closesocket(clnt_sock);
+	closesocket(clntSock);
 	return 0;
 }
 

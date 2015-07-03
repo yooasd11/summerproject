@@ -1,45 +1,44 @@
-const int PktLength = (1 << 16);
-const int PktHeaderSize = 2 * sizeof(USHORT);
-const int PktBodySize = PktLength - PktHeaderSize;
+#include <vector>
 
-#define NAME 20
-#define MaxClnt 30
+const int PKTLENGTH = (1 << 16);
+const int PKTHEADERSIZE = 2 * sizeof(USHORT);
+const int PKTBODYSIZE = PKTLENGTH - PKTHEADERSIZE;
+
+#define ECHOLIST 11
+#define ECHOCHARACTER 12
 #define ECHO 14
 
 
 class Packet{
 private:
-	char mMsg[PktBodySize];
 	unsigned short mLength;
 	unsigned short mType;
+	char mMsg[PKTBODYSIZE];
 public:
-	Packet() : mLength(2), mType(0) {
-		*mMsg = NULL;
+	Packet() : mLength(0), mType(0) {}
+
+	void setLength(USHORT length){
+		mLength = length;
 	}
 
-	Packet(char* msg, unsigned short length, unsigned short type) : mLength(length), mType(type) {
-		strcpy(mMsg, msg);
+	USHORT getLength(){
+		return mLength;
+	}
+
+	void setType(USHORT type){
+		mType = type;
+	}
+
+	USHORT getType(){
+		return mType;
 	}
 
 	char* getMsg(){
 		return mMsg;
 	}
 
-	unsigned short getLength(){
-		return mLength;
-	}
-
-	bool setType(unsigned short type){
-		mType = type;
-		return true;
-	}
-
-	unsigned short getType(){
-		return mType;
-	}
-
-	void inputMsg(){
-		fgets(mMsg, PktBodySize, stdin);
-		mLength = PktHeaderSize + strlen(mMsg);
+	void setMsg(char* msg, int len){
+		memcpy(mMsg, msg, len);
 	}
 };
+
