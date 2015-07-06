@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Connection.h" />
     <ClInclude Include="Locking.h" />
     <ClInclude Include="winsockstd.h" />
     <ClInclude Include="Packet.h" />

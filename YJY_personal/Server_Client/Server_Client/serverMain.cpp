@@ -22,8 +22,8 @@ inline void Disconnect(SOCKET& hSock){
 int _tmain()
 {
 	int port;
-	printf("Input port number : ");
-	scanf("%d", &port);
+	printf_s("Input port number : ");
+	scanf_s("%d", &port);
 
 	SOCKET servSock = servAccount(port);
 	Listener(servSock);
@@ -54,7 +54,7 @@ unsigned WINAPI HandleClnt(void *s){
 		memcpy(&PktLen, PktBuf, sizeof(USHORT));
 		memcpy(&PktType, PktBuf + sizeof(USHORT), sizeof(USHORT));
 
-		printf("Packet length(%d), type(%d) received\n", PktLen, PktType);
+		printf("Packet <length(%d), type(%d)> received\n", PktLen, PktType);
 
 		int rcvdPacketLength = PKTHEADERSIZE;
 		int totalSize = PKTHEADERSIZE + PktLen;
