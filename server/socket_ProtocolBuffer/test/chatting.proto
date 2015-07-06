@@ -1,0 +1,8 @@
+syntax="proto2";
+package chatting;
+
+message letter{
+	required string chat=1;
+	required int32 x=2;
+	required int32 y=3;
+}
