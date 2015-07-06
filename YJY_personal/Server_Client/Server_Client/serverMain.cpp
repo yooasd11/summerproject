@@ -46,25 +46,36 @@ unsigned WINAPI HandleClnt(void *s){
 	char PktBuf[PKTLENGTH];
 
 	while (1){
-		int retRecv = recv(clntSock, PktBuf, 2 * sizeof(USHORT), 0);
-		if (retRecv == -1) return -1;	// 소켓이 끊어진 경우
+		//int retRecv = recv(clntSock, PktBuf, 2 * sizeof(USHORT), 0);
+		//if (retRecv == -1) return -1;	// 소켓이 끊어진 경우
 
-		USHORT PktLen, PktType;
+		//USHORT PktLen, PktType;
 
-		memcpy(&PktLen, PktBuf, sizeof(USHORT));
-		memcpy(&PktType, PktBuf + sizeof(USHORT), sizeof(USHORT));
+		//memcpy(&PktLen, PktBuf, sizeof(USHORT));
+		//memcpy(&PktType, PktBuf + sizeof(USHORT), sizeof(USHORT));
 
-		printf("Packet <length(%d), type(%d)> received\n", PktLen, PktType);
+		//printf("Packet <length(%d), type(%d)> received\n", PktLen, PktType);
 
-		int rcvdPacketLength = PKTHEADERSIZE;
-		int totalSize = PKTHEADERSIZE + PktLen;
-		while (rcvdPacketLength < totalSize)
-		{
-			int retSuccessRevSize = recv(clntSock, PktBuf + rcvdPacketLength, PktLen, 0);
-			rcvdPacketLength += retSuccessRevSize;
-		}
+		//int rcvdPacketLength = PKTHEADERSIZE;
+		//int totalSize = PKTHEADERSIZE + PktLen;
+		//while (rcvdPacketLength < totalSize)
+		//{
+		//	int retSuccessRevSize = recv(clntSock, PktBuf + rcvdPacketLength, PktLen, 0);
+		//	rcvdPacketLength += retSuccessRevSize;
+		//}
+		char* buf = "Hello World!";
+		USHORT pktSize = strlen(buf)+1, pktType = ECHO;
+		memcpy(PktBuf, &pktSize, sizeof(USHORT));
+		memcpy(PktBuf + sizeof(USHORT), &pktType, sizeof(USHORT));
+		memcpy(PktBuf + 2 * sizeof(USHORT), buf, pktSize);
+
+		int totalSize = 2 * sizeof(USHORT)+pktSize;
+//		memcpy(&PktLen, PktBuf, sizeof(USHORT));
+//		memcpy(&PktType, PktBuf + sizeof(USHORT), sizeof(USHORT));
+
 
 		SendMsg(PktBuf, totalSize);
+		Sleep(200);
 	}
 
 	KEY->LOCK();

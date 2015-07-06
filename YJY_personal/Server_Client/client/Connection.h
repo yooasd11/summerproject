@@ -76,30 +76,28 @@ int Connection::RecvMsg(){
 	char PktBuf[PKTLENGTH];
 	Packet packet;
 
-	while (1){
-		int retRecv = recv(Socket, PktBuf, 2 * sizeof(USHORT), 0);
-		if (retRecv == -1) return -1;	// 소켓이 끊어진 경우
+	int retRecv = recv(Socket, PktBuf, 2 * sizeof(USHORT), 0);
+	if (retRecv == -1) return -1;	// 소켓이 끊어진 경우
 
-		USHORT PktLen, PktType;
+	USHORT PktLen, PktType;
 
-		memcpy(&PktLen, PktBuf, sizeof(USHORT));
-		memcpy(&PktType, PktBuf + sizeof(USHORT), sizeof(USHORT));
+	memcpy(&PktLen, PktBuf, sizeof(USHORT));
+	memcpy(&PktType, PktBuf + sizeof(USHORT), sizeof(USHORT));
 
-		packet.setLength(PktLen);
-		packet.setType(PktType);
+	packet.setLength(PktLen);
+	packet.setType(PktType);
 
-		int rcvdPacketLength = PKTHEADERSIZE;
-		int totalSize = PktLen + PKTHEADERSIZE;
-		while (rcvdPacketLength < totalSize)
-		{
-			int retSuccessRevSize = recv(Socket, PktBuf + rcvdPacketLength, PktLen, 0);
-			rcvdPacketLength += retSuccessRevSize;
-		}
-
-		packet.setMsg(PktBuf + PKTHEADERSIZE, PktLen);
-
-		ClientPacketHandle(packet);
+	int rcvdPacketLength = PKTHEADERSIZE;
+	int totalSize = PktLen + PKTHEADERSIZE;
+	while (rcvdPacketLength < totalSize)
+	{
+		int retSuccessRevSize = recv(Socket, PktBuf + rcvdPacketLength, PktLen, 0);
+		rcvdPacketLength += retSuccessRevSize;
 	}
+
+	packet.setMsg(PktBuf + PKTHEADERSIZE, PktLen);
+
+	ClientPacketHandle(packet);
 	return 0;
 }
 

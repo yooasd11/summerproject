@@ -85,7 +85,14 @@ int _tmain()
 	while (true)
 	{
 		ConnectionManager->Receive();
-		Sleep(1);
+
+		if (GetTickCount() % 2000 == 0)
+		{
+			printf("나는 출력중이다.");
+		}
+
+		Sleep(1000);
+		puts("========================");
 	}
 
 	WaitForSingleObject(hSndThread, INFINITE);
