@@ -12,7 +12,6 @@ private:
 	char* MakePacket(USHORT* TypeBuf, USHORT* LengthBuf);
 	void ClientPacketHandle(Packet& p);
 	int RecvMsg();
-	int fdNum;
 	TIMEVAL timeout;
 	fd_set reads, cpyReads;
 	Connection() : Socket(NULL) {}
@@ -142,14 +141,20 @@ void Connection::ClientPacketHandle(Packet& p)
 }
 
 bool Connection::Receive(){
-	cpyReads = reads;
-	timeout.tv_sec = 0;
-	timeout.tv_usec = 1;
-	if ((fdNum = select(0, &cpyReads, 0, 0, &timeout)) == SOCKET_ERROR) return false;
+	while (1){
+		cpyReads = reads;
+		timeout.tv_sec = 0;
+		timeout.tv_usec = 1;
+		
+		int fdNum;
 
-	if (FD_ISSET(Socket, &cpyReads)){
-		if (RecvMsg() == -1)
-			ErrorHandling("Connection disabled");
+		if ((fdNum = select(0, &cpyReads, 0, 0, &timeout)) == SOCKET_ERROR) return false;
+		if (fdNum <= 0) break;
+
+		if (FD_ISSET(Socket, &cpyReads)){
+			if (RecvMsg() == -1)
+				ErrorHandling("Connection disabled");
+		}
 	}
 	return true;
 }

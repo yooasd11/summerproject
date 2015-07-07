@@ -70,12 +70,12 @@ void MakePacket(USHORT* TypeBuf, USHORT* LengthBuf, char* PktBuf){
 
 int _tmain()
 {
-	char ip[101];
-	int port;
+	char ip[101] = "localhost";
+	int port = 9200;
 
-	printf_s("Input server info(IP PORT) : ");
+	/*printf_s("Input server info(IP PORT) : ");
 	fscanf_s(stdin, "%s", ip, sizeof(ip));
-	fscanf_s(stdin, "%d", &port);
+	fscanf_s(stdin, "%d", &port);*/
 
 	ConnectionManager = Connection::GetInstance();
 	ConnectionManager->AccountTo(ip, port);
@@ -85,14 +85,6 @@ int _tmain()
 	while (true)
 	{
 		ConnectionManager->Receive();
-
-		if (GetTickCount() % 2000 == 0)
-		{
-			printf("나는 출력중이다.");
-		}
-
-		Sleep(1000);
-		puts("========================");
 	}
 
 	WaitForSingleObject(hSndThread, INFINITE);
