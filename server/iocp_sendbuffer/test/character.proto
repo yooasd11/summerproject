@@ -1,0 +1,18 @@
+syntax="proto2";
+package Character;
+
+message character{
+	required string name=1;
+	required string chat=2;
+}
+
+message NPC{
+	required string name=1;
+	required int32 x=2;
+	required int32 y=3;
+}
+
+message Monster{
+	required string name=1;
+	required int32 power=2;
+}
