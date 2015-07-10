@@ -9,19 +9,23 @@ void EchoCharacterHandler(Packet& p);
 
 class HandlerMap{
 private:
-	void (*HandlerTable[P_MAX])(Packet&);
+	void (*HandlerTable[P_MAX])(Packet&);				//handler pointer table
 public:
 	HandlerMap(){
 		for (int i = 0; i < P_MAX; ++i) 
 			HandlerTable[i] = nullptr;
+		
+		//register handlers
 		HandlerTable[P_ECHO] = EchoHandler;
 		HandlerTable[P_ECHOLIST] = EchoListHandler;
 		HandlerTable[P_ECHOCHARACTER] = EchoCharacterHandler;
 	}
 	~HandlerMap() {}
+
 	void DeregisterFunction(int type){
 		HandlerTable[type] = nullptr;
 	}
+
 	bool HandlePacket(Packet& p){
 		int type = p.getType();
 		if (HandlerTable[type] == nullptr){

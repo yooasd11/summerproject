@@ -3,16 +3,17 @@
 
 class Connection{
 private:
-	SOCKET Socket;
-	LOCKING* KEY;
+	SOCKET Socket;				//server socket
 	void ErrorHandling(char* msg);
+
 	unsigned WINAPI SendMsg(void* s);
-	char* MakePacket(USHORT* TypeBuf, USHORT* LengthBuf);
-	void ClientPacketHandle(Packet& p);
-	int RecvMsg();
+	bool RecvMsg();
+
 	HandlerMap handlerMap;
+
 	TIMEVAL timeout;
 	fd_set reads, cpyReads;
+
 	Connection() : Socket(NULL) {}
 	~Connection() {
 		closesocket(Socket);
@@ -40,7 +41,6 @@ void Connection::ErrorHandling(char *msg){
 int Connection::AccountTo(char* ip, int port){
 	WSADATA wsaData;
 	SOCKADDR_IN servAdr;
-	KEY = new LOCKING;
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0){
 		ErrorHandling("WSAStartup() error");
@@ -70,12 +70,12 @@ int Connection::AccountTo(char* ip, int port){
 	return 0;
 }
 
-int Connection::RecvMsg(){
+bool Connection::RecvMsg(){
 	char PktBuf[PKTLENGTH];
 	Packet packet;
 
 	int retRecv = recv(Socket, PktBuf, 2 * sizeof(USHORT), 0);
-	if (retRecv == -1) return -1;	// 소켓이A 끊어진 경우
+	if (retRecv == -1) return false;	// 소켓이A 끊어진 경우
 
 	USHORT PktLen, PktType;
 
@@ -97,7 +97,7 @@ int Connection::RecvMsg(){
 
 	handlerMap.HandlePacket(packet);
 
-	return 0;
+	return true;
 }
 
 

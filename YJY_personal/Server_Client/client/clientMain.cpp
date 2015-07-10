@@ -11,11 +11,11 @@ Connection* ConnectionManager;
 void MakePacket(USHORT& TypeBuf, USHORT& LengthBuf, char* Buf);
 unsigned WINAPI SendMsg(void* s);
 
+//Make a packet and send to server
 unsigned WINAPI SendMsg(void* s){
 	char PktBuf[PKTLENGTH];
-
+	USHORT PktLen, PktType;
 	while (1){
-		USHORT PktLen, PktType;
 		MakePacket(PktType, PktLen, PktBuf);
 
 		int sndPacketLength = 0, totalSize = PKTHEADERSIZE + PktLen;
@@ -27,11 +27,12 @@ unsigned WINAPI SendMsg(void* s){
 	return 0;
 }
 
+//Make a packet on Pktbuf
 void MakePacket(USHORT& TypeBuf, USHORT& LengthBuf, char* PktBuf){
 	fscanf_s(stdin, "%d", &TypeBuf);
 
 	if (TypeBuf == P_ECHO){
-		fscanf_s(stdin, "%s", PktBuf + PKTHEADERSIZE, PKTBODYSIZE);	//패킷 버퍼의 바디에 직접 입력
+		fscanf_s(stdin, "%s", PktBuf + PKTHEADERSIZE, PKTBODYSIZE);		//write a message on packet buffer directly
 
 		LengthBuf = (sizeof(char)* strlen(PktBuf + PKTHEADERSIZE)) + sizeof(char);
 	}
@@ -80,9 +81,11 @@ int _tmain()
 	fscanf_s(stdin, "%s", ip, sizeof(ip));
 	fscanf_s(stdin, "%d", &port);*/
 
+	//Create a Connection Manager and account to server
 	ConnectionManager = Connection::GetInstance();
 	ConnectionManager->AccountTo(ip, port);
 
+	//Start sending packet thread
 	HANDLE hSndThread = (HANDLE)_beginthreadex(NULL, 0, SendMsg, NULL, 0, NULL);
 
 	while (true)

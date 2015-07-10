@@ -20,9 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Locking.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
