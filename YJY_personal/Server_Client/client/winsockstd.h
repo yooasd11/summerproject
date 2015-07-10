@@ -9,8 +9,4 @@
 #include <iostream>
 
 #pragma comment(lib, "Ws2_32.lib")
-
-#define NAME 20
-#define MaxClnt 30
-
 #endif

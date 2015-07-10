@@ -1,13 +1,17 @@
+#ifndef MAIN_INCLUDE
+#include <cstring>
+#endif
+
 const int PKTLENGTH = (1 << 16);
-const int PKTHEADERSIZE = 2 * sizeof(USHORT);
+const int PKTHEADERSIZE = 2 * sizeof(unsigned short);
 const int PKTBODYSIZE = PKTLENGTH - PKTHEADERSIZE;
 
 enum PACKET_HANDLER_TYPE
 {
 	P_BEGIN = 0,
+	P_ECHO,
 	P_ECHOLIST,
 	P_ECHOCHARACTER,
-	P_ECHO,
 	P_MAX,
 };
 
@@ -19,19 +23,19 @@ private:
 public:
 	Packet() : mLength(0), mType(0) {}
 
-	void setLength(USHORT length){
+	void setLength(unsigned short length){
 		mLength = length;
 	}
 
-	USHORT getLength(){
+	unsigned short getLength(){
 		return mLength;
 	}
 
-	void setType(USHORT type){
+	void setType(unsigned short type){
 		mType = type;
 	}
 
-	USHORT getType(){
+	unsigned short getType(){
 		return mType;
 	}
 

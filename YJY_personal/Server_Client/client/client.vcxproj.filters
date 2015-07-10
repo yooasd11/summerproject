@@ -13,10 +13,25 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Packet">
+      <UniqueIdentifier>{281fe20d-c6de-4c90-9a90-b9df4e51db64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Packet\HandlerBase">
+      <UniqueIdentifier>{e7e7d8e5-3551-4db9-9f77-77a5febdc96b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Packet\HandlerFunc">
+      <UniqueIdentifier>{bef8eb59-2a51-4c2a-baad-4fa72fb413d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="clientMain.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Connection.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HandlerMap.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

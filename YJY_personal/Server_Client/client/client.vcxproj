@@ -77,6 +77,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="clientMain.cpp" />
+    <ClCompile Include="Connection.cpp" />
+    <ClCompile Include="HandlerMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
