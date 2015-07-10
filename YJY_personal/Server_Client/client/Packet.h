@@ -1,13 +1,15 @@
-#include <vector>
-
 const int PKTLENGTH = (1 << 16);
 const int PKTHEADERSIZE = 2 * sizeof(USHORT);
 const int PKTBODYSIZE = PKTLENGTH - PKTHEADERSIZE;
 
-#define ECHOLIST 11
-#define ECHOCHARACTER 12
-#define ECHO 14
-
+enum PACKET_HANDLER_TYPE
+{
+	P_BEGIN = 0,
+	P_ECHOLIST,
+	P_ECHOCHARACTER,
+	P_ECHO,
+	P_MAX,
+};
 
 class Packet{
 private:

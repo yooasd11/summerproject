@@ -1,7 +1,5 @@
 #include "winsockstd.h"
-
-#ifndef CONNECTION_DEF
-#define CONNECTION_DEF
+#include "HandlerMap.h"
 
 class Connection{
 private:
@@ -12,6 +10,7 @@ private:
 	char* MakePacket(USHORT* TypeBuf, USHORT* LengthBuf);
 	void ClientPacketHandle(Packet& p);
 	int RecvMsg();
+	HandlerMap handlerMap;
 	TIMEVAL timeout;
 	fd_set reads, cpyReads;
 	Connection() : Socket(NULL) {}
@@ -76,7 +75,7 @@ int Connection::RecvMsg(){
 	Packet packet;
 
 	int retRecv = recv(Socket, PktBuf, 2 * sizeof(USHORT), 0);
-	if (retRecv == -1) return -1;	// 소켓이 끊어진 경우
+	if (retRecv == -1) return -1;	// 소켓이A 끊어진 경우
 
 	USHORT PktLen, PktType;
 
@@ -96,49 +95,11 @@ int Connection::RecvMsg(){
 
 	packet.setMsg(PktBuf + PKTHEADERSIZE, PktLen);
 
-	ClientPacketHandle(packet);
+	handlerMap.HandlePacket(packet);
+
 	return 0;
 }
 
-void Connection::ClientPacketHandle(Packet& p)
-{
-	USHORT PktType = p.getType();
-	char* PktBody = p.getMsg();
-
-	if (PktType == ECHO){
-		fprintf(stdout, "%s\n", PktBody);
-	}
-
-	else if (PktType == ECHOLIST){
-		int size = -1;
-
-		memcpy(&size, PktBody, sizeof(int));
-
-		std::vector<int> vec;
-
-		for (int i = 1; i <= size; ++i){
-			int val;
-			memcpy(&val, PktBody + (sizeof(int)*i), sizeof(int));
-			vec.push_back(val);
-		}
-
-		for (unsigned int i = 0; i < vec.size(); ++i){
-			fprintf(stdout, "%d ", vec[i]);
-		}
-		fprintf(stdout, "\n");
-	}
-
-	else if (PktType == ECHOCHARACTER){
-		Character character;
-
-		memcpy(character.name, PktBody, NAMESIZE);
-		memcpy(&character.x, PktBody + NAMESIZE, sizeof(double));
-		memcpy(&character.y, PktBody + NAMESIZE + sizeof(double), sizeof(double));
-		memcpy(&character.id, PktBody + NAMESIZE + 2 * sizeof(double), sizeof(long long));
-
-		fprintf(stdout, "%s %lf %lf %lld\n", character.name, character.x, character.y, character.id);
-	}
-}
 
 bool Connection::Receive(){
 	while (1){
@@ -158,5 +119,3 @@ bool Connection::Receive(){
 	}
 	return true;
 }
-
-#endif

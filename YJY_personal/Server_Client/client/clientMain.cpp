@@ -1,19 +1,22 @@
+#ifndef MAIN_INCLUDE
+#define MAIN_INCLUDE
 #include "winsockstd.h"
 #include "Character.h"
 #include "Packet.h"
 #include "Connection.h"
+#endif
 
-LOCKING* KEY;
 Connection* ConnectionManager;
 
-void MakePacket(USHORT* TypeBuf, USHORT* LengthBuf, char* Buf);
+void MakePacket(USHORT& TypeBuf, USHORT& LengthBuf, char* Buf);
+unsigned WINAPI SendMsg(void* s);
 
 unsigned WINAPI SendMsg(void* s){
 	char PktBuf[PKTLENGTH];
 
 	while (1){
 		USHORT PktLen, PktType;
-		MakePacket(&PktType, &PktLen, PktBuf);
+		MakePacket(PktType, PktLen, PktBuf);
 
 		int sndPacketLength = 0, totalSize = PKTHEADERSIZE + PktLen;
 		while (sndPacketLength < totalSize){
@@ -24,16 +27,16 @@ unsigned WINAPI SendMsg(void* s){
 	return 0;
 }
 
-void MakePacket(USHORT* TypeBuf, USHORT* LengthBuf, char* PktBuf){
-	fscanf_s(stdin, "%d", TypeBuf);
+void MakePacket(USHORT& TypeBuf, USHORT& LengthBuf, char* PktBuf){
+	fscanf_s(stdin, "%d", &TypeBuf);
 
-	if (*TypeBuf == ECHO){
+	if (TypeBuf == P_ECHO){
 		fscanf_s(stdin, "%s", PktBuf + PKTHEADERSIZE, PKTBODYSIZE);	//패킷 버퍼의 바디에 직접 입력
 
-		*LengthBuf = (sizeof(char)* strlen(PktBuf + PKTHEADERSIZE)) + sizeof(char);
+		LengthBuf = (sizeof(char)* strlen(PktBuf + PKTHEADERSIZE)) + sizeof(char);
 	}
 
-	else if (*TypeBuf == ECHOLIST){
+	else if (TypeBuf == P_ECHOLIST){
 		int listBuf[PKTBODYSIZE / sizeof(int)];
 		fscanf_s(stdin, "%d", &listBuf[0]);
 
@@ -44,26 +47,26 @@ void MakePacket(USHORT* TypeBuf, USHORT* LengthBuf, char* PktBuf){
 			scanf_s("%d", &listBuf[i]);
 		}
 
-		*LengthBuf = sizeof(int)+(sizeof(int)* listSize);
-		memcpy(PktBuf + PKTHEADERSIZE, listBuf, *LengthBuf);
+		LengthBuf = sizeof(int)+(sizeof(int)* listSize);
+		memcpy(PktBuf + PKTHEADERSIZE, listBuf, LengthBuf);
 	}
 
-	else if (*TypeBuf == ECHOCHARACTER){
+	else if (TypeBuf == P_ECHOCHARACTER){
 		char name[NAMESIZE];
 		double x, y;
 		long long id;
 		fscanf_s(stdin, "%s", name, NAMESIZE);
 		fscanf_s(stdin, "%lf %lf %lld", &x, &y, &id);
 
-		*LengthBuf = NAMESIZE + 2 * sizeof(double)+sizeof(long long);
+		LengthBuf = NAMESIZE + 2 * sizeof(double)+sizeof(long long);
 		memcpy(PktBuf + PKTHEADERSIZE, name, NAMESIZE);
 		memcpy(PktBuf + PKTHEADERSIZE + NAMESIZE, &x, sizeof(double));
 		memcpy(PktBuf + PKTHEADERSIZE + NAMESIZE + sizeof(double), &y, sizeof(double));
 		memcpy(PktBuf + PKTHEADERSIZE + NAMESIZE + 2 * sizeof(double), &id, sizeof(long long));
 	}
 
-	memcpy(PktBuf, LengthBuf, sizeof(USHORT));
-	memcpy(PktBuf + sizeof(USHORT), TypeBuf, sizeof(USHORT));
+	memcpy(PktBuf, &LengthBuf, sizeof(USHORT));
+	memcpy(PktBuf + sizeof(USHORT), &TypeBuf, sizeof(USHORT));
 }
 
 
