@@ -1,7 +1,6 @@
 #pragma once
 
 #include "winsockstd.h"
-#include "HandlerMap.h"
 
 class Connection{
 private:
