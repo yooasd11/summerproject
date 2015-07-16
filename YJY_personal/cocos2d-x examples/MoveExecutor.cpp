@@ -1,8 +1,10 @@
+#pragma once
 #include "MoveExecutor.h"
 #include "JYObject.h"
 #include "ExecutorList.h"
 #include "Inputhandler.h"
 #include "MyScene.h"
+#include "CoordinateConverter.h"
 
 void MoveExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 }
@@ -16,10 +18,16 @@ void MoveExecutor::tick(float fDeltaTime){
 		handleKeycodeMovement(keyCode);
 	if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_S) == true)
 		handleKeycodeMovement(keyCode);
-	if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_A) == true)
+	if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_A) == true){
+		cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
+		pDragon->setFlippedX(false);
 		handleKeycodeMovement(keyCode);
-	if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_D) == true)
+	}
+	if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_D) == true){
+		cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
+		pDragon->setFlippedX(true);
 		handleKeycodeMovement(keyCode);
+	}
 }
 
 void MoveExecutor::handleKeycodeMovement(cocos2d::EventKeyboard::KeyCode keyCode){
@@ -36,17 +44,22 @@ void MoveExecutor::handleKeycodeMovement(cocos2d::EventKeyboard::KeyCode keyCode
 
 cocos2d::CCPoint MoveExecutor::getNextPos(cocos2d::CCPoint pos, cocos2d::EventKeyboard::KeyCode keyCode){
 	int nKeyCode = (int)keyCode;
-	if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_W) return pos + cocos2d::ccp(0.0f, 10.0f);
-	else if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_S) return pos + cocos2d::ccp(0.0f, -10.0f);
-	else if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_A) return pos + cocos2d::ccp(-10.0f, 0.0f);
-	else if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_D) return pos + cocos2d::ccp(10.0f, 0.0f);
-	return pos;
+	cocos2d::CCPoint nextRelPos = ccp(0.0f, 0.0f);
+	if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_W) 
+		nextRelPos = cocos2d::ccp(0.0f, 10.0f);
+	else if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_S)
+		nextRelPos = cocos2d::ccp(0.0f, -10.0f);
+	else if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_A) 
+		nextRelPos = cocos2d::ccp(-10.0f, 0.0f);
+	else if (nKeyCode == (int)cocos2d::EventKeyboard::KeyCode::KEY_D) 
+		nextRelPos = cocos2d::ccp(10.0f, 0.0f);
+	return pos + nextRelPos;
 }
 
 void MoveExecutor::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst, cocos2d::EventKeyboard::KeyCode keyCode){
-	//충돌 체크
 	boundaryCollisionChecker(src, dst);
 	objectCollisionChecker(src, dst);
+	//CollisionExecutor* pCollisionExecutor = getOwner()->getExecutor(__Executor::__CollisionExecutor);
 
 	//action tag를 key에 부여한 후 수행한다.
 	static int nGenerateActionTag = 1000;
@@ -57,7 +70,8 @@ void MoveExecutor::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst,
 }
 
 bool MoveExecutor::boundaryCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst){
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)this->getOwner()->getCCObject()->getParent();
+	cocos2d::CCLayer* nowScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)nowScene->getChildByName("Background")->getChildByName("Tmap");
 	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width;
 	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height;
 	//정상적인 좌표
@@ -74,7 +88,8 @@ bool MoveExecutor::boundaryCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPo
 }
 
 bool MoveExecutor::objectCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst){
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)this->getOwner()->getCCObject()->getParent();
+	cocos2d::CCLayer* nowScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)nowScene->getChildByName("Background")->getChildByName("Tmap");
 	cocos2d::CCPoint tileCoord = this->tileCoordForPostion(dst);
 	cocos2d::CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
 	cocos2d::CCTMXLayer* items = pTmap->getLayer("Items");
@@ -103,27 +118,22 @@ bool MoveExecutor::objectCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoin
 }
 
 cocos2d::CCPoint MoveExecutor::tileCoordForPostion(cocos2d::CCPoint pos){
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)this->getOwner()->getCCObject()->getParent();
+	cocos2d::CCLayer* nowScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)nowScene->getChildByName("Background")->getChildByName("Tmap");
 	int x = pos.x / pTmap->getTileSize().width;
 	int y = (pTmap->getMapSize().height * pTmap->getTileSize().height - pos.y) / pTmap->getTileSize().height;
 	return cocos2d::ccp(x, y);
 }
 
 void MoveExecutor::onMouseMove(cocos2d::Event* pEvent){
-	cocos2d::EventMouse* e = (cocos2d::EventMouse*)pEvent;
 	cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
 	cocos2d::CCSprite* fireAim = (cocos2d::CCSprite*)pDragon->getChildByName("Aim");
+	
+	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(fireAim, pEvent);
 
-	cocos2d::CCScene* currentScene = cocos2d::CCDirector::getInstance()->getRunningScene();
-
-	cocos2d::CCPoint aimWinPos = pDragon->convertToWorldSpace(fireAim->getPosition() - fireAim->getAnchorPoint());
-	cocos2d::CCPoint mouseWinPos = currentScene->convertToWorldSpace(e->getLocation());
-
-	mouseWinPos.y -= currentScene->getContentSize().height * 2;
-	mouseWinPos.y = abs(mouseWinPos.y);
-
-	float degree = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - aimWinPos.x, mouseWinPos.y - aimWinPos.y)) - 90.0f;
 	fireAim->setRotation(degree);
+}
 
-	CCLOG("Mouse : (%.2f, %.2f), Aim : (%.2f, %.2f), Degree : %.2f", mouseWinPos.x, mouseWinPos.y, aimWinPos.x, aimWinPos.y, degree);
+void MoveExecutor::onMouseDown(cocos2d::Event* pEvent){
+
 }

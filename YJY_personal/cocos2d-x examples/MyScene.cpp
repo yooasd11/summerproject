@@ -2,6 +2,9 @@
 #include "MultiByteConverter.h"
 #include "XMLParser.h"
 #include "JYObject.h"
+#include "JYPlayer.h"
+#include "JYItem.h"
+#include "JYArm.h"
 #include "MoveExecutor.h"
 #include "Inputhandler.h"
 USING_NS_CC;
@@ -13,10 +16,9 @@ Scene* MyScene::createScene()
 
 	// 'layer' is an autorelease object
 	auto layer = MyScene::create();
-
+	layer->setName("MyScene");
 	// add layer as a child to scene
 	scene->addChild(layer);
-
 	// return the scene
 	return scene;
 }
@@ -31,7 +33,7 @@ bool MyScene::init()
 		return false;
 	}
 
-	pJYObjectDragon = nullptr;
+	this->pJYPlayerDragon = nullptr;
 	winSize = CCDirector::getInstance()->getWinSize();
 	CCLOG("WinSize : (%.2f, %.2f)", winSize.width, winSize.height);
 
@@ -40,6 +42,26 @@ bool MyScene::init()
 	this->schedule(schedule_selector(MyScene::callEveryFrame));
 	return true;
 
+}
+
+void MyScene::addBackground(){
+	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestDesert.tmx");
+	pTmap->setName("Tmap");
+	backgroundNode = CCParallaxNode::create();
+	backgroundNode->setName("Background");
+	backgroundNode->addChild(pTmap, 1, ccp(1.0f, 1.0f), ccp(0, 0));
+	this->addChild(backgroundNode, 0);
+
+	CCTMXObjectGroup* objects = pTmap->objectGroupNamed("Objects");
+	ValueMap& spawnPoint = objects->getObject("SpawnPoint");
+	CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
+	metaInfo->setVisible(false);
+
+	//create a dragon on "SpawnPoint"
+	int x = spawnPoint["x"].asInt();
+	int y = spawnPoint["y"].asInt();
+
+	this->createDragon(CCPoint(ccp(x, y)));
 }
 
 void MyScene::createDragon(CCPoint dragonPosition){
@@ -59,7 +81,7 @@ void MyScene::createDragon(CCPoint dragonPosition){
 	pDragon->setName("Dragon");
 	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)backgroundNode->getChildByName("Tmap");
 	pTmap->addChild(pDragon, 3, 15);
-	
+
 
 	CCSprite* fireAim = CCSprite::create("line.PNG");
 	fireAim->setPosition(pDragon->getContentSize().width / 2, pDragon->getContentSize().height / 3);
@@ -68,31 +90,21 @@ void MyScene::createDragon(CCPoint dragonPosition){
 	fireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
 	pDragon->addChild(fireAim, 2);
 
+	CCSprite* bullet = CCSprite::create("bullet.PNG");
+	bullet->setName("Bullet");
+	bullet->setVisible(false);
+	bullet->setScale(0.3f);
+	bullet->setPosition(ccp(5.0f, 5.0f));
+	this->addChild(bullet);
+
 	Animate* animate = Animate::create(animation);
 	RepeatForever* rep = RepeatForever::create(animate);
 	pDragon->runAction(rep);
 
-	pJYObjectDragon = new JYObject(pDragon);
-}
-
-void MyScene::addBackground(){
-	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestDesert.tmx");
-	pTmap->setName("Tmap");
-	backgroundNode = CCParallaxNode::create();
-	backgroundNode->addChild(pTmap, 1, ccp(1.0f, 1.0f), ccp(0, 0));
-
-	this->addChild(backgroundNode, 0);
-
-	CCTMXObjectGroup* objects = pTmap->objectGroupNamed("Objects");
-	ValueMap& spawnPoint = objects->getObject("SpawnPoint");
-	CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
-	metaInfo->setVisible(false);
-
-	//create a dragon on "SpawnPoint"
-	int x = spawnPoint["x"].asInt();
-	int y = spawnPoint["y"].asInt();
-
-	this->createDragon(CCPoint(ccp(x, y)));
+	pJYPlayerDragon = new JYPlayer(pDragon);
+	JYArm* pJYArmBullet = new JYArm(bullet);
+	pJYArmBullet->setName("JYBullet");
+	pJYPlayerDragon->addChild(pJYArmBullet);
 }
 
 void MyScene::onEnter(){
@@ -131,7 +143,7 @@ bool MyScene::onTouchBegan(Touch* pTouch, Event* pEvent){
 }
 
 void MyScene::onTouchMoved(Touch* pTouch, Event* pEvent){
-	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pJYObjectDragon->getCCObject()->getParent();
+	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pJYPlayerDragon->getCCObject()->getParent();
 	CCPoint diff = pTouch->getDelta();
 	CCPoint currentPos = backgroundNode->getPosition();
 	CCPoint newPos = currentPos + diff;
@@ -151,6 +163,7 @@ void MyScene::onMouseMove(Event* pEvent){
 }
 
 void MyScene::onMouseDown(Event* pEvent){
+	pJYPlayerDragon->onMouseDown(pEvent);
 }
 
 void MyScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* pEvent){
@@ -162,5 +175,7 @@ void MyScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent){
 }
 
 void MyScene::callEveryFrame(float fDeltaTime){
-	pJYObjectDragon->tick(fDeltaTime);
+	JYArm * pJYArmBullet = (JYArm*)pJYPlayerDragon->getChildByName("JYBullet");
+	pJYPlayerDragon->tick(fDeltaTime);
+	pJYArmBullet->tick(fDeltaTime);
 }

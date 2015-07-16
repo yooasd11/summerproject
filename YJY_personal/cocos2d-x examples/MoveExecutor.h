@@ -9,10 +9,11 @@ private:
 
 	void handleKeycodeMovement(cocos2d::EventKeyboard::KeyCode keyCode);
 	cocos2d::CCPoint getNextPos(cocos2d::CCPoint pos, cocos2d::EventKeyboard::KeyCode keyCode);
-	cocos2d::CCPoint MoveExecutor::tileCoordForPostion(cocos2d::CCPoint pos);
-	void MoveExecutor::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst, cocos2d::EventKeyboard::KeyCode keyCode);
-	bool MoveExecutor::boundaryCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst);
-	bool MoveExecutor::objectCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst);
+	cocos2d::CCPoint tileCoordForPostion(cocos2d::CCPoint pos);
+	
+	void setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst, cocos2d::EventKeyboard::KeyCode keyCode);
+	bool boundaryCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst);
+	bool objectCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst);
 public:
 	MoveExecutor(JYObject* pOwner) : BaseExecutor(pOwner) {
 		regist();
@@ -22,6 +23,7 @@ public:
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onMouseMove(cocos2d::Event* pEvent);
+	virtual void onMouseDown(cocos2d::Event* pEvent);
 	virtual void tick(float fDeltaTime);
 };
 

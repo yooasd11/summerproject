@@ -28,15 +28,5 @@ void BaseExecutor::setOwner(JYObject* pOwner){
 	return;
 }
 
-void BaseExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
-}
-
-void BaseExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent) {
-}
-
 void BaseExecutor::tick(float fDeltaTime){
-}
-
-void BaseExecutor::onMouseMove(cocos2d::Event* pEvent){
-
 }

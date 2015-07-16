@@ -5,7 +5,7 @@
 
 USING_NS_CC;
 
-class JYObject;
+class JYPlayer;
 
 class MyScene : public cocos2d::Layer
 {
@@ -14,7 +14,7 @@ public:
 	// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	static cocos2d::Scene* createScene();
 
-	JYObject* pJYObjectDragon;
+	JYPlayer* pJYPlayerDragon;
 	CCParallaxNode* backgroundNode;
 	CCSize winSize;
 

@@ -20,10 +20,6 @@ public:
 
 	JYObject* const getOwner() const;
 	void setOwner(JYObject* pOwner);
-
-	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
-	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
-	virtual void onMouseMove(cocos2d::Event* pEvent);
 	virtual void tick(float fDeltaTime);
 };
 
