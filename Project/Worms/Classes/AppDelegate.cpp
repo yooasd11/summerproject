@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "MyScene.h"
 
 USING_NS_CC;
 
@@ -38,6 +38,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
+	glview->setFrameSize(960, 640);
     // turn on display FPS
     director->setDisplayStats(true);
 
@@ -47,7 +48,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = MyScene::createScene();
 
     // run
     director->runWithScene(scene);

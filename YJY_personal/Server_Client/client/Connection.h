@@ -7,11 +7,9 @@ private:
 	SOCKET Socket;				//server socket
 	inline void ErrorHandling(char* msg);
 
-	//IO function
-	unsigned WINAPI SendMsg(void* s);
 	bool RecvMsg();
+	void makePacket(USHORT& TypeBuf, USHORT& LengthBuf, char* PktBuf);
 
-	//values for select()
 	TIMEVAL timeout;
 	fd_set reads, cpyReads;
 
@@ -30,5 +28,6 @@ public:
 		return Socket;
 	}
 	bool Receive();
+	unsigned WINAPI sendMsg(void* s);
 };
 

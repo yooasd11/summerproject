@@ -1,7 +1,6 @@
 #pragma once
-#ifndef MAIN_INCLUDE
-#include "Packet.h"
-#endif
+
+class Packet;
 
 class HandlerMap{
 private:

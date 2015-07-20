@@ -73,7 +73,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END);C:\Users\yooasd11\Documents\summerproject\Project\ProtoBuf\include;</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -86,9 +86,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END);libprotobuf.lib;</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories);$(_COCOS_LIB_PATH_WIN32_BEGIN);$(_COCOS_LIB_PATH_WIN32_END)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories);$(_COCOS_LIB_PATH_WIN32_BEGIN);$(_COCOS_LIB_PATH_WIN32_END);C:\Users\yooasd11\Documents\summerproject\Project\ProtoBuf\;</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -139,13 +139,44 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Classes\AccountPacket.pb.cc" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\BaseExecutor.cpp" />
+    <ClCompile Include="..\Classes\CollisionExecutor.cpp" />
+    <ClCompile Include="..\Classes\ConnectionManager.cpp" />
+    <ClCompile Include="..\Classes\InGamePacket.pb.cc" />
+    <ClCompile Include="..\Classes\InputHandler.cpp" />
+    <ClCompile Include="..\Classes\JYArm.cpp" />
+    <ClCompile Include="..\Classes\JYItem.cpp" />
+    <ClCompile Include="..\Classes\JYObject.cpp" />
+    <ClCompile Include="..\Classes\JYObjectManager.cpp" />
+    <ClCompile Include="..\Classes\JYPlayer.cpp" />
+    <ClCompile Include="..\Classes\MoveExecutor.cpp" />
+    <ClCompile Include="..\Classes\MyScene.cpp" />
+    <ClCompile Include="..\Classes\PacketHandlerMap.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Classes\AccountPacket.pb.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\BaseExecutor.h" />
+    <ClInclude Include="..\Classes\CollisionExecutor.h" />
+    <ClInclude Include="..\Classes\ConnectionManager.h" />
+    <ClInclude Include="..\Classes\CoordinateConverter.h" />
+    <ClInclude Include="..\Classes\ExecutorList.h" />
+    <ClInclude Include="..\Classes\InGamePacket.pb.h" />
+    <ClInclude Include="..\Classes\Inputhandler.h" />
+    <ClInclude Include="..\Classes\JYArm.h" />
+    <ClInclude Include="..\Classes\JYItem.h" />
+    <ClInclude Include="..\Classes\JYObject.h" />
+    <ClInclude Include="..\Classes\JYObjectManager.h" />
+    <ClInclude Include="..\Classes\JYPlayer.h" />
+    <ClInclude Include="..\Classes\JYRealTimer.h" />
+    <ClInclude Include="..\Classes\MoveExecutor.h" />
+    <ClInclude Include="..\Classes\MyScene.h" />
+    <ClInclude Include="..\Classes\Packet.h" />
+    <ClInclude Include="..\Classes\PacketHandlerMap.h" />
+    <ClInclude Include="..\Classes\winsockstd.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
