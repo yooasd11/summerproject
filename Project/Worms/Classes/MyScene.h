@@ -36,7 +36,7 @@ public:
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	void addBackground();
 	void createDragon(const UINT& nUID, const CCPoint& pos);
-	//void makePlayer(const UINT& nUID, JYObject* const pJYPlayer);
+	void makePlayer(const UINT& nUID, JYObject* const pJYPlayer);
 	void setViewPointCenter(CCPoint pos);
 	void callEveryFrame(float fDeltaTime);
 	// implement the "static create()" method manually

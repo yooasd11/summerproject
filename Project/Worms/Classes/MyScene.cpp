@@ -123,37 +123,34 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	pDragon->runAction(rep);
 
 	JYPlayer* pJYPlayer = new JYPlayer(pDragon);
-
-	/*if (this->pJYPlayerDragon == nullptr){
-		this->makePlayer(nUID, pJYPlayer);
-	}*/
+	this->makePlayer(nUID, pJYPlayer);
 }
 
-//void MyScene::makePlayer(const UINT& nUID, JYObject* const pJYPlayer){
-//	if (this->pJYPlayerDragon != nullptr) return;
-//
-//	CCNode* pNode = pJYPlayer->getCCObject();
-//
-//	pFireAim = CCSprite::create("line.PNG");
-//	pFireAim->setPosition(pNode->getContentSize().width / 2, pNode->getContentSize().height / 3);
-//	pFireAim->setName("Aim");
-//	pFireAim->setScale(0.3f);
-//	pFireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
-//	pNode->addChild(pFireAim);
-//
-//	CCSprite* bullet = CCSprite::create("bullet.PNG");
-//	bullet->setName("Bullet");
-//	bullet->setVisible(false);
-//	bullet->setScale(0.3f);
-//	bullet->setPosition(ccp(5.0f, 5.0f));
-//	this->addChild(bullet);
-//
-//	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
-//	pJYPlayerDragon->setUID(nUID);
-//	JYArm* pJYArmBullet = new JYArm(bullet);
-//	pJYArmBullet->setName("JYBullet");
-//	pJYPlayerDragon->addChild(pJYArmBullet);
-//}
+void MyScene::makePlayer(const UINT& nUID, JYObject* const pJYPlayer){
+	CCNode* pNode = pJYPlayer->getCCObject();
+
+	pFireAim = CCSprite::create("line.PNG");
+	pFireAim->setPosition(pNode->getContentSize().width / 2, pNode->getContentSize().height / 3);
+	pFireAim->setName("Aim");
+	pFireAim->setScale(0.3f);
+	pFireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
+	pNode->addChild(pFireAim);
+
+	CCSprite* bullet = CCSprite::create("bullet.PNG");
+	bullet->setName("Bullet");
+	bullet->setVisible(false);
+	bullet->setScale(0.3f);
+	bullet->setPosition(ccp(5.0f, 5.0f));
+	this->addChild(bullet);
+
+	if (nUID == this->nPlayerUID){
+		pJYPlayerDragon = (JYPlayer*)pJYPlayer;
+		pJYPlayerDragon->setUID(nUID);
+		JYArm* pJYArmBullet = new JYArm(bullet);
+		pJYArmBullet->setName("JYBullet");
+		pJYPlayerDragon->addChild(pJYArmBullet);
+	}
+}
 
 
 bool MyScene::onTouchBegan(Touch* pTouch, Event* pEvent){
