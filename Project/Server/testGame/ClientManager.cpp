@@ -18,7 +18,7 @@ void ClientManager::mapping(SOCKET clnt)
 {
 	this->key->LOCK();
 	//클라이언트가 접속되었을때 기본적인 유저정보가 입력된다...
-	USER temp(int(clnt), 100, 200.0f, 200.0f);
+	USER temp(int(clnt), 100, rand() % 640 + 1.0f, rand() % 320 + 1.0f);
 	this->mappingClient[clnt] = temp;
 	this->clntCount += 1;
 	this->key->UNLOCK();

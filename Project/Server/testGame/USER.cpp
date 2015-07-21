@@ -9,7 +9,9 @@ USER::USER()
 	this->hp = 100;
 	this->current = 0;
 	this->total = 0;
-	state::WAITING;
+	this->state = WAIT;
+	this->velocity = 0.0f;
+	this->key = new Lock();
 }
 
 USER::USER(int _id, int _hp, float _x, float _y)
@@ -20,7 +22,9 @@ USER::USER(int _id, int _hp, float _x, float _y)
 	this->y = _y;
 	this->current = 0;
 	this->total = 0;
-	state::WAITING;
+	this->state = WAIT;
+	this->velocity = 0.0f;
+	this->key = new Lock();
 }
 
 USER::~USER()
@@ -71,7 +75,7 @@ char* USER::getBuffer()
 
 bool USER::finished()
 {
-	if (this->current == this->total) return true;
+	if (this->current == this->total && this->current != 0) return true;
 	return false;
 }
 
@@ -80,4 +84,23 @@ void USER::clear()
 	this->current = 0;
 	this->total = 0;
 	memset(this->Buffer, 0, sizeof(this->Buffer));
+}
+
+void USER::packetHandle()
+{
+	
+	Packet userPacket;
+	unsigned short current = 0;
+
+	//계속해서 유저를 처리할 수 있도록
+	LockHelper(this->key);
+	while ( current < this->getTotal()){
+		memcpy(&userPacket.Length, this->Buffer+current, sizeof(current));
+		current += sizeof(unsigned short);
+		memcpy(&userPacket.Type, this->Buffer + current, sizeof(current));
+		current += sizeof(unsigned short);
+		memcpy(&userPacket.Msg, this->Buffer + current, userPacket.Length);
+		current += userPacket.Length;
+		PacketHandler::GetInstance()->HandlePacket(userPacket);
+	}
 }

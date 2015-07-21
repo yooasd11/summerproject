@@ -15,6 +15,9 @@
 #define LEFT 1
 #define SPEED 5
 #define ACCOUNT 2
+#define WAIT 1
+#define MOVE 2
+#define ATTACK 3
 
 
 void ErrorHandling(char *msg);

@@ -31,23 +31,6 @@ int _tmain()
 
 		PacketHandler::GetInstance()->SendAccountPacket(sock);
 		PacketHandler::GetInstance()->BroadCastAccountPacket();
-		
-
-		////접속되면 최초로 메시지를 보냄...
-		//char buffer[500];
-		//AccountPacket::S_Account temp;
-		////USER user = CompletionPort.cm
-
-		//unsigned short size = 0, ty = 0, len = 0;
-		//temp.set_uid(sock); temp.set_hp(100); temp.set_x(200), temp.set_y(200);
-		//size = temp.ByteSize();
-		//ty = ACCOUNT; // 
-		//memcpy(buffer, &size, sizeof(size));
-		//memcpy(buffer + sizeof(size), &ty, sizeof(ty));
-		//temp.SerializeToArray(buffer + sizeof(size)+sizeof(ty), temp.ByteSize());
-		//len = temp.ByteSize() + sizeof(size)+sizeof(ty);
-		//send(sock, buffer, len, 0);
-		//
 
 		handle.ReadMode();
 		CompletionPort.RecvMessage(handle);

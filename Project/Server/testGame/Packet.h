@@ -21,10 +21,12 @@ enum PACKET_HANDLER_TYPE
 class Packet
 {
 private:
+	
+public:
 	unsigned short Length;
 	unsigned short Type;
+	int uid;
 	char Msg[PKTBODY];
-public:
 	Packet();
 	~Packet();
 	Packet* PacketSeperate(char*, int);

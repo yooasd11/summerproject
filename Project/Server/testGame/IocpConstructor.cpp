@@ -164,10 +164,15 @@ void IocpConstructor::ThreadFunction()
 
 	while (1){
 		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), INFINITE);
+		//바로 에러처리해줌...getlasterror 'INFINITE'모드가 아닐 때 사용...
+		if (GetLastError() == WAIT_TIMEOUT){
+			//소켓을 닫아준다...
+			continue;
+
+		}
 		//클라이언트 통신
 		sock = tempHandle.handleinfo->ClntSock;
 		if (hasJob){
-			printf("완료 통지 \n");
 			sock = tempHandle.handleinfo->ClntSock;
 			USER& User = this->cm->retUser(sock);
 
@@ -179,111 +184,36 @@ void IocpConstructor::ThreadFunction()
 					//유저정보의 삭제...
 					this->cm->removesocket(sock);
 					closesocket(sock);
-					printf("완료 통지 유저나감\n");
-				}
-				
-
-				//같다는 말은 아직 받은 데이터가 하나도 존재하지 않는다는 의미
-				else if (User.getCurrent() == 0)
-				{
-					//최초의 입장패킷에 대한 처리를 여기서 해줘야함..
-
-
-					//패킷을 한 번에 받지 못하는 경우까지 생각해줘야함
-					unsigned short Len, current = 0;//패킷바디에 관한 사이즈가 저장되어 있음
-					memcpy(&Len, tempHandle.ioinfo->wsaBuf.buf, sizeof(Len));
-					Len += (sizeof(unsigned short)* 2);
-					//받아야 될 전체 길이를 저장하도록 하자
-					User.setTotal(Len);
-					User.setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
-					User.setCurrent(tempHandle.bytesTrans);
 				}
 
-				//아직 다 받지 못한 경우에 대한 예외처리...
-				else if (User.getCurrent() != User.getTotal())
-				{
-					User.setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
-					User.setCurrent(User.getCurrent() + tempHandle.bytesTrans);
-				}
+				//user에 관한 정보를 저장하고....
+				User.setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
+				User.setTotal(tempHandle.bytesTrans);
+				User.setCurrent(User.getCurrent() + tempHandle.bytesTrans);
+				User.uid = sock;
+				User.packetHandle();
+				User.clear();
 
-
-				if (User.finished())
-				{
-					//Packet receive;
-					////패킷을 분리하고
-					//receive.PacketSeperate(User.getBuffer(), User.getTotal());
-					////패킷을 처리해주어야함..
-					//PacketHandler::GetInstance()->HandlePacket(receive);
-
-					////유저정보에 관한 초기화...
-					//User.clear();
-				}
-
-				//unsigned short pksize, ty;
-				//memcpy(&pksize, tempHandle.ioinfo->wsaBuf.buf, sizeof(pksize));
-				//memcpy(&ty, tempHandle.ioinfo->wsaBuf.buf + sizeof(pksize), sizeof(ty));
-				//if (ty == C_MOVE){
-
-				//	InGamePacket::C_Move movetemp;
-				//	movetemp.ParseFromArray(tempHandle.ioinfo->buf + sizeof(pksize)+sizeof(ty), pksize);
-				//	printf("유저의 처음 위치 %d %d\n", User.x, User.y);
-				//	printf("이동중!!\n");
-				//	if (movetemp.direction() == RIGHT){
-				//		User.x += (SPEED*movetemp.duration());
-				//	}
-				//	else{
-				//		User.x -= (SPEED*movetemp.duration());
-				//	}
-				//	printf("유저의 변경된 위치 %d %d\n", User.x, User.y);
-
-				//	InGamePacket::S_Move movetemp_2;
-				//	movetemp_2.set_uid(sock); movetemp_2.set_x(User.x); movetemp_2.set_y(User.y);
-				//	pksize = movetemp_2.ByteSize();
-				//	ty = S_MOVE;
-
-				//	//IOCP 모든 클라한테 다 보내줘야함...
-				//	std::map<SOCKET, USER>::iterator it;
-				//	for (it = this->cm->mappingClient.begin(); it != this->cm->mappingClient.end(); it++){
-				//		tempHandle.WriteMode();
-				//		memcpy(tempHandle.ioinfo->buf, &pksize, sizeof(pksize));
-				//		memcpy(tempHandle.ioinfo->buf + sizeof(pksize), &ty, sizeof(ty));
-				//		movetemp_2.SerializePartialToArray(tempHandle.ioinfo->buf + sizeof(pksize)+sizeof(ty), pksize);
-				//		this->SndMessage(tempHandle, it->second.uid);
-				//	}
-
-
-					////////일반버전
-					//memcpy(buffer, &pksize, sizeof(pksize));
-					//memcpy(buffer + sizeof(pksize), &ty, sizeof(ty));
-					//movetemp_2.SerializePartialToArray(buffer + sizeof(pksize)+sizeof(ty), pksize);
-					//send(sock, buffer, pksize + sizeof(pksize)+sizeof(ty), 0);
-			//	}
-				//데이터의 크기확인
-				//패킷의 종류확인
-				//유저의 상태에 따라 데이터를 처리여부 결정..
-				//미사일이냐 유저정보냐
-				//if(미사일) 데미지처리...맵상태..
-				//if(유저) 이동이냐 공격이냐
-
-
+				tempHandle.ReadMode();
+				this->RecvMessage(tempHandle);
 			}
+
+			//
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
+				//send 부분을 바꾸자...
 				printf("메시지 전송 완료\n");
-				//체력이 '0'인 유저에 대한 처리
-				//처리한 정보를 클라이언트에게 돌려줘야함..
-				//입은데미지..이런거..?			
+			
 			}
 		}
 
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...
 		else{
-			printf("완료통지가 없는 경우\n");
-			if (GetLastError() == 64){
+			printf("완료통지가 없는 경우...\n");
+			if (GetLastError() == WAIT_TIMEOUT){
 				this->cm->removesocket(sock);
 				closesocket(sock);
-				printf("유저나감\n");
-				printf("lasterror : %d\n", GetLastError());
+				printf("비정상 종료\n");
 			}
 			//JobSchedule();
 		}

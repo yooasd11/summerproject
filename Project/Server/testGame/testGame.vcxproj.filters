@@ -72,10 +72,10 @@
     <ClInclude Include="PacketHandler.h">
       <Filter>Packet</Filter>
     </ClInclude>
-    <ClInclude Include="..\protobuffer\InGamePacket.pb.h">
+    <ClInclude Include="..\..\ProtoBuf\packets\AccountPacket.pb.h">
       <Filter>protocolBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\protobuffer\AccountPacket.pb.h">
+    <ClInclude Include="..\..\ProtoBuf\packets\InGamePacket.pb.h">
       <Filter>protocolBuffer</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,10 +128,10 @@
     <ClCompile Include="PacketHandler.cpp">
       <Filter>Packet</Filter>
     </ClCompile>
-    <ClCompile Include="..\protobuffer\AccountPacket.pb.cc">
+    <ClCompile Include="..\..\ProtoBuf\packets\AccountPacket.pb.cc">
       <Filter>protocolBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\protobuffer\InGamePacket.pb.cc">
+    <ClCompile Include="..\..\ProtoBuf\packets\InGamePacket.pb.cc">
       <Filter>protocolBuffer</Filter>
     </ClCompile>
   </ItemGroup>
