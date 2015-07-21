@@ -7,6 +7,7 @@ class JYRealTimer;
 
 USING_NS_CC;
 
+class JYObject;
 class JYPlayer;
 
 class MyScene : public cocos2d::Layer

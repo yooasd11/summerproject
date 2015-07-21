@@ -141,7 +141,7 @@ void MyScene::makePlayer(const UINT& nUID, JYObject* const pJYPlayer){
 	bullet->setVisible(false);
 	bullet->setScale(0.3f);
 	bullet->setPosition(ccp(5.0f, 5.0f));
-	this->addChild(bullet);
+	addChild(bullet);
 
 	if (nUID == this->nPlayerUID){
 		pJYPlayerDragon = (JYPlayer*)pJYPlayer;

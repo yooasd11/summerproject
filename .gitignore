@@ -2,7 +2,10 @@ server/critical section/thread2.opensdf
 *.tlog
 *.sdf
 *.opensdf
-C:\Users\yooasd11\Documents\summerproject\Project\Worms\proj.android\
-C:\Users\yooasd11\Documents\summerproject\Project\Worms\proj.ios_mac\
-C:\Users\yooasd11\Documents\summerproject\Project\Worms\proj.win8.1-universal\
-C:\Users\yooasd11\Documents\summerproject\Project\Worms\proj.win32\Debug.win32
+Project\Worms\proj.android\
+Project\Worms\proj.ios_mac\
+Project\Worms\proj.win8.1-universal\
+Project\Worms\proj.win32\Debug.win32
+Project\Server\ipch
+Project\Server\Debug
+Project\Worms\proj.win32\Debug.win32\
