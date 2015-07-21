@@ -29,8 +29,9 @@ int _tmain()
 		handle.Copy();
 		CompletionPort.registerObject(handle);
 
-		PacketHandler::GetInstance()->BroadCastAccountPacket();
 		PacketHandler::GetInstance()->SendAccountPacket(sock);
+		PacketHandler::GetInstance()->BroadCastAccountPacket();
+		
 
 		////접속되면 최초로 메시지를 보냄...
 		//char buffer[500];

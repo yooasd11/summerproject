@@ -2,9 +2,10 @@ syntax="proto2";
 package InGamePacket;
 
 message C_Move{
-	required float x=1;
-	required float y=2;
-	required float velocity=3;	
+	required uint32 uid=1;
+	required float x=2;
+	required float y=3;
+	required float velocity=4;
 }
 
 message S_Move{
@@ -15,8 +16,9 @@ message S_Move{
 }
 
 message C_Stop{
-	required float x=1;
-	required float y=2;
+	required float uid=1;
+	required float x=2;
+	required float y=3;
 }
 
 message S_Stop{

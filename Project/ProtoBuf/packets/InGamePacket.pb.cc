@@ -43,7 +43,8 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       "InGamePacket.proto");
   GOOGLE_CHECK(file != NULL);
   C_Move_descriptor_ = file->message_type(0);
-  static const int C_Move_offsets_[3] = {
+  static const int C_Move_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Move, uid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Move, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Move, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Move, velocity_),
@@ -78,7 +79,8 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Move, _internal_metadata_),
       -1);
   C_Stop_descriptor_ = file->message_type(2);
-  static const int C_Stop_offsets_[2] = {
+  static const int C_Stop_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, uid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, y_),
   };
@@ -152,12 +154,13 @@ void protobuf_AddDesc_InGamePacket_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\022InGamePacket.proto\022\014InGamePacket\"0\n\006C_"
-    "Move\022\t\n\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\020\n\010velocity\030\003"
-    " \002(\002\"=\n\006S_Move\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t"
-    "\n\001y\030\003 \002(\002\022\020\n\010velocity\030\004 \002(\002\"\036\n\006C_Stop\022\t\n"
-    "\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\"+\n\006S_Stop\022\013\n\003uid\030\001 \002"
-    "(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002(\002", 224);
+    "\n\022InGamePacket.proto\022\014InGamePacket\"=\n\006C_"
+    "Move\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002(\002\022"
+    "\020\n\010velocity\030\004 \002(\002\"=\n\006S_Move\022\013\n\003uid\030\001 \002(\r"
+    "\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002(\002\022\020\n\010velocity\030\004 \002(\002"
+    "\"+\n\006C_Stop\022\013\n\003uid\030\001 \002(\002\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030"
+    "\003 \002(\002\"+\n\006S_Stop\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022"
+    "\t\n\001y\030\003 \002(\002", 250);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "InGamePacket.proto", &protobuf_RegisterTypes);
   C_Move::default_instance_ = new C_Move();
@@ -191,6 +194,7 @@ static void MergeFromFail(int line) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int C_Move::kUidFieldNumber;
 const int C_Move::kXFieldNumber;
 const int C_Move::kYFieldNumber;
 const int C_Move::kVelocityFieldNumber;
@@ -215,6 +219,7 @@ C_Move::C_Move(const C_Move& from)
 
 void C_Move::SharedCtor() {
   _cached_size_ = 0;
+  uid_ = 0u;
   x_ = 0;
   y_ = 0;
   velocity_ = 0;
@@ -265,7 +270,7 @@ void C_Move::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(x_, velocity_);
+  ZR_(uid_, velocity_);
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -286,9 +291,24 @@ bool C_Move::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required float x = 1;
+      // required uint32 uid = 1;
       case 1: {
-        if (tag == 13) {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &uid_)));
+          set_has_uid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(21)) goto parse_x;
+        break;
+      }
+
+      // required float x = 2;
+      case 2: {
+        if (tag == 21) {
+         parse_x:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
                  input, &x_)));
@@ -296,13 +316,13 @@ bool C_Move::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(21)) goto parse_y;
+        if (input->ExpectTag(29)) goto parse_y;
         break;
       }
 
-      // required float y = 2;
-      case 2: {
-        if (tag == 21) {
+      // required float y = 3;
+      case 3: {
+        if (tag == 29) {
          parse_y:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -311,13 +331,13 @@ bool C_Move::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(29)) goto parse_velocity;
+        if (input->ExpectTag(37)) goto parse_velocity;
         break;
       }
 
-      // required float velocity = 3;
-      case 3: {
-        if (tag == 29) {
+      // required float velocity = 4;
+      case 4: {
+        if (tag == 37) {
          parse_velocity:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -355,19 +375,24 @@ failure:
 void C_Move::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:InGamePacket.C_Move)
-  // required float x = 1;
+  // required uint32 uid = 1;
+  if (has_uid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
+  }
+
+  // required float x = 2;
   if (has_x()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(1, this->x(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->x(), output);
   }
 
-  // required float y = 2;
+  // required float y = 3;
   if (has_y()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->y(), output);
   }
 
-  // required float velocity = 3;
+  // required float velocity = 4;
   if (has_velocity()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->velocity(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->velocity(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -380,19 +405,24 @@ void C_Move::SerializeWithCachedSizes(
 ::google::protobuf::uint8* C_Move::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:InGamePacket.C_Move)
-  // required float x = 1;
+  // required uint32 uid = 1;
+  if (has_uid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
+  }
+
+  // required float x = 2;
   if (has_x()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(1, this->x(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->x(), target);
   }
 
-  // required float y = 2;
+  // required float y = 3;
   if (has_y()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->y(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->y(), target);
   }
 
-  // required float velocity = 3;
+  // required float velocity = 4;
   if (has_velocity()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->velocity(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->velocity(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -406,18 +436,25 @@ void C_Move::SerializeWithCachedSizes(
 int C_Move::RequiredFieldsByteSizeFallback() const {
   int total_size = 0;
 
+  if (has_uid()) {
+    // required uint32 uid = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->uid());
+  }
+
   if (has_x()) {
-    // required float x = 1;
+    // required float x = 2;
     total_size += 1 + 4;
   }
 
   if (has_y()) {
-    // required float y = 2;
+    // required float y = 3;
     total_size += 1 + 4;
   }
 
   if (has_velocity()) {
-    // required float velocity = 3;
+    // required float velocity = 4;
     total_size += 1 + 4;
   }
 
@@ -426,14 +463,19 @@ int C_Move::RequiredFieldsByteSizeFallback() const {
 int C_Move::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required float x = 1;
+  if (((_has_bits_[0] & 0x0000000f) ^ 0x0000000f) == 0) {  // All required fields are present.
+    // required uint32 uid = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->uid());
+
+    // required float x = 2;
     total_size += 1 + 4;
 
-    // required float y = 2;
+    // required float y = 3;
     total_size += 1 + 4;
 
-    // required float velocity = 3;
+    // required float velocity = 4;
     total_size += 1 + 4;
 
   } else {
@@ -465,6 +507,9 @@ void C_Move::MergeFrom(const ::google::protobuf::Message& from) {
 void C_Move::MergeFrom(const C_Move& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_uid()) {
+      set_uid(from.uid());
+    }
     if (from.has_x()) {
       set_x(from.x());
     }
@@ -493,7 +538,7 @@ void C_Move::CopyFrom(const C_Move& from) {
 }
 
 bool C_Move::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
 
   return true;
 }
@@ -503,6 +548,7 @@ void C_Move::Swap(C_Move* other) {
   InternalSwap(other);
 }
 void C_Move::InternalSwap(C_Move* other) {
+  std::swap(uid_, other->uid_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
   std::swap(velocity_, other->velocity_);
@@ -522,15 +568,39 @@ void C_Move::InternalSwap(C_Move* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // C_Move
 
-// required float x = 1;
-bool C_Move::has_x() const {
+// required uint32 uid = 1;
+bool C_Move::has_uid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-void C_Move::set_has_x() {
+void C_Move::set_has_uid() {
   _has_bits_[0] |= 0x00000001u;
 }
-void C_Move::clear_has_x() {
+void C_Move::clear_has_uid() {
   _has_bits_[0] &= ~0x00000001u;
+}
+void C_Move::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+ ::google::protobuf::uint32 C_Move::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Move.uid)
+  return uid_;
+}
+ void C_Move::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Move.uid)
+}
+
+// required float x = 2;
+bool C_Move::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+void C_Move::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+void C_Move::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 void C_Move::clear_x() {
   x_ = 0;
@@ -546,15 +616,15 @@ void C_Move::clear_x() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Move.x)
 }
 
-// required float y = 2;
+// required float y = 3;
 bool C_Move::has_y() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 void C_Move::set_has_y() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 void C_Move::clear_has_y() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 void C_Move::clear_y() {
   y_ = 0;
@@ -570,15 +640,15 @@ void C_Move::clear_y() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Move.y)
 }
 
-// required float velocity = 3;
+// required float velocity = 4;
 bool C_Move::has_velocity() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 void C_Move::set_has_velocity() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 void C_Move::clear_has_velocity() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 void C_Move::clear_velocity() {
   velocity_ = 0;
@@ -1074,6 +1144,7 @@ void S_Move::clear_velocity() {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int C_Stop::kUidFieldNumber;
 const int C_Stop::kXFieldNumber;
 const int C_Stop::kYFieldNumber;
 #endif  // !_MSC_VER
@@ -1097,6 +1168,7 @@ C_Stop::C_Stop(const C_Stop& from)
 
 void C_Stop::SharedCtor() {
   _cached_size_ = 0;
+  uid_ = 0;
   x_ = 0;
   y_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -1146,7 +1218,7 @@ void C_Stop::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(x_, y_);
+  ZR_(uid_, y_);
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -1167,9 +1239,24 @@ bool C_Stop::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required float x = 1;
+      // required float uid = 1;
       case 1: {
         if (tag == 13) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &uid_)));
+          set_has_uid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(21)) goto parse_x;
+        break;
+      }
+
+      // required float x = 2;
+      case 2: {
+        if (tag == 21) {
+         parse_x:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
                  input, &x_)));
@@ -1177,13 +1264,13 @@ bool C_Stop::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(21)) goto parse_y;
+        if (input->ExpectTag(29)) goto parse_y;
         break;
       }
 
-      // required float y = 2;
-      case 2: {
-        if (tag == 21) {
+      // required float y = 3;
+      case 3: {
+        if (tag == 29) {
          parse_y:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -1221,14 +1308,19 @@ failure:
 void C_Stop::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:InGamePacket.C_Stop)
-  // required float x = 1;
-  if (has_x()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(1, this->x(), output);
+  // required float uid = 1;
+  if (has_uid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(1, this->uid(), output);
   }
 
-  // required float y = 2;
+  // required float x = 2;
+  if (has_x()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->x(), output);
+  }
+
+  // required float y = 3;
   if (has_y()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->y(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1241,14 +1333,19 @@ void C_Stop::SerializeWithCachedSizes(
 ::google::protobuf::uint8* C_Stop::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:InGamePacket.C_Stop)
-  // required float x = 1;
-  if (has_x()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(1, this->x(), target);
+  // required float uid = 1;
+  if (has_uid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(1, this->uid(), target);
   }
 
-  // required float y = 2;
+  // required float x = 2;
+  if (has_x()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->x(), target);
+  }
+
+  // required float y = 3;
   if (has_y()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->y(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->y(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1262,13 +1359,18 @@ void C_Stop::SerializeWithCachedSizes(
 int C_Stop::RequiredFieldsByteSizeFallback() const {
   int total_size = 0;
 
+  if (has_uid()) {
+    // required float uid = 1;
+    total_size += 1 + 4;
+  }
+
   if (has_x()) {
-    // required float x = 1;
+    // required float x = 2;
     total_size += 1 + 4;
   }
 
   if (has_y()) {
-    // required float y = 2;
+    // required float y = 3;
     total_size += 1 + 4;
   }
 
@@ -1277,11 +1379,14 @@ int C_Stop::RequiredFieldsByteSizeFallback() const {
 int C_Stop::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
-    // required float x = 1;
+  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
+    // required float uid = 1;
     total_size += 1 + 4;
 
-    // required float y = 2;
+    // required float x = 2;
+    total_size += 1 + 4;
+
+    // required float y = 3;
     total_size += 1 + 4;
 
   } else {
@@ -1313,6 +1418,9 @@ void C_Stop::MergeFrom(const ::google::protobuf::Message& from) {
 void C_Stop::MergeFrom(const C_Stop& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_uid()) {
+      set_uid(from.uid());
+    }
     if (from.has_x()) {
       set_x(from.x());
     }
@@ -1338,7 +1446,7 @@ void C_Stop::CopyFrom(const C_Stop& from) {
 }
 
 bool C_Stop::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   return true;
 }
@@ -1348,6 +1456,7 @@ void C_Stop::Swap(C_Stop* other) {
   InternalSwap(other);
 }
 void C_Stop::InternalSwap(C_Stop* other) {
+  std::swap(uid_, other->uid_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
@@ -1366,15 +1475,39 @@ void C_Stop::InternalSwap(C_Stop* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // C_Stop
 
-// required float x = 1;
-bool C_Stop::has_x() const {
+// required float uid = 1;
+bool C_Stop::has_uid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-void C_Stop::set_has_x() {
+void C_Stop::set_has_uid() {
   _has_bits_[0] |= 0x00000001u;
 }
-void C_Stop::clear_has_x() {
+void C_Stop::clear_has_uid() {
   _has_bits_[0] &= ~0x00000001u;
+}
+void C_Stop::clear_uid() {
+  uid_ = 0;
+  clear_has_uid();
+}
+ float C_Stop::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Stop.uid)
+  return uid_;
+}
+ void C_Stop::set_uid(float value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.uid)
+}
+
+// required float x = 2;
+bool C_Stop::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+void C_Stop::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+void C_Stop::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 void C_Stop::clear_x() {
   x_ = 0;
@@ -1390,15 +1523,15 @@ void C_Stop::clear_x() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.x)
 }
 
-// required float y = 2;
+// required float y = 3;
 bool C_Stop::has_y() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 void C_Stop::set_has_y() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 void C_Stop::clear_has_y() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 void C_Stop::clear_y() {
   y_ = 0;
