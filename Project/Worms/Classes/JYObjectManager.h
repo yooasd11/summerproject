@@ -1,6 +1,6 @@
 #include <vector>
 #include <string>
-class JYObject;
+#include "JYObject.h"
 
 class JYObjectManager{
 private:
@@ -10,6 +10,7 @@ private:
 	~JYObjectManager() {}
 	std::vector<JYObject*>::iterator findIteratorByName(const std::string& sName);
 	std::vector<JYObject*>::iterator findIteratorByObject(JYObject* const pObject);
+	std::vector<JYObject*>::iterator findIteratorByUID(UINT& nUID);
 public:
 	static JYObjectManager* getInstance(){
 		static JYObjectManager instance;
@@ -20,4 +21,5 @@ public:
 	void pushObject(JYObject* const pObject);
 	void popObject(JYObject* const pObject);
 	JYObject* findObjectByName(const std::string& sName);
+	JYObject* findObjectByUID(UINT& nUID);
 };

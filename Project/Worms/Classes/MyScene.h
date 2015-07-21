@@ -16,7 +16,9 @@ public:
 	// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	static cocos2d::Scene* createScene();
 
+	UINT nPlayerUID;
 	JYPlayer* pJYPlayerDragon;
+	CCSprite* pFireAim;
 	CCParallaxNode* backgroundNode;
 	CCSize winSize;
 	JYRealTimer* pTimer;
@@ -33,7 +35,8 @@ public:
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	void addBackground();
-	void createDragon(const UINT& nUID, CCPoint pos);
+	void createDragon(const UINT& nUID, const CCPoint& pos);
+	//void makePlayer(const UINT& nUID, JYObject* const pJYPlayer);
 	void setViewPointCenter(CCPoint pos);
 	void callEveryFrame(float fDeltaTime);
 	// implement the "static create()" method manually

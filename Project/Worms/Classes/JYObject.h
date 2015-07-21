@@ -6,6 +6,8 @@
 
 class JYObject{
 private:
+	UINT m_nUID;
+	float m_fVelocity;
 	cocos2d::CCNode* m_pCCObject;
 	JYObject* m_pJYObjectParent;
 	BaseExecutor* m_Executors[__MaxExecutor];
@@ -15,6 +17,21 @@ private:
 public:
 	JYObject(cocos2d::CCNode* pCCObject);
 	virtual ~JYObject();
+
+	UINT getUID(){
+		return m_nUID;
+	}
+	void setUID(const UINT& nUID){
+		m_nUID = nUID;
+	}
+
+	float getVelocity(){
+		return m_fVelocity;
+	}
+
+	void setVelocity(const float& fVelocity){
+		m_fVelocity = fVelocity;
+	}
 
 	BaseExecutor* getExecutor(int type) { 
 		return m_Executors[type]; 

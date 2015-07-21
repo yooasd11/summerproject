@@ -4,6 +4,7 @@
 #include "InGamePacket.pb.h"
 #include "MyScene.h"
 #include "JYPlayer.h"
+#include "JYObjectManager.h"
 #include <vector>
 
 
@@ -41,22 +42,28 @@ void EchoPacketHandler(Packet& p){
 REGIST_HANDLER(PACKET_TYPE::PKT_ACCOUNT, AccountPacketHandler);
 void AccountPacketHandler(Packet& p){
 	char* PktBody = p.getMsg();
-	UINT AccountSize;
-	memcpy(&AccountSize, PktBody, sizeof(UINT));
-	AccountPacket::S_Account sAccountPacket;
-	for (UINT i = 0; i < AccountSize; ++i){
-		sAccountPacket.ParseFromArray(PktBody + sizeof(UINT) + i*sAccountPacket.ByteSize() , sAccountPacket.ByteSize());
+	UINT nUID;
+	memcpy(&nUID, PktBody, sizeof(UINT));
 
-		UINT nUid = sAccountPacket.uid();
-		UINT nHP = sAccountPacket.hp();
-		UINT nPosX = sAccountPacket.x();
-		UINT nPosY = sAccountPacket.y();
+	MyScene* pMyScene = (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+	pMyScene->nPlayerUID = nUID;
+}
 
-		CCLOG("Account result : UID - %d, HP - %d, X - %d, Y - %d", nUid, nHP, nPosX, nPosY);
+REGIST_HANDLER(PACKET_TYPE::PKT_ACCOUNT_LIST, AccountListPacketHandler);
+void AccountListPacketHandler(Packet& p){
+	char* PktBody = p.getMsg();
+	AccountPacket::S_Account_List sAccountList;
+	sAccountList.ParseFromArray(PktBody, p.getLength());
+	USHORT nSize = sAccountList.account_member_size();
+	for (USHORT i = 0; i < nSize; ++i){
+		AccountPacket::S_Account_List::Account mAccount = sAccountList.account_member(i);
+		UINT nUID = mAccount.uid();
+		UINT nHP = mAccount.hp();
+		float fX = mAccount.x();
+		float fY = mAccount.y();
 
-		cocos2d::CCScene* pNowScene = cocos2d::CCDirector::getInstance()->getRunningScene();
-		MyScene* pMyScene = (MyScene*)pNowScene->getChildByName("MyScene");
-		pMyScene->createDragon(nUid, ccp((float)nPosX, (float)nPosY));
+		MyScene* pMyScene = (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+		pMyScene->createDragon(nUID, ccp(fX, fY));
 	}
 }
 
@@ -70,6 +77,10 @@ void SMovePacketHandler(Packet& p){
 	float fX = sMovePacket.x();
 	float fY = sMovePacket.y();
 	float fVelocity = sMovePacket.velocity();
+
+	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+	pJYPlayer->setVelocity(fVelocity);
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_STOP, SStopPacketHandler);
@@ -83,9 +94,8 @@ void SStopPacketHandler(Packet& p){
 	float fY = sStopPacket.y();
 
 	CCLOG("Position from server : (%.2f, %.2f)", fX, fY);
-	cocos2d::CCScene* pNowScene = cocos2d::CCDirector::getInstance()->getRunningScene();
-	MyScene* pMyScene = (MyScene*)pNowScene->getChildByName("MyScene");
-	pMyScene->pJYPlayerDragon->getCCObject()->setPosition(ccp(fX, fY));
+	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	pJYPlayer->setVelocity(0.0f);
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_END, EndHandler);

@@ -47,7 +47,7 @@ void PacketHandler::SendAccountPacket(SOCKET clnt)
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	memcpy(buffer + sizeof(size)+sizeof(type), &clnt, sizeof(SOCKET));
-	send(clnt, buffer, BUFSIZE - 1, 0);
+	send(clnt, buffer, size + sizeof(unsigned short)*2, 0);
 	delete[] buffer;
 	return;
 }
@@ -83,7 +83,7 @@ void PacketHandler::BroadCastAccountPacket()
 	//이제 보내줘야함..
 	for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 	{
-		send(it->second.uid, buffer, BUFSIZE - 1, 0);
+		send(it->second.uid, buffer, size+current, 0);
 	}
 	delete[] buffer;
 	return;

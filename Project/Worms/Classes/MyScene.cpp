@@ -12,10 +12,11 @@
 #include "AccountPacket.pb.h"
 #include "InGamePacket.pb.h"
 #include "Packet.h"
+#include "JYObjectManager.h"
 USING_NS_CC;
 
-#define SERVER_IP_ADDRESS "10.1.4.85"
-//#define SERVER_IP_ADDRESS "localhost"
+//#define SERVER_IP_ADDRESS "10.1.4.85"
+#define SERVER_IP_ADDRESS "localhost"
 #define SERVER_PORT_NUMBER 9200
 
 Scene* MyScene::createScene()
@@ -99,7 +100,7 @@ void MyScene::addBackground(){
 	metaInfo->setVisible(false);
 }
 
-void MyScene::createDragon(const UINT& nUID, CCPoint dragonPosition){
+void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	CCTexture2D* texture = CCDirector::getInstance()->getTextureCache()->addImage("Animations/dragon_animation.png");
 	CCAnimation* animation = Animation::create();
 	animation->setDelayPerUnit(0.05f);
@@ -117,31 +118,43 @@ void MyScene::createDragon(const UINT& nUID, CCPoint dragonPosition){
 	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)backgroundNode->getChildByName("Tmap");
 	pTmap->addChild(pDragon, 3, 15);
 
-
-	CCSprite* fireAim = CCSprite::create("line.PNG");
-	fireAim->setPosition(pDragon->getContentSize().width / 2, pDragon->getContentSize().height / 3);
-	fireAim->setName("Aim");
-	fireAim->setScale(0.3f);
-	fireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
-	pDragon->addChild(fireAim, 2);
-
-	CCSprite* bullet = CCSprite::create("bullet.PNG");
-	bullet->setName("Bullet");
-	bullet->setVisible(false);
-	bullet->setScale(0.3f);
-	bullet->setPosition(ccp(5.0f, 5.0f));
-	this->addChild(bullet);
-
 	Animate* animate = Animate::create(animation);
 	RepeatForever* rep = RepeatForever::create(animate);
 	pDragon->runAction(rep);
 
-	pJYPlayerDragon = new JYPlayer(pDragon);
-	pJYPlayerDragon->setUID(nUID);
-	JYArm* pJYArmBullet = new JYArm(bullet);
-	pJYArmBullet->setName("JYBullet");
-	pJYPlayerDragon->addChild(pJYArmBullet);
+	JYPlayer* pJYPlayer = new JYPlayer(pDragon);
+
+	/*if (this->pJYPlayerDragon == nullptr){
+		this->makePlayer(nUID, pJYPlayer);
+	}*/
 }
+
+//void MyScene::makePlayer(const UINT& nUID, JYObject* const pJYPlayer){
+//	if (this->pJYPlayerDragon != nullptr) return;
+//
+//	CCNode* pNode = pJYPlayer->getCCObject();
+//
+//	pFireAim = CCSprite::create("line.PNG");
+//	pFireAim->setPosition(pNode->getContentSize().width / 2, pNode->getContentSize().height / 3);
+//	pFireAim->setName("Aim");
+//	pFireAim->setScale(0.3f);
+//	pFireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
+//	pNode->addChild(pFireAim);
+//
+//	CCSprite* bullet = CCSprite::create("bullet.PNG");
+//	bullet->setName("Bullet");
+//	bullet->setVisible(false);
+//	bullet->setScale(0.3f);
+//	bullet->setPosition(ccp(5.0f, 5.0f));
+//	this->addChild(bullet);
+//
+//	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
+//	pJYPlayerDragon->setUID(nUID);
+//	JYArm* pJYArmBullet = new JYArm(bullet);
+//	pJYArmBullet->setName("JYBullet");
+//	pJYPlayerDragon->addChild(pJYArmBullet);
+//}
+
 
 bool MyScene::onTouchBegan(Touch* pTouch, Event* pEvent){
 	return true;
@@ -164,7 +177,7 @@ void MyScene::onTouchEnded(Touch* pTouch, Event* pEvent){
 }
 
 void MyScene::onMouseMove(Event* pEvent){
-	InputHandler::getInstance()->onMouseMove(pEvent);
+	pJYPlayerDragon->onMouseMove(pEvent);
 }
 
 void MyScene::onMouseDown(Event* pEvent){
@@ -183,6 +196,9 @@ void MyScene::callEveryFrame(float fDeltaTime){
 	ConnectionManager::getInstance()->receive();
 	float fElapsedTime = pTimer->getElapsedTime();
 	JYArm * pJYArmBullet = (JYArm*)pJYPlayerDragon->getChildByName("JYBullet");
-	pJYPlayerDragon->tick(fElapsedTime);
+	std::vector<JYObject*>* pJYObjectArray = &JYObjectManager::getInstance()->m_pJYObjectVector;
+	for (auto it = pJYObjectArray->begin(); it < pJYObjectArray->end(); ++it){
+		(*it)->tick(fElapsedTime);
+	}
 	pJYArmBullet->tick(fElapsedTime);
 }

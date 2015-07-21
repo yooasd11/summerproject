@@ -15,10 +15,10 @@ void MoveExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
 	float fX = pDragon->getPosition().x;
 	float fY = pDragon->getPosition().y;
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A){
-		fVelocity = -50.0f;
+		fVelocity = -20.0f;
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_D){
-		fVelocity = 50.0f;
+		fVelocity = 20.0f;
 	}
 
 	char sendBuf[PKTBODYSIZE];
@@ -51,7 +51,7 @@ void MoveExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 void MoveExecutor::tick(float fDeltaTime){
 	cocos2d::EventKeyboard::KeyCode keyCode;
 
-	if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_W) == true)
+	/*if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_W) == true)
 		handleKeycodeMovement(keyCode);
 
 	if (InputHandler::getInstance()->isKeyPressed(keyCode = cocos2d::EventKeyboard::KeyCode::KEY_S) == true)
@@ -67,8 +67,18 @@ void MoveExecutor::tick(float fDeltaTime){
 		cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
 		pDragon->setFlippedX(true);
 		handleKeycodeMovement(keyCode);
-	}
+	}*/
 
+	static float fPassedTime = 0;
+	fPassedTime += fDeltaTime;
+	if (fPassedTime >= 0.1f){
+		float fVelolcity = this->getOwner()->getVelocity();
+		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
+		cocos2d::CCPoint currPos = pCCOwner->getPosition();
+		cocos2d::CCPoint nextPos = cocos2d::ccp(currPos.x + fVelolcity * fPassedTime, currPos.y);
+		this->setPlayerPosition(currPos, nextPos);
+		fPassedTime = 0.0f;
+	}
 }
 
 void MoveExecutor::handleKeycodeMovement(cocos2d::EventKeyboard::KeyCode keyCode){
@@ -79,7 +89,7 @@ void MoveExecutor::handleKeycodeMovement(cocos2d::EventKeyboard::KeyCode keyCode
 	if (pCCOwner->getActionByTag(nActionTagForKeycode[nKeyCode]) == nullptr){
 		nActionTagForKeycode[nKeyCode] = 0;
 		cocos2d::CCPoint nextPos = getNextPos(currPos, keyCode);
-		setPlayerPosition(currPos, nextPos, keyCode);
+		setPlayerPosition(currPos, nextPos);
 	}
 }
 
@@ -97,7 +107,7 @@ cocos2d::CCPoint MoveExecutor::getNextPos(cocos2d::CCPoint pos, cocos2d::EventKe
 	return pos + nextRelPos;
 }
 
-void MoveExecutor::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst, cocos2d::EventKeyboard::KeyCode keyCode){
+void MoveExecutor::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst){
 	boundaryCollisionChecker(src, dst);
 	objectCollisionChecker(src, dst);
 	//CollisionExecutor* pCollisionExecutor = getOwner()->getExecutor(__Executor::__CollisionExecutor);
@@ -107,7 +117,6 @@ void MoveExecutor::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst,
 	cocos2d::CCActionInterval* moveAct = cocos2d::CCMoveTo::create(0.1f, dst);
 	moveAct->setTag(++nGenerateActionTag);
 	this->getOwner()->getCCObject()->runAction(moveAct);
-	nActionTagForKeycode[(int)keyCode] = nGenerateActionTag;
 }
 
 bool MoveExecutor::boundaryCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst){

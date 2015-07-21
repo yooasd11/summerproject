@@ -11,6 +11,7 @@ enum PACKET_TYPE
 	PKT_BEGIN = 0,
 	PKT_ECHO,
 	PKT_ACCOUNT,
+	PKT_ACCOUNT_LIST,
 	PKT_S_MOVE,			//right = 0, left = 1
 	PKT_C_MOVE,
 	PKT_S_STOP,

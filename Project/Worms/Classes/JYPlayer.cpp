@@ -7,7 +7,6 @@
 
 JYPlayer::JYPlayer(cocos2d::CCNode* pCCObject) : JYObject(pCCObject){
 	new MoveExecutor(this);
-	m_nUID = -1;
 }
 void JYPlayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 	MoveExecutor* pMoveExecutor = (MoveExecutor*)this->getExecutor(__MoveExecutor);

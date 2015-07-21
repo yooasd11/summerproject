@@ -22,12 +22,14 @@ int ConnectionManager::accountTo(char* ip, int port){
 		return -2;
 	}
 
-	if (!strcmp(ip, "localhost")) 
-		strcpy(ip, "127.0.0.1");
+	char* pIp = new char[std::strlen(ip)];
+	strcpy(pIp, ip);
+	if (!strcmp(pIp, "localhost")) 
+		strcpy(pIp, "127.0.0.1");
 
 	memset(&servAdr, 0, sizeof(servAdr));
 	servAdr.sin_family = AF_INET;
-	servAdr.sin_addr.s_addr = inet_addr(ip);
+	servAdr.sin_addr.s_addr = inet_addr(pIp);
 	servAdr.sin_port = htons(port);
 
 	if (connect(m_servSocket, (SOCKADDR*)&servAdr, sizeof(servAdr)) == SOCKET_ERROR){
@@ -46,9 +48,8 @@ int ConnectionManager::recvMsg(){
 	char BodyBuf[PKTBODYSIZE];
 	Packet packet;
 
-	int retRecv = recv(m_servSocket, HeaderBuf, 2 * sizeof(USHORT), 0);
-	if (retRecv == -1) return -1;	// 소켓이A 끊어진 경우
-
+	int retRecv = recv(m_servSocket, HeaderBuf, PKTHEADERSIZE, 0);
+	if (retRecv < 4) return -1;	// 이상한 대가리
 	USHORT PktLen, PktType;
 
 	memcpy(&PktLen, HeaderBuf, sizeof(USHORT));
@@ -56,7 +57,7 @@ int ConnectionManager::recvMsg(){
 
 	packet.setLength(PktLen);
 	packet.setType(PktType);
-
+	if (PktType >= PACKET_TYPE::PKT_END) return -2;
 	int rcvdPacketLength = 0;
 	while (rcvdPacketLength < PktLen)
 	{

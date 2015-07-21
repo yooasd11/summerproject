@@ -2,6 +2,8 @@
 #include "AppDelegate.h"
 #include "cocos2d.h"
 
+#include "InGamePacket.pb.h"
+
 USING_NS_CC;
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,

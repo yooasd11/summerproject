@@ -5,6 +5,8 @@
 #include "CoordinateConverter.h"
 
 JYObject::JYObject(cocos2d::CCNode* pCCObject) : m_pCCObject(pCCObject), m_pJYObjectParent(nullptr) {
+	m_nUID = -1;
+	m_fVelocity = 0.0f;
 	memset(m_Executors, 0, sizeof(m_Executors));
 	JYObjectManager::getInstance()->pushObject(this);
 }

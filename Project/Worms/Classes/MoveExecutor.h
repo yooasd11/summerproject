@@ -11,7 +11,7 @@ private:
 	cocos2d::CCPoint getNextPos(cocos2d::CCPoint pos, cocos2d::EventKeyboard::KeyCode keyCode);
 	cocos2d::CCPoint tileCoordForPostion(cocos2d::CCPoint pos);
 	
-	void setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst, cocos2d::EventKeyboard::KeyCode keyCode);
+	void setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst);
 	bool boundaryCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst);
 	bool objectCollisionChecker(cocos2d::CCPoint& src, cocos2d::CCPoint& dst);
 public:
