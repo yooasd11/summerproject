@@ -29,11 +29,11 @@ void PacketHandler::UnregistHandler(int type)
 bool PacketHandler::HandlePacket(Packet& p){
 	//패킷에 관한 처리...
 	
-	//int type = p.getType();
-	//if (this->HandlerTable[type] == nullptr){
-	//	return false;
-	//}
-	//this->HandlerTable[type](p);
+	int type = p.getType();
+	if (this->HandlerTable[type] == nullptr){
+		return false;
+	}
+	this->HandlerTable[type](p);
 	return true;
 }
 
@@ -83,7 +83,7 @@ void PacketHandler::BroadCastAccountPacket()
 	//이제 보내줘야함..
 	for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 	{
-		send(it->second.uid, buffer, size+current, 0);
+		send(it->second.uid, buffer, size + sizeof(unsigned short)*2, 0);
 	}
 	delete[] buffer;
 	return;
@@ -96,10 +96,10 @@ void PacketHandler::BroadCastAccountPacket()
 	HandlerRegistHelper Handler_##PACKET_HANDLE(PACKET_TYPE, PACKET_HANDLE);
 
 
-REGIST_HANDLE(PKT_C_STOP, SMOVE_Handler);
-void SMOVE_Handler(Packet& p)
+REGIST_HANDLE(PKT_C_STOP, C_MOVE_Handler);
+void C_MOVE_Handler(Packet& p)
 {
-
+	InGamePacket::C_Move MovePacket;
 
 
 }
