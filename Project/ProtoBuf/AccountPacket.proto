@@ -3,6 +3,10 @@ package AccountPacket;
 
 message S_Account_List{
 
+message Disconnect{
+	required uint32 uid=1;
+}
+
 message Account{
 	required uint32 uid=1;
 	required uint32 hp=2;

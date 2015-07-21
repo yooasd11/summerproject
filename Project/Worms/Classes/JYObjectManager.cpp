@@ -18,7 +18,7 @@ std::vector<JYObject*>::iterator JYObjectManager::findIteratorByObject(JYObject*
 
 }
 
-std::vector<JYObject*>::iterator JYObjectManager::findIteratorByUID(UINT& nUID){
+std::vector<JYObject*>::iterator JYObjectManager::findIteratorByUID(const UINT& nUID){
 	for (auto it = m_pJYObjectVector.begin(); it < m_pJYObjectVector.end(); ++it){
 		if ((*it)->getUID() == nUID) {
 			return it;
@@ -31,7 +31,7 @@ std::vector<JYObject*>::iterator JYObjectManager::findIteratorByUID(UINT& nUID){
 
 void JYObjectManager::pushObject(JYObject* const pObject){
 	if (pObject == nullptr) return;
-	if (findIteratorByObject(pObject) != m_pJYObjectVector.end())
+	if (findIteratorByObject(pObject) == m_pJYObjectVector.end())
 		m_pJYObjectVector.push_back(pObject);
 }
 
@@ -48,7 +48,7 @@ JYObject* JYObjectManager::findObjectByName(const std::string& sName){
 	return *retIt;
 }
 
-JYObject* JYObjectManager::findObjectByUID(UINT& nUID){
+JYObject* JYObjectManager::findObjectByUID(const UINT& nUID){
 	std::vector<JYObject*>::iterator retIt = findIteratorByUID(nUID);
 	if (retIt == m_pJYObjectVector.end()) return nullptr;
 	return *retIt;

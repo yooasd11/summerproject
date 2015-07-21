@@ -37,9 +37,99 @@ void protobuf_AssignDesc_AccountPacket_2eproto();
 void protobuf_ShutdownFile_AccountPacket_2eproto();
 
 class S_Account_List;
+class S_Account_List_Disconnect;
 class S_Account_List_Account;
 
 // ===================================================================
+
+class S_Account_List_Disconnect : public ::google::protobuf::Message {
+ public:
+  S_Account_List_Disconnect();
+  virtual ~S_Account_List_Disconnect();
+
+  S_Account_List_Disconnect(const S_Account_List_Disconnect& from);
+
+  inline S_Account_List_Disconnect& operator=(const S_Account_List_Disconnect& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const S_Account_List_Disconnect& default_instance();
+
+  void Swap(S_Account_List_Disconnect* other);
+
+  // implements Message ----------------------------------------------
+
+  inline S_Account_List_Disconnect* New() const { return New(NULL); }
+
+  S_Account_List_Disconnect* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const S_Account_List_Disconnect& from);
+  void MergeFrom(const S_Account_List_Disconnect& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(S_Account_List_Disconnect* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 uid = 1;
+  bool has_uid() const;
+  void clear_uid();
+  static const int kUidFieldNumber = 1;
+  ::google::protobuf::uint32 uid() const;
+  void set_uid(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:AccountPacket.S_Account_List.Disconnect)
+ private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 uid_;
+  friend void  protobuf_AddDesc_AccountPacket_2eproto();
+  friend void protobuf_AssignDesc_AccountPacket_2eproto();
+  friend void protobuf_ShutdownFile_AccountPacket_2eproto();
+
+  void InitAsDefaultInstance();
+  static S_Account_List_Disconnect* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class S_Account_List_Account : public ::google::protobuf::Message {
  public:
@@ -225,6 +315,7 @@ class S_Account_List : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
+  typedef S_Account_List_Disconnect Disconnect;
   typedef S_Account_List_Account Account;
 
   // accessors -------------------------------------------------------
@@ -261,6 +352,34 @@ class S_Account_List : public ::google::protobuf::Message {
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
+// S_Account_List_Disconnect
+
+// required uint32 uid = 1;
+inline bool S_Account_List_Disconnect::has_uid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void S_Account_List_Disconnect::set_has_uid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void S_Account_List_Disconnect::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void S_Account_List_Disconnect::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+inline ::google::protobuf::uint32 S_Account_List_Disconnect::uid() const {
+  // @@protoc_insertion_point(field_get:AccountPacket.S_Account_List.Disconnect.uid)
+  return uid_;
+}
+inline void S_Account_List_Disconnect::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:AccountPacket.S_Account_List.Disconnect.uid)
+}
+
+// -------------------------------------------------------------------
+
 // S_Account_List_Account
 
 // required uint32 uid = 1;
@@ -394,6 +513,8 @@ S_Account_List::mutable_account_member() {
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 

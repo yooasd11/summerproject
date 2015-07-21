@@ -9,6 +9,7 @@ USING_NS_CC;
 
 class JYObject;
 class JYPlayer;
+class JYArm;
 
 class MyScene : public cocos2d::Layer
 {
@@ -18,8 +19,9 @@ public:
 	static cocos2d::Scene* createScene();
 
 	UINT nPlayerUID;
-	JYPlayer* pJYPlayerDragon;
 	CCSprite* pFireAim;
+	JYArm * pJYArmBullet;
+	JYPlayer* pJYPlayerDragon;
 	CCParallaxNode* backgroundNode;
 	CCSize winSize;
 	JYRealTimer* pTimer;
@@ -37,7 +39,8 @@ public:
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	void addBackground();
 	void createDragon(const UINT& nUID, const CCPoint& pos);
-	void makePlayer(const UINT& nUID, JYObject* const pJYPlayer);
+	void deleteDragon(const UINT& nUID);
+	void makePlayer(JYObject* const pJYPlayer);
 	void setViewPointCenter(CCPoint pos);
 	void callEveryFrame(float fDeltaTime);
 	// implement the "static create()" method manually

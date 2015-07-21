@@ -73,6 +73,7 @@ void JYObject::tick(float fDeltaTime){
 }
 
 void JYObject::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+
 }
 
 void JYObject::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){

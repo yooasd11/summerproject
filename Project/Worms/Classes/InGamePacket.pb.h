@@ -107,29 +107,38 @@ class C_Move : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required float x = 1;
+  // required uint32 uid = 1;
+  bool has_uid() const;
+  void clear_uid();
+  static const int kUidFieldNumber = 1;
+  ::google::protobuf::uint32 uid() const;
+  void set_uid(::google::protobuf::uint32 value);
+
+  // required float x = 2;
   bool has_x() const;
   void clear_x();
-  static const int kXFieldNumber = 1;
+  static const int kXFieldNumber = 2;
   float x() const;
   void set_x(float value);
 
-  // required float y = 2;
+  // required float y = 3;
   bool has_y() const;
   void clear_y();
-  static const int kYFieldNumber = 2;
+  static const int kYFieldNumber = 3;
   float y() const;
   void set_y(float value);
 
-  // required float velocity = 3;
+  // required float velocity = 4;
   bool has_velocity() const;
   void clear_velocity();
-  static const int kVelocityFieldNumber = 3;
+  static const int kVelocityFieldNumber = 4;
   float velocity() const;
   void set_velocity(float value);
 
   // @@protoc_insertion_point(class_scope:InGamePacket.C_Move)
  private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
   inline void set_has_x();
   inline void clear_has_x();
   inline void set_has_y();
@@ -143,6 +152,7 @@ class C_Move : public ::google::protobuf::Message {
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::uint32 uid_;
   float x_;
   float y_;
   float velocity_;
@@ -341,22 +351,31 @@ class C_Stop : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required float x = 1;
+  // required uint32 uid = 1;
+  bool has_uid() const;
+  void clear_uid();
+  static const int kUidFieldNumber = 1;
+  ::google::protobuf::uint32 uid() const;
+  void set_uid(::google::protobuf::uint32 value);
+
+  // required float x = 2;
   bool has_x() const;
   void clear_x();
-  static const int kXFieldNumber = 1;
+  static const int kXFieldNumber = 2;
   float x() const;
   void set_x(float value);
 
-  // required float y = 2;
+  // required float y = 3;
   bool has_y() const;
   void clear_y();
-  static const int kYFieldNumber = 2;
+  static const int kYFieldNumber = 3;
   float y() const;
   void set_y(float value);
 
   // @@protoc_insertion_point(class_scope:InGamePacket.C_Stop)
  private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
   inline void set_has_x();
   inline void clear_has_x();
   inline void set_has_y();
@@ -368,6 +387,7 @@ class C_Stop : public ::google::protobuf::Message {
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::uint32 uid_;
   float x_;
   float y_;
   friend void  protobuf_AddDesc_InGamePacket_2eproto();
@@ -497,15 +517,39 @@ class S_Stop : public ::google::protobuf::Message {
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // C_Move
 
-// required float x = 1;
-inline bool C_Move::has_x() const {
+// required uint32 uid = 1;
+inline bool C_Move::has_uid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void C_Move::set_has_x() {
+inline void C_Move::set_has_uid() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void C_Move::clear_has_x() {
+inline void C_Move::clear_has_uid() {
   _has_bits_[0] &= ~0x00000001u;
+}
+inline void C_Move::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+inline ::google::protobuf::uint32 C_Move::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Move.uid)
+  return uid_;
+}
+inline void C_Move::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Move.uid)
+}
+
+// required float x = 2;
+inline bool C_Move::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void C_Move::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void C_Move::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void C_Move::clear_x() {
   x_ = 0;
@@ -521,15 +565,15 @@ inline void C_Move::set_x(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Move.x)
 }
 
-// required float y = 2;
+// required float y = 3;
 inline bool C_Move::has_y() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void C_Move::set_has_y() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void C_Move::clear_has_y() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void C_Move::clear_y() {
   y_ = 0;
@@ -545,15 +589,15 @@ inline void C_Move::set_y(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Move.y)
 }
 
-// required float velocity = 3;
+// required float velocity = 4;
 inline bool C_Move::has_velocity() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void C_Move::set_has_velocity() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void C_Move::clear_has_velocity() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void C_Move::clear_velocity() {
   velocity_ = 0;
@@ -673,15 +717,39 @@ inline void S_Move::set_velocity(float value) {
 
 // C_Stop
 
-// required float x = 1;
-inline bool C_Stop::has_x() const {
+// required uint32 uid = 1;
+inline bool C_Stop::has_uid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void C_Stop::set_has_x() {
+inline void C_Stop::set_has_uid() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void C_Stop::clear_has_x() {
+inline void C_Stop::clear_has_uid() {
   _has_bits_[0] &= ~0x00000001u;
+}
+inline void C_Stop::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+inline ::google::protobuf::uint32 C_Stop::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Stop.uid)
+  return uid_;
+}
+inline void C_Stop::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.uid)
+}
+
+// required float x = 2;
+inline bool C_Stop::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void C_Stop::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void C_Stop::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void C_Stop::clear_x() {
   x_ = 0;
@@ -697,15 +765,15 @@ inline void C_Stop::set_x(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.x)
 }
 
-// required float y = 2;
+// required float y = 3;
 inline bool C_Stop::has_y() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void C_Stop::set_has_y() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void C_Stop::clear_has_y() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void C_Stop::clear_y() {
   y_ = 0;

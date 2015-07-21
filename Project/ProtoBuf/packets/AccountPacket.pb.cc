@@ -23,6 +23,9 @@ namespace {
 const ::google::protobuf::Descriptor* S_Account_List_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   S_Account_List_reflection_ = NULL;
+const ::google::protobuf::Descriptor* S_Account_List_Disconnect_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  S_Account_List_Disconnect_reflection_ = NULL;
 const ::google::protobuf::Descriptor* S_Account_List_Account_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   S_Account_List_Account_reflection_ = NULL;
@@ -51,7 +54,22 @@ void protobuf_AssignDesc_AccountPacket_2eproto() {
       sizeof(S_Account_List),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Account_List, _internal_metadata_),
       -1);
-  S_Account_List_Account_descriptor_ = S_Account_List_descriptor_->nested_type(0);
+  S_Account_List_Disconnect_descriptor_ = S_Account_List_descriptor_->nested_type(0);
+  static const int S_Account_List_Disconnect_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Account_List_Disconnect, uid_),
+  };
+  S_Account_List_Disconnect_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      S_Account_List_Disconnect_descriptor_,
+      S_Account_List_Disconnect::default_instance_,
+      S_Account_List_Disconnect_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Account_List_Disconnect, _has_bits_[0]),
+      -1,
+      -1,
+      sizeof(S_Account_List_Disconnect),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Account_List_Disconnect, _internal_metadata_),
+      -1);
+  S_Account_List_Account_descriptor_ = S_Account_List_descriptor_->nested_type(1);
   static const int S_Account_List_Account_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Account_List_Account, uid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Account_List_Account, hp_),
@@ -84,6 +102,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       S_Account_List_descriptor_, &S_Account_List::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+      S_Account_List_Disconnect_descriptor_, &S_Account_List_Disconnect::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       S_Account_List_Account_descriptor_, &S_Account_List_Account::default_instance());
 }
 
@@ -92,6 +112,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void protobuf_ShutdownFile_AccountPacket_2eproto() {
   delete S_Account_List::default_instance_;
   delete S_Account_List_reflection_;
+  delete S_Account_List_Disconnect::default_instance_;
+  delete S_Account_List_Disconnect_reflection_;
   delete S_Account_List_Account::default_instance_;
   delete S_Account_List_Account_reflection_;
 }
@@ -103,16 +125,19 @@ void protobuf_AddDesc_AccountPacket_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\023AccountPacket.proto\022\rAccountPacket\"\211\001\n"
+    "\n\023AccountPacket.proto\022\rAccountPacket\"\244\001\n"
     "\016S_Account_List\022=\n\016Account_Member\030\001 \003(\0132"
-    "%.AccountPacket.S_Account_List.Account\0328"
-    "\n\007Account\022\013\n\003uid\030\001 \002(\r\022\n\n\002hp\030\002 \002(\r\022\t\n\001x\030"
-    "\003 \002(\002\022\t\n\001y\030\004 \002(\002", 176);
+    "%.AccountPacket.S_Account_List.Account\032\031"
+    "\n\nDisconnect\022\013\n\003uid\030\001 \002(\r\0328\n\007Account\022\013\n\003"
+    "uid\030\001 \002(\r\022\n\n\002hp\030\002 \002(\r\022\t\n\001x\030\003 \002(\002\022\t\n\001y\030\004 "
+    "\002(\002", 203);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "AccountPacket.proto", &protobuf_RegisterTypes);
   S_Account_List::default_instance_ = new S_Account_List();
+  S_Account_List_Disconnect::default_instance_ = new S_Account_List_Disconnect();
   S_Account_List_Account::default_instance_ = new S_Account_List_Account();
   S_Account_List::default_instance_->InitAsDefaultInstance();
+  S_Account_List_Disconnect::default_instance_->InitAsDefaultInstance();
   S_Account_List_Account::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_AccountPacket_2eproto);
 }
@@ -135,6 +160,237 @@ static void MergeFromFail(int line) {
 
 
 // ===================================================================
+
+#ifndef _MSC_VER
+const int S_Account_List_Disconnect::kUidFieldNumber;
+#endif  // !_MSC_VER
+
+S_Account_List_Disconnect::S_Account_List_Disconnect()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:AccountPacket.S_Account_List.Disconnect)
+}
+
+void S_Account_List_Disconnect::InitAsDefaultInstance() {
+}
+
+S_Account_List_Disconnect::S_Account_List_Disconnect(const S_Account_List_Disconnect& from)
+  : ::google::protobuf::Message(),
+    _internal_metadata_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:AccountPacket.S_Account_List.Disconnect)
+}
+
+void S_Account_List_Disconnect::SharedCtor() {
+  _cached_size_ = 0;
+  uid_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+S_Account_List_Disconnect::~S_Account_List_Disconnect() {
+  // @@protoc_insertion_point(destructor:AccountPacket.S_Account_List.Disconnect)
+  SharedDtor();
+}
+
+void S_Account_List_Disconnect::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void S_Account_List_Disconnect::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* S_Account_List_Disconnect::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return S_Account_List_Disconnect_descriptor_;
+}
+
+const S_Account_List_Disconnect& S_Account_List_Disconnect::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_AccountPacket_2eproto();
+  return *default_instance_;
+}
+
+S_Account_List_Disconnect* S_Account_List_Disconnect::default_instance_ = NULL;
+
+S_Account_List_Disconnect* S_Account_List_Disconnect::New(::google::protobuf::Arena* arena) const {
+  S_Account_List_Disconnect* n = new S_Account_List_Disconnect;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void S_Account_List_Disconnect::Clear() {
+  uid_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  if (_internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->Clear();
+  }
+}
+
+bool S_Account_List_Disconnect::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:AccountPacket.S_Account_List.Disconnect)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 uid = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &uid_)));
+          set_has_uid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:AccountPacket.S_Account_List.Disconnect)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:AccountPacket.S_Account_List.Disconnect)
+  return false;
+#undef DO_
+}
+
+void S_Account_List_Disconnect::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:AccountPacket.S_Account_List.Disconnect)
+  // required uint32 uid = 1;
+  if (has_uid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:AccountPacket.S_Account_List.Disconnect)
+}
+
+::google::protobuf::uint8* S_Account_List_Disconnect::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AccountPacket.S_Account_List.Disconnect)
+  // required uint32 uid = 1;
+  if (has_uid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AccountPacket.S_Account_List.Disconnect)
+  return target;
+}
+
+int S_Account_List_Disconnect::ByteSize() const {
+  int total_size = 0;
+
+  // required uint32 uid = 1;
+  if (has_uid()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->uid());
+  }
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void S_Account_List_Disconnect::MergeFrom(const ::google::protobuf::Message& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  const S_Account_List_Disconnect* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const S_Account_List_Disconnect>(
+          &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void S_Account_List_Disconnect::MergeFrom(const S_Account_List_Disconnect& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_uid()) {
+      set_uid(from.uid());
+    }
+  }
+  if (from._internal_metadata_.have_unknown_fields()) {
+    mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+  }
+}
+
+void S_Account_List_Disconnect::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void S_Account_List_Disconnect::CopyFrom(const S_Account_List_Disconnect& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_Account_List_Disconnect::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void S_Account_List_Disconnect::Swap(S_Account_List_Disconnect* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void S_Account_List_Disconnect::InternalSwap(S_Account_List_Disconnect* other) {
+  std::swap(uid_, other->uid_);
+  std::swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata S_Account_List_Disconnect::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = S_Account_List_Disconnect_descriptor_;
+  metadata.reflection = S_Account_List_Disconnect_reflection_;
+  return metadata;
+}
+
+
+// -------------------------------------------------------------------
 
 #ifndef _MSC_VER
 const int S_Account_List_Account::kUidFieldNumber;
@@ -746,6 +1002,34 @@ void S_Account_List::InternalSwap(S_Account_List* other) {
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
+// S_Account_List_Disconnect
+
+// required uint32 uid = 1;
+bool S_Account_List_Disconnect::has_uid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+void S_Account_List_Disconnect::set_has_uid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+void S_Account_List_Disconnect::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+void S_Account_List_Disconnect::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+ ::google::protobuf::uint32 S_Account_List_Disconnect::uid() const {
+  // @@protoc_insertion_point(field_get:AccountPacket.S_Account_List.Disconnect.uid)
+  return uid_;
+}
+ void S_Account_List_Disconnect::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:AccountPacket.S_Account_List.Disconnect.uid)
+}
+
+// -------------------------------------------------------------------
+
 // S_Account_List_Account
 
 // required uint32 uid = 1;

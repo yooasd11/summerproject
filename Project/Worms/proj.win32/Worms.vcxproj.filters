@@ -48,9 +48,6 @@
     <ClCompile Include="..\Classes\MoveExecutor.cpp">
       <Filter>src\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\InGamePacket.pb.cc">
-      <Filter>src\Network\Packets</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\ConnectionManager.cpp">
       <Filter>src\Network</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\MyScene.cpp">
       <Filter>src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\InGamePacket.pb.cc">
+      <Filter>src\Network\Packets</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AccountPacket.pb.cc">
       <Filter>src\Network\Packets</Filter>
@@ -103,9 +103,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\MoveExecutor.h">
       <Filter>src\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\InGamePacket.pb.h">
-      <Filter>src\Network\Packets</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Packet.h">
       <Filter>src\Network\Packets</Filter>
@@ -139,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\JYRealTimer.h">
       <Filter>src\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\InGamePacket.pb.h">
+      <Filter>src\Network\Packets</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AccountPacket.pb.h">
       <Filter>src\Network\Packets</Filter>

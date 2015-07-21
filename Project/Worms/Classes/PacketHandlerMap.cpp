@@ -98,6 +98,18 @@ void SStopPacketHandler(Packet& p){
 	pJYPlayer->setVelocity(0.0f);
 }
 
+REGIST_HANDLER(PACKET_TYPE::PKT_S_DISCONNECT, SDisconnectHandler);
+void SDisconnectHandler(Packet& p){
+	char* PktBody = p.getMsg();
+	AccountPacket::S_Account_List::Disconnect sDisconnect;
+	sDisconnect.ParseFromArray(PktBody, p.getLength());
+	
+	UINT nUID = sDisconnect.uid();
+
+	MyScene* pMyScene = (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+	pMyScene->deleteDragon(nUID);
+}
+
 REGIST_HANDLER(PACKET_TYPE::PKT_END, EndHandler);
 void EndHandler(Packet& p){
 	

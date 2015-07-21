@@ -21,15 +21,17 @@ void MoveExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
 		fVelocity = 20.0f;
 	}
 
+	this->getOwner()->setVelocity(fVelocity);
+
 	char sendBuf[PKTBODYSIZE];
 	InGamePacket::C_Move c_move;
+	c_move.set_uid(this->getOwner()->getUID());
 	c_move.set_velocity(fVelocity);
 	c_move.set_x(fX);
 	c_move.set_y(fY);
-	c_move.SerializeToArray(sendBuf, sizeof(sendBuf));
+	c_move.SerializeToArray(sendBuf, c_move.ByteSize());
 
-	CCLOG("%d", strlen(sendBuf));
-	ConnectionManager::getInstance()->transmit(PACKET_TYPE::PKT_C_MOVE, sendBuf);
+	ConnectionManager::getInstance()->transmit(c_move.ByteSize(), PACKET_TYPE::PKT_C_MOVE, sendBuf);
 }
 
 void MoveExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
@@ -39,13 +41,15 @@ void MoveExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 
 	char sendBuf[PKTBODYSIZE];
 	InGamePacket::C_Stop c_stop;
+	c_stop.set_uid(this->getOwner()->getUID());
 	c_stop.set_x(fX);
 	c_stop.set_y(fY);
 
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A || keyCode == cocos2d::EventKeyboard::KeyCode::KEY_D){
-		ConnectionManager::getInstance()->transmit(PACKET_TYPE::PKT_C_STOP, sendBuf);
+		this->getOwner()->setVelocity(0.0f);
+		ConnectionManager::getInstance()->transmit(c_stop.ByteSize(), PACKET_TYPE::PKT_C_STOP, sendBuf);
+		ConnectionManager::getInstance()->receive();
 	}
-	ConnectionManager::getInstance()->receive();
 }
 
 void MoveExecutor::tick(float fDeltaTime){

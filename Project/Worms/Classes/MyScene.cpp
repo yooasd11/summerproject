@@ -39,7 +39,7 @@ void MyScene::onEnter(){
 
 	ConnectionManager::getInstance()->accountTo(SERVER_IP_ADDRESS, SERVER_PORT_NUMBER);
 	ConnectionManager::getInstance()->receive();
-	
+
 	EventListenerTouchOneByOne* touchListener = EventListenerTouchOneByOne::create();
 	touchListener->setSwallowTouches(true);
 	touchListener->onTouchBegan = CC_CALLBACK_2(MyScene::onTouchBegan, this);
@@ -94,7 +94,7 @@ void MyScene::addBackground(){
 	backgroundNode->setName("Background");
 	backgroundNode->addChild(pTmap, 1, ccp(1.0f, 1.0f), ccp(0, 0));
 	this->addChild(backgroundNode, 0);
-
+	CCLOG("TMAP size : (%.1f, %.1f)", pTmap->getContentSize().width, pTmap->getContentSize().height);
 	CCTMXObjectGroup* objects = pTmap->objectGroupNamed("Objects");
 	CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
 	metaInfo->setVisible(false);
@@ -123,10 +123,19 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	pDragon->runAction(rep);
 
 	JYPlayer* pJYPlayer = new JYPlayer(pDragon);
-	this->makePlayer(nUID, pJYPlayer);
+	pJYPlayer->setUID(nUID);
+	if (nUID == nPlayerUID){
+		this->makePlayer(pJYPlayer);
+	}
 }
 
-void MyScene::makePlayer(const UINT& nUID, JYObject* const pJYPlayer){
+void MyScene::deleteDragon(const UINT& nUID){
+	JYPlayer* pTarget = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	this->removeChild(pTarget->getCCObject());
+	delete pTarget;
+}
+
+void MyScene::makePlayer(JYObject* const pJYPlayer){
 	CCNode* pNode = pJYPlayer->getCCObject();
 
 	pFireAim = CCSprite::create("line.PNG");
@@ -143,13 +152,10 @@ void MyScene::makePlayer(const UINT& nUID, JYObject* const pJYPlayer){
 	bullet->setPosition(ccp(5.0f, 5.0f));
 	addChild(bullet);
 
-	if (nUID == this->nPlayerUID){
-		pJYPlayerDragon = (JYPlayer*)pJYPlayer;
-		pJYPlayerDragon->setUID(nUID);
-		JYArm* pJYArmBullet = new JYArm(bullet);
-		pJYArmBullet->setName("JYBullet");
-		pJYPlayerDragon->addChild(pJYArmBullet);
-	}
+	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
+	pJYArmBullet = new JYArm(bullet);
+	pJYArmBullet->setName("JYBullet");
+	pJYPlayerDragon->addChild(pJYArmBullet);
 }
 
 
@@ -174,28 +180,30 @@ void MyScene::onTouchEnded(Touch* pTouch, Event* pEvent){
 }
 
 void MyScene::onMouseMove(Event* pEvent){
-	pJYPlayerDragon->onMouseMove(pEvent);
+	if (pJYPlayerDragon != nullptr)
+		pJYPlayerDragon->onMouseMove(pEvent);
 }
 
 void MyScene::onMouseDown(Event* pEvent){
-	pJYPlayerDragon->onMouseDown(pEvent);
+	if (pJYPlayerDragon != nullptr)
+		pJYPlayerDragon->onMouseDown(pEvent);
 }
 
 void MyScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* pEvent){
-	InputHandler::getInstance()->onKeyPressed(keyCode, pEvent);
 }
 
 void MyScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent){
-	InputHandler::getInstance()->onKeyPressed(keyCode, pEvent);
 }
 
 void MyScene::callEveryFrame(float fDeltaTime){
 	ConnectionManager::getInstance()->receive();
 	float fElapsedTime = pTimer->getElapsedTime();
-	JYArm * pJYArmBullet = (JYArm*)pJYPlayerDragon->getChildByName("JYBullet");
-	std::vector<JYObject*>* pJYObjectArray = &JYObjectManager::getInstance()->m_pJYObjectVector;
-	for (auto it = pJYObjectArray->begin(); it < pJYObjectArray->end(); ++it){
-		(*it)->tick(fElapsedTime);
+	if (pJYPlayerDragon != nullptr){
+
+		std::vector<JYObject*>* pJYObjectArray = &JYObjectManager::getInstance()->m_pJYObjectVector;
+		for (auto it = pJYObjectArray->begin(); it < pJYObjectArray->end(); ++it){
+			(*it)->tick(fElapsedTime);
+		}
+		pJYArmBullet->tick(fElapsedTime);
 	}
-	pJYArmBullet->tick(fElapsedTime);
 }

@@ -29,6 +29,6 @@ public:
 		return m_servSocket;
 	}
 	bool receive();
-	unsigned WINAPI transmit(const USHORT& PacketType, void* s);
+	unsigned WINAPI transmit(const USHORT& PacketLenght, const USHORT& PacketType, void* s);
 };
 

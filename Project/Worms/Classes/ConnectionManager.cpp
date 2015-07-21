@@ -91,21 +91,17 @@ bool ConnectionManager::receive(){
 	return true;
 }
 
-unsigned WINAPI ConnectionManager::transmit(const USHORT& PacketType, void* s){
+unsigned WINAPI ConnectionManager::transmit(const USHORT& PacketLength, const USHORT& PacketType, void* s){
 	char PktBuf[PKTLENGTH];
-	USHORT PktLen = strlen((char*)s);
 	
-	memcpy(PktBuf, &PktLen, sizeof(USHORT));
+	memcpy(PktBuf, &PacketLength, sizeof(USHORT));
 	memcpy(PktBuf + sizeof(USHORT), &PacketType, sizeof(USHORT));
-	memcpy(PktBuf + PKTHEADERSIZE, s, PktLen);
+	memcpy(PktBuf + PKTHEADERSIZE, s, PacketLength);
 
-	while (1){
-
-		int sndPacketLength = 0, totalSize = PKTHEADERSIZE + PktLen;
-		while (sndPacketLength < totalSize){
-			int retPktLength = send(this->getSocket(), PktBuf + sndPacketLength, totalSize, 0);
-			sndPacketLength += retPktLength;
-		}
+	int sndPacketLength = 0, totalSize = PKTHEADERSIZE + PacketLength;
+	while (sndPacketLength < totalSize){
+		int retPktLength = send(this->getSocket(), PktBuf + sndPacketLength, totalSize, 0);
+		sndPacketLength += retPktLength;
 	}
 	return 0;
 }
