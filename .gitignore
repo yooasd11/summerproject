@@ -6,7 +6,7 @@ Project/Worms/proj.android
 Project/Worms/proj.ios_mac
 Project/Worms/proj.linux
 Project/Worms/proj.win8.1-universal
-Project/Worms/proj.win32\Debug.win32
+Project/Worms/proj.win32/Debug.win32
 Project/Server/ipch
 Project/Server/Debug
 Project/Server/testGame/Debug

@@ -21,8 +21,6 @@ void MoveExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
 		fVelocity = 20.0f;
 	}
 
-	this->getOwner()->setVelocity(fVelocity);
-
 	char sendBuf[PKTBODYSIZE];
 	InGamePacket::C_Move c_move;
 	c_move.set_uid(this->getOwner()->getUID());
