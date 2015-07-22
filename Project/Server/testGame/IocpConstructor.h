@@ -10,6 +10,7 @@ private:
 	DWORD flags;
 	DWORD recvBytes;
 	Lock *queueLock;
+	Lock *UserLock;
 public:
 	static GameManager *manageGame;
 	static ClientManager *cm;
