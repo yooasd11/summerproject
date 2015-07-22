@@ -26,7 +26,7 @@ public:
 	int getCurrent();
 	bool finished();
 	void clear();
-	void packetHandle();
+	void UserpacketHandle();
 
 	//잡큐에 관한 작업정의...
 	void UserMove();

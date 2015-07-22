@@ -114,7 +114,6 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	type = PKT_S_MOVE;
 
 	
-
 	//최초의 작업을 잡큐에 넣어줌..
 	TimerJob job;
 	job.current = job.state::UserMove;
@@ -137,6 +136,25 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 
 	
 	//잡큐에 넣어줘서 계속해서 이동체크를 해주어야 한다....이게 상태바꾸는거...
+
+	delete[] buffer;
+	return;
+}
+
+void PacketHandler::C_MOVE_Handler(USER user)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type, current = 0;
+
+	InGamePacket::S_Move ServerMovePacket;
+	ServerMovePacket.set_uid(user.uid); ServerMovePacket.set_x(user.x); ServerMovePacket.set_y(user.y); ServerMovePacket.set_velocity(user.velocity);
+	size = ServerMovePacket.ByteSize();
+
+	memcpy(buffer, &size, sizeof(size));
+	memcpy(buffer + sizeof(size), &type, sizeof(type));
+	ServerMovePacket.SerializePartialToArray(buffer + sizeof(unsigned short)* 2, size);
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
 
 	delete[] buffer;
 	return;

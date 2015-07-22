@@ -13,7 +13,6 @@ public:
 		static PacketHandler pInstance;
 		return &pInstance;
 	}
-
 	void RegistHandler(PACKET_HANDLER_TYPE eType, HandlerFunc func);
 	void UnregistHandler(int type);
 	bool HandlePacket(Packet& p);
@@ -22,6 +21,7 @@ public:
 	void BroadCast(char*, int);
 	void C_MOVE_Handler(Packet&);
 	void C_STOP_handler(Packet&);
+	void C_MOVE_Handler(USER);
 };
 
 class HandlerRegistHelper

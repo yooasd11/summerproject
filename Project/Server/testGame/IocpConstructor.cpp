@@ -193,7 +193,7 @@ void IocpConstructor::ThreadFunction()
 				User.setTotal(tempHandle.bytesTrans);
 				User.setCurrent(User.getCurrent() + tempHandle.bytesTrans);
 				User.uid = sock;
-				User.packetHandle();
+				User.UserpacketHandle();
 				User.clear();
 
 				tempHandle.ReadMode();
