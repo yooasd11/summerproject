@@ -42,12 +42,12 @@ void MoveExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 	c_stop.set_uid(this->getOwner()->getUID());
 	c_stop.set_x(fX);
 	c_stop.set_y(fY);
+
 	c_stop.SerializeToArray(sendBuf, c_stop.ByteSize());
 
+
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A || keyCode == cocos2d::EventKeyboard::KeyCode::KEY_D){
-		this->getOwner()->setVelocity(0.0f);
 		ConnectionManager::getInstance()->transmit(c_stop.ByteSize(), PACKET_TYPE::PKT_C_STOP, sendBuf);
-		ConnectionManager::getInstance()->receive();
 	}
 }
 
