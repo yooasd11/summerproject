@@ -20,6 +20,8 @@
 #define ATTACK 3
 #define MAXGETTICK (1<<28);
 
+#define LOCKING(key) LockHelper lockHelper (key);
+
 void ErrorHandling(char *msg);
 
 #include <stdio.h>
@@ -52,3 +54,4 @@ void ErrorHandling(char *msg);
 #include "Packet.h"
 #include "PacketHandler.h"
 #include "IocpConstructor.h"
+

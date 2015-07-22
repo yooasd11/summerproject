@@ -139,14 +139,14 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	return;
 }
 
-void PacketHandler::C_MOVE_Handler(USER user)
+void PacketHandler::C_MOVE_Handler(USER* user)
 {
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size = 0, type, current = 0;
 
 	InGamePacket::S_Move ServerMovePacket;
-	ServerMovePacket.set_uid(user.uid); ServerMovePacket.set_x(user.x); ServerMovePacket.set_y(user.y); ServerMovePacket.set_velocity(user.velocity);
+	ServerMovePacket.set_uid(user->uid); ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y); ServerMovePacket.set_velocity(user->velocity);
 	size = ServerMovePacket.ByteSize();
 
 	memcpy(buffer, &size, sizeof(size));

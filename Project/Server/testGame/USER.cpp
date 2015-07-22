@@ -92,7 +92,7 @@ void USER::UserpacketHandle()
 	unsigned short current = 0;
 
 	//계속해서 유저를 처리할 수 있도록
-	LockHelper(this->key);
+	LOCKING(this->key);
 	while ( current < this->getTotal()){
 		memcpy(&userPacket.Length, this->Buffer+current, sizeof(current));
 		current += sizeof(unsigned short);
@@ -109,11 +109,13 @@ void USER::UserpacketHandle()
 void USER::UserMove(){
 
 	TimerJob userMoveJob;
+	LOCKING(this->key);
 	//시간초보다 작으면 수행되겠지..잡큐에서 알아서 수행해줌
 	if (this->state == MOVE){
+		printf("캐릭터 이동중\n");
 		//현재위치 갱신과 위치를 위치를 브로드캐스팅
 		this->x += (this->velocity * 0.1f);
-		PacketHandler::GetInstance()->C_MOVE_Handler(*this);
+		PacketHandler::GetInstance()->C_MOVE_Handler(this);
 
 
 		//움직일 작업에 대해서 처리..

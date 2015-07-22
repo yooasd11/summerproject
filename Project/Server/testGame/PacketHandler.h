@@ -21,7 +21,7 @@ public:
 	void BroadCast(char*, int);
 	void C_MOVE_Handler(Packet&);
 	void C_STOP_handler(Packet&);
-	void C_MOVE_Handler(USER);
+	void C_MOVE_Handler(USER*);
 };
 
 class HandlerRegistHelper

@@ -26,9 +26,8 @@ NPC::~NPC()
 
 void NPC::Move()
 {
-	this->Key->LOCK();
+	LOCKING(this->Key);
 	this->x += 4; this->y += 6;
-	this->Key->UNLOCK();
 	printf("%d MOVE %d %d\n", this->th, this->x, this->y);
 	return;
 }

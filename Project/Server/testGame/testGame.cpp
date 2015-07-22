@@ -7,11 +7,13 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
+
 int _tmain()
 {
 	SocketListener serv;
 	IocpConstructor CompletionPort;
 
+	
 	serv.MakeListener(9200);
 	serv.listenClient(5);
 	CompletionPort.setServSock(serv.getSocket());

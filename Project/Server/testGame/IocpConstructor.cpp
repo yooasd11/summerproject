@@ -13,11 +13,14 @@ GameManager* IocpConstructor::manageGame;
 ClientManager* IocpConstructor::cm;
 std::vector<TimerJob> IocpConstructor::jobs;
 
+
+
 IocpConstructor::IocpConstructor()
 {
 	this->manageGame = new GameManager;
 	this->cm = new ClientManager;
 	this->queueLock = new Lock;
+	this->UserLock = new Lock;
 	this->flags = 0;
 	this->ComPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 
@@ -34,6 +37,8 @@ IocpConstructor::~IocpConstructor()
 	delete this->cm;
 	delete this->manageGame;
 	delete this->queueLock;
+	delete this->UserLock;
+
 }
 
 void IocpConstructor::registerObject(ClientHandle& client)
@@ -76,7 +81,7 @@ HANDLE IocpConstructor::getPort()
 //npc를 얼마나 생성할 것인가...
 void IocpConstructor::AutoNPC(int count)
 {
-	this->queueLock->LOCK();
+	LOCKING(this->queueLock);
 	for (int i = 0; i < count; i++)
 	{
 		//초기의 랜덤위치를 부여해주는 작업이 필요
@@ -91,20 +96,22 @@ void IocpConstructor::AutoNPC(int count)
 		temp.th = i;
 		this->jobs.push_back(temp);
 	}
-	this->queueLock->UNLOCK();
+
 	return;
 }
 
 
+
+
+//#define LOCK(key) LockHelper lockHelper (key);
 
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
 	
 	//'lock'이 여기 있어야되는게 맞나....
-	LockHelper(this->queueLock);
+	LOCKING(this->queueLock);
 	if (this->jobs.empty()){
-		this->queueLock->UNLOCK();
 		printf("queue가 비었습니다\n");
 		return;
 	}
@@ -152,7 +159,8 @@ void IocpConstructor::JobSchedule()
 		//	job.exectime = GetTickCount() + (500 * th) + 1000;
 		//}
 	}
-	this->jobs.push_back(job);
+	//현재 시간보다 작으면 넣어줌!
+	else this->jobs.push_back(job);
 	return;
 }
 
@@ -171,14 +179,15 @@ void IocpConstructor::ThreadFunction()
 		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), INFINITE);
 
 		//위치가 
-		sock = tempHandle.handleinfo->ClntSock;
+		//sock = tempHandle.handleinfo->ClntSock;
 		//바로 에러처리해줌...getlasterror 'INFINITE'모드가 아닐 때 사용...
-		if (GetLastError() == WAIT_TIMEOUT || GetLastError() == 64){
-			this->cm->removesocket(sock);
-			closesocket(sock);
-			//소켓을 닫아준다...
-			continue;
-		}
+		//if (GetLastError() == WAIT_TIMEOUT || GetLastError() == 64){
+		//	sock = tempHandle.handleinfo->ClntSock;
+		//	this->cm->removesocket(sock);
+		//	closesocket(sock);
+		//	//소켓을 닫아준다...
+		//	continue;
+		//}
 		//클라이언트 통신
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
@@ -207,13 +216,15 @@ void IocpConstructor::ThreadFunction()
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
 				//send 부분을 바꾸자...
+				JobSchedule();
 				printf("메시지 전송 완료\n");
 			
 			}
 		}
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...
 		else{
-			JobSchedule();
+
+			//JobSchedule();
 			//printf("완료통지가 없는 경우...\n");
 			/*if (GetLastError() == 64){
 				this->cm->removesocket(sock);

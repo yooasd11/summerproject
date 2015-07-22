@@ -14,12 +14,6 @@ public:
 	static GameManager *manageGame;
 	static ClientManager *cm;
 	static std::vector<TimerJob> jobs;
-	//GameManager *manageGame;
-	//ClientManager *cm;
-
-	//static GameManager manageGame;
-	//static ClientManager cm;
-
 	
 	IocpConstructor();
 	~IocpConstructor();
