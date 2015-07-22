@@ -80,8 +80,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ProtoBuf\packets\AccountPacket.pb.h" />
-    <ClInclude Include="..\..\ProtoBuf\packets\InGamePacket.pb.h" />
+    <ClInclude Include="..\protobuffer\AccountPacket.pb.h" />
+    <ClInclude Include="..\protobuffer\InGamePacket.pb.h" />
     <ClInclude Include="ClientHandle.h" />
     <ClInclude Include="ClientManager.h" />
     <ClInclude Include="GameManager.h" />
@@ -100,10 +100,10 @@
     <ClInclude Include="USER.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ProtoBuf\packets\AccountPacket.pb.cc">
+    <ClCompile Include="..\protobuffer\AccountPacket.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\ProtoBuf\packets\InGamePacket.pb.cc">
+    <ClCompile Include="..\protobuffer\InGamePacket.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ClientHandle.cpp" />

@@ -63,7 +63,7 @@ int USER::getCurrent()
 
 void USER::setBuffer(char *msg, int len)
 {
-	memcpy(this->Buffer + this->current, msg, len);
+	memcpy(this->Buffer, msg, len);
 	return;
 }
 
@@ -98,19 +98,21 @@ void USER::UserpacketHandle()
 		current += sizeof(unsigned short);
 		memcpy(&userPacket.Type, this->Buffer + current, sizeof(current));
 		current += sizeof(unsigned short);
-		memcpy(&userPacket.Msg, this->Buffer + current, userPacket.Length);
+		memcpy(userPacket.Msg, this->Buffer + current, userPacket.Length);
 		current += userPacket.Length;
 		PacketHandler::GetInstance()->HandlePacket(userPacket);
 	}
+	//'clear'의 위치를 잘 생각해주어함.....
+	this->clear();
 }
 
 void USER::UserMove(){
 
 	TimerJob userMoveJob;
-	//시간초보다 작으면 수행되겠지ㅣ...?
+	//시간초보다 작으면 수행되겠지..잡큐에서 알아서 수행해줌
 	if (this->state == MOVE){
 		//현재위치 갱신과 위치를 위치를 브로드캐스팅
-		this->x += (this->velocity * 0.2f);
+		this->x += (this->velocity * 0.1f);
 		PacketHandler::GetInstance()->C_MOVE_Handler(*this);
 
 

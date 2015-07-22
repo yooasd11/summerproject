@@ -158,7 +158,7 @@ void protobuf_AddDesc_InGamePacket_2eproto() {
     "Move\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002(\002\022"
     "\020\n\010velocity\030\004 \002(\002\"=\n\006S_Move\022\013\n\003uid\030\001 \002(\r"
     "\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002(\002\022\020\n\010velocity\030\004 \002(\002"
-    "\"+\n\006C_Stop\022\013\n\003uid\030\001 \002(\002\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030"
+    "\"+\n\006C_Stop\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030"
     "\003 \002(\002\"+\n\006S_Stop\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022"
     "\t\n\001y\030\003 \002(\002", 250);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
@@ -1168,7 +1168,7 @@ C_Stop::C_Stop(const C_Stop& from)
 
 void C_Stop::SharedCtor() {
   _cached_size_ = 0;
-  uid_ = 0;
+  uid_ = 0u;
   x_ = 0;
   y_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -1239,11 +1239,11 @@ bool C_Stop::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required float uid = 1;
+      // required uint32 uid = 1;
       case 1: {
-        if (tag == 13) {
+        if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &uid_)));
           set_has_uid();
         } else {
@@ -1308,9 +1308,9 @@ failure:
 void C_Stop::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:InGamePacket.C_Stop)
-  // required float uid = 1;
+  // required uint32 uid = 1;
   if (has_uid()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(1, this->uid(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
   }
 
   // required float x = 2;
@@ -1333,9 +1333,9 @@ void C_Stop::SerializeWithCachedSizes(
 ::google::protobuf::uint8* C_Stop::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:InGamePacket.C_Stop)
-  // required float uid = 1;
+  // required uint32 uid = 1;
   if (has_uid()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(1, this->uid(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
   }
 
   // required float x = 2;
@@ -1360,8 +1360,10 @@ int C_Stop::RequiredFieldsByteSizeFallback() const {
   int total_size = 0;
 
   if (has_uid()) {
-    // required float uid = 1;
-    total_size += 1 + 4;
+    // required uint32 uid = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->uid());
   }
 
   if (has_x()) {
@@ -1380,8 +1382,10 @@ int C_Stop::ByteSize() const {
   int total_size = 0;
 
   if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required float uid = 1;
-    total_size += 1 + 4;
+    // required uint32 uid = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->uid());
 
     // required float x = 2;
     total_size += 1 + 4;
@@ -1475,7 +1479,7 @@ void C_Stop::InternalSwap(C_Stop* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // C_Stop
 
-// required float uid = 1;
+// required uint32 uid = 1;
 bool C_Stop::has_uid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -1486,14 +1490,14 @@ void C_Stop::clear_has_uid() {
   _has_bits_[0] &= ~0x00000001u;
 }
 void C_Stop::clear_uid() {
-  uid_ = 0;
+  uid_ = 0u;
   clear_has_uid();
 }
- float C_Stop::uid() const {
+ ::google::protobuf::uint32 C_Stop::uid() const {
   // @@protoc_insertion_point(field_get:InGamePacket.C_Stop.uid)
   return uid_;
 }
- void C_Stop::set_uid(float value) {
+ void C_Stop::set_uid(::google::protobuf::uint32 value) {
   set_has_uid();
   uid_ = value;
   // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.uid)

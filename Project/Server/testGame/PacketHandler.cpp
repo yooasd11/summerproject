@@ -167,7 +167,8 @@ void PacketHandler::C_STOP_handler(Packet& p)
 
 	InGamePacket::C_Stop StopPacket;
 	StopPacket.ParseFromArray(p.Msg, p.getLength());
-	USER &user = IocpConstructor::cm->retUser(StopPacket.uid());
+	
+	USER& user = IocpConstructor::cm->retUser(StopPacket.uid());
 	user.state = WAIT;
 
 	type = PKT_S_STOP;

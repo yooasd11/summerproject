@@ -103,7 +103,6 @@ void IocpConstructor::JobSchedule()
 	
 	//'lock'이 여기 있어야되는게 맞나....
 	LockHelper(this->queueLock);
-
 	if (this->jobs.empty()){
 		this->queueLock->UNLOCK();
 		printf("queue가 비었습니다\n");
@@ -132,7 +131,8 @@ void IocpConstructor::JobSchedule()
 		int th = job.th;
 		auto f = job.func;
 		f();
-		//if (job.state == )
+		//최초의 잡을 어디서 해주냐...생각해보자 
+		//if (job.current == TimerJob::state::UserMove)
 
 
 		//새로운 작업을 등록해줘야함..
@@ -170,15 +170,16 @@ void IocpConstructor::ThreadFunction()
 	while (1){
 		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), INFINITE);
 
-		printf("%d\n", GetLastError());
+		//위치가 
+		sock = tempHandle.handleinfo->ClntSock;
 		//바로 에러처리해줌...getlasterror 'INFINITE'모드가 아닐 때 사용...
-		if (GetLastError() == WAIT_TIMEOUT){
+		if (GetLastError() == WAIT_TIMEOUT || GetLastError() == 64){
+			this->cm->removesocket(sock);
+			closesocket(sock);
 			//소켓을 닫아준다...
 			continue;
-
 		}
 		//클라이언트 통신
-		sock = tempHandle.handleinfo->ClntSock;
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
 			USER& User = this->cm->retUser(sock);
@@ -192,19 +193,16 @@ void IocpConstructor::ThreadFunction()
 					this->cm->removesocket(sock);
 					closesocket(sock);
 				}
-
 				//user에 관한 정보를 저장하고....
 				User.setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
 				User.setTotal(tempHandle.bytesTrans);
-				User.setCurrent(User.getCurrent() + tempHandle.bytesTrans);
+				//User.setCurrent(User.getCurrent() + tempHandle.bytesTrans);
+				User.setCurrent(tempHandle.bytesTrans);
 				User.uid = sock;
 				User.UserpacketHandle();
-				User.clear();
-
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
 			}
-
 			//
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
@@ -213,16 +211,16 @@ void IocpConstructor::ThreadFunction()
 			
 			}
 		}
-
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...
 		else{
-			printf("완료통지가 없는 경우...\n");
-			if (GetLastError() == 64){
+			JobSchedule();
+			//printf("완료통지가 없는 경우...\n");
+			/*if (GetLastError() == 64){
 				this->cm->removesocket(sock);
 				closesocket(sock);
 				printf("비정상 종료\n");
 			}
-			//JobSchedule();
+			else JobSchedule();*/
 		}
 	}
 	return;
