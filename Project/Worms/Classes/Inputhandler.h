@@ -25,5 +25,6 @@ public:
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onMouseMove(cocos2d::Event* pEvent);
+	void onMouseDown(cocos2d::Event* pEvent);
 	void tick(float fDeltaTime);
 };

@@ -26,3 +26,17 @@ message S_Stop{
 	required float x=2;
 	required float y=3;
 }
+
+message C_Shoot{
+	required uint32 uid=1;
+	required float damage=2;
+	required float velocity=3;
+	required float direction=4;
+}
+
+message S_Shoot{
+	required uint32 uid=1;
+	required float damage=2;
+	required float x=3;
+	required float y=4;
+}

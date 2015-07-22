@@ -51,8 +51,8 @@ void MyScene::onEnter(){
 	keyListener->onKeyReleased = CC_CALLBACK_2(InputHandler::onKeyReleased, InputHandler::getInstance());
 
 	EventListenerMouse* mouseListener = EventListenerMouse::create();
-	mouseListener->onMouseMove = CC_CALLBACK_1(MyScene::onMouseMove, this);
-	mouseListener->onMouseDown = CC_CALLBACK_1(MyScene::onMouseDown, this);
+	mouseListener->onMouseMove = CC_CALLBACK_1(InputHandler::onMouseMove, InputHandler::getInstance());
+	mouseListener->onMouseDown = CC_CALLBACK_1(InputHandler::onMouseDown, InputHandler::getInstance());
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
@@ -180,13 +180,9 @@ void MyScene::onTouchEnded(Touch* pTouch, Event* pEvent){
 }
 
 void MyScene::onMouseMove(Event* pEvent){
-	if (pJYPlayerDragon != nullptr)
-		pJYPlayerDragon->onMouseMove(pEvent);
 }
 
 void MyScene::onMouseDown(Event* pEvent){
-	if (pJYPlayerDragon != nullptr)
-		pJYPlayerDragon->onMouseDown(pEvent);
 }
 
 void MyScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* pEvent){
@@ -198,12 +194,5 @@ void MyScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent){
 void MyScene::callEveryFrame(float fDeltaTime){
 	ConnectionManager::getInstance()->receive();
 	float fElapsedTime = pTimer->getElapsedTime();
-	if (pJYPlayerDragon != nullptr){
-
-		std::vector<JYObject*>* pJYObjectArray = &JYObjectManager::getInstance()->m_pJYObjectVector;
-		for (auto it = pJYObjectArray->begin(); it < pJYObjectArray->end(); ++it){
-			(*it)->tick(fElapsedTime);
-		}
-		pJYArmBullet->tick(fElapsedTime);
-	}
+	JYObjectManager::getInstance()->tick(fDeltaTime);
 }

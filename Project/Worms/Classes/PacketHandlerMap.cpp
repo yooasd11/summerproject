@@ -45,7 +45,7 @@ void AccountPacketHandler(Packet& p){
 	UINT nUID;
 	memcpy(&nUID, PktBody, sizeof(UINT));
 
-	MyScene* pMyScene = (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+	MyScene* pMyScene = GET_MYSCENE
 	pMyScene->nPlayerUID = nUID;
 }
 
@@ -62,8 +62,10 @@ void AccountListPacketHandler(Packet& p){
 		float fX = mAccount.x();
 		float fY = mAccount.y();
 
-		MyScene* pMyScene = (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
-		pMyScene->createDragon(nUID, ccp(fX, fY));
+		if (JYObjectManager::getInstance()->findObjectByUID(nUID) == nullptr){
+			MyScene* pMyScene = GET_MYSCENE
+			pMyScene->createDragon(nUID, ccp(fX, fY));
+		}
 	}
 }
 
@@ -77,10 +79,11 @@ void SMovePacketHandler(Packet& p){
 	float fX = sMovePacket.x();
 	float fY = sMovePacket.y();
 	float fVelocity = sMovePacket.velocity();
-
+	CCLOG("S_Move from server : UID - %d, X - %.1f, Y - %.1f, V - %.1f", nUID, fX, fY, fVelocity);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
-	pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
-	pJYPlayer->setVelocity(fVelocity);
+	if (pJYPlayer != nullptr){
+		pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+	}
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_STOP, SStopPacketHandler);
@@ -106,7 +109,7 @@ void SDisconnectHandler(Packet& p){
 	
 	UINT nUID = sDisconnect.uid();
 
-	MyScene* pMyScene = (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+	MyScene* pMyScene = GET_MYSCENE
 	pMyScene->deleteDragon(nUID);
 }
 

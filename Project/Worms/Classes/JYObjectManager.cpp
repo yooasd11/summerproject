@@ -53,3 +53,27 @@ JYObject* JYObjectManager::findObjectByUID(const UINT& nUID){
 	if (retIt == m_pJYObjectVector.end()) return nullptr;
 	return *retIt;
 }
+
+void JYObjectManager::tick(float fDeltaTime){
+	for (int i = 0; i < m_pJYObjectVector.size(); ++i){
+		m_pJYObjectVector[i]->tick(fDeltaTime);
+	}
+}
+
+void JYObjectManager::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+	for (int i = 0; i < m_pJYObjectVector.size(); ++i){
+		m_pJYObjectVector[i]->onKeyPressed(keyCode, pEvent);
+	}
+}
+
+void JYObjectManager::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+	for (int i = 0; i < m_pJYObjectVector.size(); ++i){
+		m_pJYObjectVector[i]->onKeyReleased(keyCode, pEvent);
+	}
+}
+
+void JYObjectManager::onMouseMove(cocos2d::Event* pEvent){
+	for (int i = 0; i < m_pJYObjectVector.size(); ++i){
+		m_pJYObjectVector[i]->onMouseMove(pEvent);
+	}
+}

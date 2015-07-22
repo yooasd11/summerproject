@@ -30,6 +30,7 @@ void MoveExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
 	c_move.SerializeToArray(sendBuf, c_move.ByteSize());
 
 	ConnectionManager::getInstance()->transmit(c_move.ByteSize(), PACKET_TYPE::PKT_C_MOVE, sendBuf);
+	this->getOwner()->setVelocity(fVelocity);
 }
 
 void MoveExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
@@ -44,7 +45,6 @@ void MoveExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 	c_stop.set_y(fY);
 
 	c_stop.SerializeToArray(sendBuf, c_stop.ByteSize());
-
 
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A || keyCode == cocos2d::EventKeyboard::KeyCode::KEY_D){
 		ConnectionManager::getInstance()->transmit(c_stop.ByteSize(), PACKET_TYPE::PKT_C_STOP, sendBuf);
