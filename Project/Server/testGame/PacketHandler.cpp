@@ -30,7 +30,6 @@ void PacketHandler::UnregistHandler(int type)
 
 
 
-
 //접속했을시 자식의 'uid'를 전달
 void PacketHandler::SendAccountPacket(SOCKET clnt)
 {
@@ -94,7 +93,6 @@ void PacketHandler::BroadCastAccountPacket()
 
 
 //REGIST_HANDLE(PKT_C_STOP, C_MOVE_Handler);
-
 
 
 void PacketHandler::C_MOVE_Handler(Packet& p)
@@ -186,15 +184,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	delete[] buffer;
 	return;
 }
-//
-//REGIST_HANDLE(P_CMOVE, CMOVE_Handler);
-//void CMOVE_Handler(Packet& p)
-//{
-//
-//
-//
-//
-//}
+
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
@@ -214,7 +204,6 @@ void PacketHandler::BroadCast(char *buffer, int size)
 }
 
 bool PacketHandler::HandlePacket(Packet& p){
-	//패킷에 관한 처리...핸들러로 하면 안될거같음
 
 	if (p.getType() == PKT_C_MOVE){
 		C_MOVE_Handler(p);

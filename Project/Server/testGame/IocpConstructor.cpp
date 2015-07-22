@@ -100,18 +100,19 @@ void IocpConstructor::AutoNPC(int count)
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
-	{
-		LockHelper(this->queueLock);
+	
+	//'lock'이 여기 있어야되는게 맞나....
+	LockHelper(this->queueLock);
 
-	}
 	if (this->jobs.empty()){
 		this->queueLock->UNLOCK();
 		printf("queue가 비었습니다\n");
 		return;
 	}
 
-	DWORD Minvalue = (1 << 28);
+	DWORD Minvalue = MAXGETTICK;
 	int index = -1;
+	//최소시간이 제일 작을 것을 찾음..
 	for (int i = 0; i < this->jobs.size(); i++)
 	{
 		if (this->jobs[i].exectime < Minvalue)
@@ -121,31 +122,35 @@ void IocpConstructor::JobSchedule()
 		}
 	}
 	if (index == -1) return;
+
 	TimerJob job = this->jobs[index];
 	this->jobs.erase(this->jobs.begin() + index);
 
 	if (job.exectime < GetTickCount())
 	{
+		//함수를 처리해주고...
 		int th = job.th;
 		auto f = job.func;
 		f();
+		//if (job.state == )
+
 
 		//새로운 작업을 등록해줘야함..
 		//이동이나 공격에 대한 동작??
-		int action = rand() % 1;
-		if (!action)
-		{
-			//엔피시가 이동하면 이 정보를 모든 클라이언트한테 보내줘야한다..
-			//이 부분을 클래스 안으로 옮겨야함...클래스내 move로!!!
-			job.func = std::bind(&NPC::Move, &(this->manageGame->manageNPC->npc[th]));
-			job.exectime = GetTickCount() + (500 * th) + 1000;
-		}
-		else
-		{
-			//'Attack'함수에 유저벡터를 넘겨줘야 어느 유저를 공격할지 결정할 수 있다...근처에 아무도없을 경우 공격안함..최근상태가 공격이었으면 다시 공격
-			job.func = std::bind(&NPC::Attack, &(this->manageGame->manageNPC->npc[th]), this->cm->mappingClient);
-			job.exectime = GetTickCount() + (500 * th) + 1000;
-		}
+		//int action = rand() % 1;
+		//if (!action)
+		//{
+		//	//엔피시가 이동하면 이 정보를 모든 클라이언트한테 보내줘야한다..
+		//	//이 부분을 클래스 안으로 옮겨야함...클래스내 move로!!!
+		//	job.func = std::bind(&NPC::Move, &(this->manageGame->manageNPC->npc[th]));
+		//	job.exectime = GetTickCount() + (500 * th) + 1000;
+		//}
+		//else
+		//{
+		//	//'Attack'함수에 유저벡터를 넘겨줘야 어느 유저를 공격할지 결정할 수 있다...근처에 아무도없을 경우 공격안함..최근상태가 공격이었으면 다시 공격
+		//	job.func = std::bind(&NPC::Attack, &(this->manageGame->manageNPC->npc[th]), this->cm->mappingClient);
+		//	job.exectime = GetTickCount() + (500 * th) + 1000;
+		//}
 	}
 	this->jobs.push_back(job);
 	return;

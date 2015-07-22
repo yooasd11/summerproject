@@ -86,9 +86,8 @@ void USER::clear()
 	memset(this->Buffer, 0, sizeof(this->Buffer));
 }
 
-void USER::packetHandle()
+void USER::UserpacketHandle()
 {
-	
 	Packet userPacket;
 	unsigned short current = 0;
 
@@ -110,7 +109,12 @@ void USER::UserMove(){
 	TimerJob userMoveJob;
 	//시간초보다 작으면 수행되겠지ㅣ...?
 	if (this->state == MOVE){
+		//현재위치 갱신과 위치를 위치를 브로드캐스팅
 		this->x += (this->velocity * 0.2f);
+		PacketHandler::GetInstance()->C_MOVE_Handler(*this);
+
+
+		//움직일 작업에 대해서 처리..
 		userMoveJob.func = std::bind(&USER::UserMove, this);
 		userMoveJob.exectime = GetTickCount() + 100;
 		IocpConstructor::jobs.push_back(userMoveJob);

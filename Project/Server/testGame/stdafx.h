@@ -18,7 +18,7 @@
 #define WAIT 1
 #define MOVE 2
 #define ATTACK 3
-
+#define MAXGETTICK (1<<28);
 
 void ErrorHandling(char *msg);
 
