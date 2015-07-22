@@ -19,8 +19,9 @@ public:
 	bool HandlePacket(Packet& p);
 	void SendAccountPacket(SOCKET);
 	void BroadCastAccountPacket();
-	//void BroadCast(char*, int);
-
+	void BroadCast(char*, int);
+	void C_MOVE_Handler(Packet&);
+	void C_STOP_handler(Packet&);
 };
 
 class HandlerRegistHelper

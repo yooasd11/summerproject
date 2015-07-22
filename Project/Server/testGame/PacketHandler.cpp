@@ -46,9 +46,12 @@ void PacketHandler::SendAccountPacket(SOCKET clnt)
 
 	
 	//비동기식으로 데이터를 전송
-	tempHandle.WriteMode();
+	
+	tempHandle.ioinfo = new IoData;
+	memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
 	tempHandle.ioinfo->wsaBuf.len = sizeof(SOCKET)+sizeof(unsigned short)* 2;
 	tempHandle.ioinfo->wsaBuf.buf = buffer;
+	tempHandle.ioinfo->rwMode = WRITE;
 	WSASend(clnt, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
 	delete[] buffer;
 	return;
@@ -90,8 +93,11 @@ void PacketHandler::BroadCastAccountPacket()
 	HandlerRegistHelper Handler_##PACKET_HANDLE(PACKET_TYPE, PACKET_HANDLE);
 
 
-REGIST_HANDLE(PKT_C_STOP, C_MOVE_Handler);
-void C_MOVE_Handler(Packet& p)
+//REGIST_HANDLE(PKT_C_STOP, C_MOVE_Handler);
+
+
+
+void PacketHandler::C_MOVE_Handler(Packet& p)
 {
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
@@ -101,29 +107,64 @@ void C_MOVE_Handler(Packet& p)
 	InGamePacket::C_Move MovePacket;
 	MovePacket.ParseFromArray(p.Msg, p.getLength());
 	USER &user = IocpConstructor::cm->retUser(MovePacket.uid());
-	user.state = MOVE;
 
+	//유저정보 수정...
+	user.state = MOVE;
+	user.velocity = MovePacket.velocity();
 	type = PKT_S_MOVE;
+
+	
+
+	//최초의 작업을 잡큐에 넣어줌..
+	TimerJob job;
+	job.current = job.state::UserMove;
+	job.exectime = GetTickCount() + 100;
+	job.func = std::bind(&USER::UserMove, user);
+	IocpConstructor::jobs.push_back(job);
+
 	
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(MovePacket.uid()); ServerMovePacket.set_velocity(MovePacket.velocity());
 	ServerMovePacket.set_x(user.x); ServerMovePacket.set_y(user.y);
-	size = ServerMovePacket.ByteSize();
+	size = ServerMovePacket.ByteSize();	
 
 	//버퍼를 만들고, 전달
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerMovePacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
-
+	printf("%d %f %f %f\n", ServerMovePacket.uid(), ServerMovePacket.x(), ServerMovePacket.y(), ServerMovePacket.velocity());
 	BroadCast(buffer, size + sizeof(unsigned short)* 2);
 
-	//std::map<SOCKET, USER>::iterator it;
-	//for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++){
-	//	//비동기로 바꿔줘야함
-	//	send(it->second.uid, buffer, size + sizeof(unsigned short)* 2, 0);
-	//}
+	
 	//잡큐에 넣어줘서 계속해서 이동체크를 해주어야 한다....이게 상태바꾸는거...
 
+	delete[] buffer;
+	return;
+}
+
+void PacketHandler::C_STOP_handler(Packet& p)
+{
+	printf("stop call \n");
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type = 0, current = 0;
+
+	InGamePacket::C_Stop StopPacket;
+	StopPacket.ParseFromArray(p.Msg, p.getLength());
+	USER &user = IocpConstructor::cm->retUser(StopPacket.uid());
+	user.state = WAIT;
+
+	type = PKT_S_STOP;
+
+	InGamePacket::S_Stop ServerStopPacket;
+	ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user.x); ServerStopPacket.set_y(user.y);
+	size = ServerStopPacket.ByteSize();
+
+	memcpy(buffer, &size, sizeof(size));
+	memcpy(buffer + sizeof(size), &type, sizeof(type));
+	ServerStopPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	
 	delete[] buffer;
 	return;
 }
@@ -137,14 +178,16 @@ void C_MOVE_Handler(Packet& p)
 //
 //}
 
-void BroadCast(char *buffer, int size)
+void PacketHandler::BroadCast(char *buffer, int size)
 {
 	ClientHandle tempHandle;
 	std::map<SOCKET, USER>::iterator it;
 
-	tempHandle.WriteMode();
+	tempHandle.ioinfo = new IoData;
+	memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
 	tempHandle.ioinfo->wsaBuf.len = size;
 	tempHandle.ioinfo->wsaBuf.buf = buffer;
+	tempHandle.ioinfo->rwMode = WRITE;
 	for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 	{
 		WSASend(it->second.uid, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
@@ -158,7 +201,9 @@ bool PacketHandler::HandlePacket(Packet& p){
 	if (p.getType() == PKT_C_MOVE){
 		C_MOVE_Handler(p);
 	}
-
+	else if (p.getType() == PKT_C_STOP){
+		C_STOP_handler(p);
+	}
 
 
 	return true;

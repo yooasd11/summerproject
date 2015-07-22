@@ -104,3 +104,16 @@ void USER::packetHandle()
 		PacketHandler::GetInstance()->HandlePacket(userPacket);
 	}
 }
+
+void USER::UserMove(){
+
+	TimerJob userMoveJob;
+	//시간초보다 작으면 수행되겠지ㅣ...?
+	if (this->state == MOVE){
+		this->x += (this->velocity * 0.2f);
+		userMoveJob.func = std::bind(&USER::UserMove, this);
+		userMoveJob.exectime = GetTickCount() + 100;
+		IocpConstructor::jobs.push_back(userMoveJob);
+	}
+	return;
+}

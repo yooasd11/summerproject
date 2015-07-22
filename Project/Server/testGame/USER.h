@@ -1,7 +1,6 @@
 #pragma once
 class USER
 {
-private:
 public:
 	int uid; //소켓번호
 	int hp;
@@ -28,5 +27,8 @@ public:
 	bool finished();
 	void clear();
 	void packetHandle();
+
+	//잡큐에 관한 작업정의...
+	void UserMove();
 };
 

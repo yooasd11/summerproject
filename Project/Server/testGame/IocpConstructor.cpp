@@ -8,10 +8,10 @@
 //HandlerMap::GetInstance()->HandlePacket(packet);
 
 
-
 //'static'으로 선언한 경우 'cpp'에 다시 정의 해주어야 한다.
 GameManager* IocpConstructor::manageGame;
 ClientManager* IocpConstructor::cm;
+std::vector<TimerJob> IocpConstructor::jobs;
 
 IocpConstructor::IocpConstructor()
 {
@@ -164,6 +164,8 @@ void IocpConstructor::ThreadFunction()
 
 	while (1){
 		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), INFINITE);
+
+		printf("%d\n", GetLastError());
 		//바로 에러처리해줌...getlasterror 'INFINITE'모드가 아닐 때 사용...
 		if (GetLastError() == WAIT_TIMEOUT){
 			//소켓을 닫아준다...
@@ -210,7 +212,7 @@ void IocpConstructor::ThreadFunction()
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...
 		else{
 			printf("완료통지가 없는 경우...\n");
-			if (GetLastError() == WAIT_TIMEOUT){
+			if (GetLastError() == 64){
 				this->cm->removesocket(sock);
 				closesocket(sock);
 				printf("비정상 종료\n");
