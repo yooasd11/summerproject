@@ -1,36 +1,42 @@
 #include "CollisionExecutor.h"
 #include "JYObject.h"
+#include "MyScene.h"
+#include "ConnectionManager.h"
+#include "InGamePacket.pb.h"
+#include "Packet.h"
 
-CollisionExecutor::CollisionExecutor(JYObject* pJYObject) : BaseExecutor(pJYObject){
-	regist();
-}
-
-CollisionExecutor::~CollisionExecutor(){
+cocos2d::CCPoint CollisionExecutor::getNextPos(cocos2d::CCPoint currentPos, float fDeltaTime){
+	float fVelocity = this->getOwner()->getVelocity();
+	float fDistance = fVelocity * fDeltaTime;
+	float fDirection = this->getOwner()->getDirection();
+	float x = currentPos.x + fDistance * cos(fDirection);
+	float y = currentPos.y + fDistance * tan(fDirection);
+	return cocos2d::ccp(x, y);
 }
 
 cocos2d::CCPoint CollisionExecutor::tileCoordForPostion(cocos2d::CCPoint pos){
-	cocos2d::CCLayer* nowScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)nowScene->getChildByName("Background")->getChildByName("Tmap");
+	MyScene* pMyScene = GET_MYSCENE;
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
 	int x = pos.x / pTmap->getTileSize().width;
 	int y = (pTmap->getMapSize().height * pTmap->getTileSize().height - pos.y) / pTmap->getTileSize().height;
 	return cocos2d::ccp(x, y);
 }
 
 bool CollisionExecutor::boundaryCollisionChecker(cocos2d::CCPoint& pos){
-	cocos2d::CCLayer* nowScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)nowScene->getChildByName("Background")->getChildByName("Tmap");
-	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width;
-	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height;
+	MyScene* pMyScene = GET_MYSCENE;
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
+	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width - 1;
+	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height - 1;
 	//정상적인 좌표
-	if (pos.x > 0 && pos.x < tmapWidth &&
-		pos.y > 0 && pos.y < tmapHeight)
+	if (pos.x > 1 && pos.x < tmapWidth &&
+		pos.y > 1 && pos.y < tmapHeight )
 		return false;
 	return true;
 }
 
 bool CollisionExecutor::objectCollisionChecker(cocos2d::CCPoint& pos){
-	cocos2d::CCLayer* nowScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)nowScene->getChildByName("Background")->getChildByName("Tmap");
+	MyScene* pMyScene = GET_MYSCENE;
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
 	cocos2d::CCPoint tileCoord = this->tileCoordForPostion(pos);
 	cocos2d::CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
 	cocos2d::CCTMXLayer* items = pTmap->getLayer("Items");
@@ -52,13 +58,28 @@ bool CollisionExecutor::objectCollisionChecker(cocos2d::CCPoint& pos){
 }
 
 void CollisionExecutor::tick(float fDeltaTime){
-	cocos2d::CCLayer* nowScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)nowScene->getChildByName("Background")->getChildByName("Tmap");
+	UINT nJYObjectType = this->getOwner()->getObjectType();
+	MyScene* pMyScene = GET_MYSCENE;
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
 	cocos2d::CCNode* pCCOwner = this->getOwner()->getCCObject();
 	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(pCCOwner->getPosition());
-	if (boundaryCollisionChecker(currentPos) == true || objectCollisionChecker(currentPos) == true){
-		pCCOwner->setPosition(cocos2d::ccp(5.0f, 5.0f));
-		pCCOwner->setVisible(false);
-		currentPos = pTmap->convertToNodeSpace(pCCOwner->getPosition());
+	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
+	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
+		if (nJYObjectType == JYOBJECT_TYPE::JY_ARM){
+			pCCOwner->setVisible(false);
+		}
+		else if (nJYObjectType == JYOBJECT_TYPE::JY_PLAYER){
+			this->getOwner()->setVelocity(0.0f);
+			pCCOwner->setPosition(currentPos);
+		}
+
+		char sendBuf[PKTBODYSIZE];
+		InGamePacket::C_Stop c_stop;
+		c_stop.set_uid(this->getOwner()->getUID());
+		c_stop.set_x(currentPos.x);
+		c_stop.set_y(currentPos.y);
+		c_stop.SerializeToArray(sendBuf, c_stop.ByteSize());
+
+		ConnectionManager::getInstance()->transmit(c_stop.ByteSize(), PACKET_TYPE::PKT_C_STOP, sendBuf);
 	}
 }

@@ -110,6 +110,7 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 		animation->addSpriteFrameWithTexture(texture, Rect(index * 130, rowIndex * 140, 130, 140));
 	}
 
+	//Create CCSprite dragon, and add to Tiled map
 	CCSprite* pDragon = Sprite::createWithTexture(texture, Rect(0, 0, 130, 140));
 	pDragon->setPosition(dragonPosition);
 	pDragon->setFlippedX(true);
@@ -118,44 +119,55 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)backgroundNode->getChildByName("Tmap");
 	pTmap->addChild(pDragon, 3, 15);
 
+	//Run action : flying animation
 	Animate* animate = Animate::create(animation);
 	RepeatForever* rep = RepeatForever::create(animate);
 	pDragon->runAction(rep);
 
+	//Create JYPlayer with CCSprite dragon
 	JYPlayer* pJYPlayer = new JYPlayer(pDragon);
 	pJYPlayer->setUID(nUID);
+
+	//Create CCSprite bullet
+	CCSprite* bullet = CCSprite::create("bullet.PNG");
+	bullet->setName("Bullet");
+	bullet->setVisible(false);
+	bullet->setScale(0.3f);
+	bullet->setPosition(pDragon->getPosition());
+
+	//Create JYArm with CCSprite bullet and add
+	JYArm* pJYArmBullet = new JYArm(bullet);
+	pJYArmBullet->setName("JYBullet");
+	pJYPlayer->addChild(pJYArmBullet);
+	this->addChild(bullet);
+
 	if (nUID == nPlayerUID){
 		this->makePlayer(pJYPlayer);
 	}
 }
 
+//Manager에서 삭제
+//자식들 삭제
+//등등 많은 추가 소스 필요함
 void MyScene::deleteDragon(const UINT& nUID){
 	JYPlayer* pTarget = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	this->removeChild(pTarget->getCCObject());
 	delete pTarget;
 }
 
+//Make pJYPlayer as a actual player of the scene
 void MyScene::makePlayer(JYObject* const pJYPlayer){
 	CCNode* pNode = pJYPlayer->getCCObject();
 
-	pFireAim = CCSprite::create("line.PNG");
+	//make aim
+	CCSprite* pFireAim = CCSprite::create("line.PNG");
 	pFireAim->setPosition(pNode->getContentSize().width / 2, pNode->getContentSize().height / 3);
 	pFireAim->setName("Aim");
 	pFireAim->setScale(0.3f);
 	pFireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
 	pNode->addChild(pFireAim);
 
-	CCSprite* bullet = CCSprite::create("bullet.PNG");
-	bullet->setName("Bullet");
-	bullet->setVisible(false);
-	bullet->setScale(0.3f);
-	bullet->setPosition(ccp(5.0f, 5.0f));
-	addChild(bullet);
-
 	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
-	pJYArmBullet = new JYArm(bullet);
-	pJYArmBullet->setName("JYBullet");
-	pJYPlayerDragon->addChild(pJYArmBullet);
 }
 
 

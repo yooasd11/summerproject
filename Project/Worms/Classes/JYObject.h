@@ -3,11 +3,14 @@
 #include "cocos2d.h"
 #include "ExecutorList.h"
 #include "BaseExecutor.h"
+#include "JYObjectList.h"
 
 class JYObject{
 private:
+	UINT m_nObjectType;
 	UINT m_nUID;
 	float m_fVelocity;
+	float m_fDirection;
 	cocos2d::CCNode* m_pCCObject;
 	JYObject* m_pJYObjectParent;
 	BaseExecutor* m_Executors[__MaxExecutor];
@@ -17,6 +20,14 @@ private:
 public:
 	JYObject(cocos2d::CCNode* pCCObject);
 	virtual ~JYObject();
+
+	UINT getObjectType(){
+		return m_nObjectType;
+	}
+
+	void setObjectType(const UINT& nType){
+		m_nObjectType = nType;
+	}
 
 	UINT getUID(){
 		return m_nUID;
@@ -33,6 +44,14 @@ public:
 		m_fVelocity = fVelocity;
 	}
 
+	float getDirection(){
+		return m_fDirection;
+	}
+
+	void setDirection(const float& fDirection){
+		m_fDirection = fDirection;
+	}
+
 	BaseExecutor* getExecutor(int type) { 
 		return m_Executors[type]; 
 	}
@@ -40,7 +59,7 @@ public:
 	void ReleaseExecutor(BaseExecutor* param);
 
 	cocos2d::CCNode* getCCObject() { return m_pCCObject; }
-	void setCCObjet(cocos2d::CCNode* ccOb) { m_pCCObject = ccOb; }
+	void setCCObject(cocos2d::CCNode* ccOb) { m_pCCObject = ccOb; }
 
 	void setName(const std::string& sName) { m_sName = sName; }
 	std::string getName() { return m_sName; }

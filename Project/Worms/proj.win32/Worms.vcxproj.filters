@@ -25,7 +25,7 @@
     <Filter Include="src\Scenes">
       <UniqueIdentifier>{529634c5-17ad-47bf-880a-3fe23cdee667}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Timer">
+    <Filter Include="src\Utility">
       <UniqueIdentifier>{674b9fc5-7cf9-437b-abfe-d894e7bb9ea9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -72,8 +72,14 @@
     <ClCompile Include="..\Classes\MyScene.cpp">
       <Filter>src\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\AssaultExecutor.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\AccountPacket.pb.cc">
       <Filter>src\Network\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MoveRequestExecutor.cpp">
+      <Filter>src\Managers</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\InGamePacket.pb.cc">
       <Filter>src\Network\Packets</Filter>
@@ -90,9 +96,6 @@
       <Filter>src\Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CollisionExecutor.h">
-      <Filter>src\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CoordinateConverter.h">
       <Filter>src\Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ExecutorList.h">
@@ -135,10 +138,22 @@
       <Filter>src\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\JYRealTimer.h">
-      <Filter>src\Timer</Filter>
+      <Filter>src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AssaultExecutor.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AccountPacket.pb.h">
       <Filter>src\Network\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveRequestExecutor.h">
+      <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CoordinateConverter.h">
+      <Filter>src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\JYObjectList.h">
+      <Filter>src\Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\InGamePacket.pb.h">
       <Filter>src\Network\Packets</Filter>
