@@ -40,6 +40,8 @@ class C_Move;
 class S_Move;
 class C_Stop;
 class S_Stop;
+class C_Shoot;
+class S_Shoot;
 
 // ===================================================================
 
@@ -128,10 +130,17 @@ class C_Move : public ::google::protobuf::Message {
   float y() const;
   void set_y(float value);
 
-  // required float velocity = 4;
+  // required float direction = 4;
+  bool has_direction() const;
+  void clear_direction();
+  static const int kDirectionFieldNumber = 4;
+  float direction() const;
+  void set_direction(float value);
+
+  // required float velocity = 5;
   bool has_velocity() const;
   void clear_velocity();
-  static const int kVelocityFieldNumber = 4;
+  static const int kVelocityFieldNumber = 5;
   float velocity() const;
   void set_velocity(float value);
 
@@ -143,6 +152,8 @@ class C_Move : public ::google::protobuf::Message {
   inline void clear_has_x();
   inline void set_has_y();
   inline void clear_has_y();
+  inline void set_has_direction();
+  inline void clear_has_direction();
   inline void set_has_velocity();
   inline void clear_has_velocity();
 
@@ -155,6 +166,7 @@ class C_Move : public ::google::protobuf::Message {
   ::google::protobuf::uint32 uid_;
   float x_;
   float y_;
+  float direction_;
   float velocity_;
   friend void  protobuf_AddDesc_InGamePacket_2eproto();
   friend void protobuf_AssignDesc_InGamePacket_2eproto();
@@ -250,10 +262,17 @@ class S_Move : public ::google::protobuf::Message {
   float y() const;
   void set_y(float value);
 
-  // required float velocity = 4;
+  // required float direction = 4;
+  bool has_direction() const;
+  void clear_direction();
+  static const int kDirectionFieldNumber = 4;
+  float direction() const;
+  void set_direction(float value);
+
+  // required float velocity = 5;
   bool has_velocity() const;
   void clear_velocity();
-  static const int kVelocityFieldNumber = 4;
+  static const int kVelocityFieldNumber = 5;
   float velocity() const;
   void set_velocity(float value);
 
@@ -265,6 +284,8 @@ class S_Move : public ::google::protobuf::Message {
   inline void clear_has_x();
   inline void set_has_y();
   inline void clear_has_y();
+  inline void set_has_direction();
+  inline void clear_has_direction();
   inline void set_has_velocity();
   inline void clear_has_velocity();
 
@@ -277,6 +298,7 @@ class S_Move : public ::google::protobuf::Message {
   ::google::protobuf::uint32 uid_;
   float x_;
   float y_;
+  float direction_;
   float velocity_;
   friend void  protobuf_AddDesc_InGamePacket_2eproto();
   friend void protobuf_AssignDesc_InGamePacket_2eproto();
@@ -509,6 +531,290 @@ class S_Stop : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static S_Stop* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class C_Shoot : public ::google::protobuf::Message {
+ public:
+  C_Shoot();
+  virtual ~C_Shoot();
+
+  C_Shoot(const C_Shoot& from);
+
+  inline C_Shoot& operator=(const C_Shoot& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const C_Shoot& default_instance();
+
+  void Swap(C_Shoot* other);
+
+  // implements Message ----------------------------------------------
+
+  inline C_Shoot* New() const { return New(NULL); }
+
+  C_Shoot* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const C_Shoot& from);
+  void MergeFrom(const C_Shoot& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(C_Shoot* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 uid = 1;
+  bool has_uid() const;
+  void clear_uid();
+  static const int kUidFieldNumber = 1;
+  ::google::protobuf::uint32 uid() const;
+  void set_uid(::google::protobuf::uint32 value);
+
+  // required float x = 2;
+  bool has_x() const;
+  void clear_x();
+  static const int kXFieldNumber = 2;
+  float x() const;
+  void set_x(float value);
+
+  // required float y = 3;
+  bool has_y() const;
+  void clear_y();
+  static const int kYFieldNumber = 3;
+  float y() const;
+  void set_y(float value);
+
+  // required float damage = 4;
+  bool has_damage() const;
+  void clear_damage();
+  static const int kDamageFieldNumber = 4;
+  float damage() const;
+  void set_damage(float value);
+
+  // required float velocity = 5;
+  bool has_velocity() const;
+  void clear_velocity();
+  static const int kVelocityFieldNumber = 5;
+  float velocity() const;
+  void set_velocity(float value);
+
+  // required float direction = 6;
+  bool has_direction() const;
+  void clear_direction();
+  static const int kDirectionFieldNumber = 6;
+  float direction() const;
+  void set_direction(float value);
+
+  // @@protoc_insertion_point(class_scope:InGamePacket.C_Shoot)
+ private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_damage();
+  inline void clear_has_damage();
+  inline void set_has_velocity();
+  inline void clear_has_velocity();
+  inline void set_has_direction();
+  inline void clear_has_direction();
+
+  // helper for ByteSize()
+  int RequiredFieldsByteSizeFallback() const;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 uid_;
+  float x_;
+  float y_;
+  float damage_;
+  float velocity_;
+  float direction_;
+  friend void  protobuf_AddDesc_InGamePacket_2eproto();
+  friend void protobuf_AssignDesc_InGamePacket_2eproto();
+  friend void protobuf_ShutdownFile_InGamePacket_2eproto();
+
+  void InitAsDefaultInstance();
+  static C_Shoot* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class S_Shoot : public ::google::protobuf::Message {
+ public:
+  S_Shoot();
+  virtual ~S_Shoot();
+
+  S_Shoot(const S_Shoot& from);
+
+  inline S_Shoot& operator=(const S_Shoot& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const S_Shoot& default_instance();
+
+  void Swap(S_Shoot* other);
+
+  // implements Message ----------------------------------------------
+
+  inline S_Shoot* New() const { return New(NULL); }
+
+  S_Shoot* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const S_Shoot& from);
+  void MergeFrom(const S_Shoot& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(S_Shoot* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 uid = 1;
+  bool has_uid() const;
+  void clear_uid();
+  static const int kUidFieldNumber = 1;
+  ::google::protobuf::uint32 uid() const;
+  void set_uid(::google::protobuf::uint32 value);
+
+  // required float x = 2;
+  bool has_x() const;
+  void clear_x();
+  static const int kXFieldNumber = 2;
+  float x() const;
+  void set_x(float value);
+
+  // required float y = 3;
+  bool has_y() const;
+  void clear_y();
+  static const int kYFieldNumber = 3;
+  float y() const;
+  void set_y(float value);
+
+  // required float damage = 4;
+  bool has_damage() const;
+  void clear_damage();
+  static const int kDamageFieldNumber = 4;
+  float damage() const;
+  void set_damage(float value);
+
+  // required float velocity = 5;
+  bool has_velocity() const;
+  void clear_velocity();
+  static const int kVelocityFieldNumber = 5;
+  float velocity() const;
+  void set_velocity(float value);
+
+  // required float direction = 6;
+  bool has_direction() const;
+  void clear_direction();
+  static const int kDirectionFieldNumber = 6;
+  float direction() const;
+  void set_direction(float value);
+
+  // @@protoc_insertion_point(class_scope:InGamePacket.S_Shoot)
+ private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_damage();
+  inline void clear_has_damage();
+  inline void set_has_velocity();
+  inline void clear_has_velocity();
+  inline void set_has_direction();
+  inline void clear_has_direction();
+
+  // helper for ByteSize()
+  int RequiredFieldsByteSizeFallback() const;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 uid_;
+  float x_;
+  float y_;
+  float damage_;
+  float velocity_;
+  float direction_;
+  friend void  protobuf_AddDesc_InGamePacket_2eproto();
+  friend void protobuf_AssignDesc_InGamePacket_2eproto();
+  friend void protobuf_ShutdownFile_InGamePacket_2eproto();
+
+  void InitAsDefaultInstance();
+  static S_Shoot* default_instance_;
+};
 // ===================================================================
 
 
@@ -589,15 +895,39 @@ inline void C_Move::set_y(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Move.y)
 }
 
-// required float velocity = 4;
-inline bool C_Move::has_velocity() const {
+// required float direction = 4;
+inline bool C_Move::has_direction() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void C_Move::set_has_velocity() {
+inline void C_Move::set_has_direction() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void C_Move::clear_has_velocity() {
+inline void C_Move::clear_has_direction() {
   _has_bits_[0] &= ~0x00000008u;
+}
+inline void C_Move::clear_direction() {
+  direction_ = 0;
+  clear_has_direction();
+}
+inline float C_Move::direction() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Move.direction)
+  return direction_;
+}
+inline void C_Move::set_direction(float value) {
+  set_has_direction();
+  direction_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Move.direction)
+}
+
+// required float velocity = 5;
+inline bool C_Move::has_velocity() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void C_Move::set_has_velocity() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void C_Move::clear_has_velocity() {
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void C_Move::clear_velocity() {
   velocity_ = 0;
@@ -689,15 +1019,39 @@ inline void S_Move::set_y(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Move.y)
 }
 
-// required float velocity = 4;
-inline bool S_Move::has_velocity() const {
+// required float direction = 4;
+inline bool S_Move::has_direction() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void S_Move::set_has_velocity() {
+inline void S_Move::set_has_direction() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void S_Move::clear_has_velocity() {
+inline void S_Move::clear_has_direction() {
   _has_bits_[0] &= ~0x00000008u;
+}
+inline void S_Move::clear_direction() {
+  direction_ = 0;
+  clear_has_direction();
+}
+inline float S_Move::direction() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Move.direction)
+  return direction_;
+}
+inline void S_Move::set_direction(float value) {
+  set_has_direction();
+  direction_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Move.direction)
+}
+
+// required float velocity = 5;
+inline bool S_Move::has_velocity() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void S_Move::set_has_velocity() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void S_Move::clear_has_velocity() {
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void S_Move::clear_velocity() {
   velocity_ = 0;
@@ -865,7 +1219,307 @@ inline void S_Stop::set_y(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Stop.y)
 }
 
+// -------------------------------------------------------------------
+
+// C_Shoot
+
+// required uint32 uid = 1;
+inline bool C_Shoot::has_uid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void C_Shoot::set_has_uid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void C_Shoot::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void C_Shoot::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+inline ::google::protobuf::uint32 C_Shoot::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.uid)
+  return uid_;
+}
+inline void C_Shoot::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.uid)
+}
+
+// required float x = 2;
+inline bool C_Shoot::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void C_Shoot::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void C_Shoot::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void C_Shoot::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline float C_Shoot::x() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.x)
+  return x_;
+}
+inline void C_Shoot::set_x(float value) {
+  set_has_x();
+  x_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.x)
+}
+
+// required float y = 3;
+inline bool C_Shoot::has_y() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void C_Shoot::set_has_y() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void C_Shoot::clear_has_y() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void C_Shoot::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline float C_Shoot::y() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.y)
+  return y_;
+}
+inline void C_Shoot::set_y(float value) {
+  set_has_y();
+  y_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.y)
+}
+
+// required float damage = 4;
+inline bool C_Shoot::has_damage() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void C_Shoot::set_has_damage() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void C_Shoot::clear_has_damage() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void C_Shoot::clear_damage() {
+  damage_ = 0;
+  clear_has_damage();
+}
+inline float C_Shoot::damage() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.damage)
+  return damage_;
+}
+inline void C_Shoot::set_damage(float value) {
+  set_has_damage();
+  damage_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.damage)
+}
+
+// required float velocity = 5;
+inline bool C_Shoot::has_velocity() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void C_Shoot::set_has_velocity() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void C_Shoot::clear_has_velocity() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void C_Shoot::clear_velocity() {
+  velocity_ = 0;
+  clear_has_velocity();
+}
+inline float C_Shoot::velocity() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.velocity)
+  return velocity_;
+}
+inline void C_Shoot::set_velocity(float value) {
+  set_has_velocity();
+  velocity_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.velocity)
+}
+
+// required float direction = 6;
+inline bool C_Shoot::has_direction() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void C_Shoot::set_has_direction() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void C_Shoot::clear_has_direction() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void C_Shoot::clear_direction() {
+  direction_ = 0;
+  clear_has_direction();
+}
+inline float C_Shoot::direction() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.direction)
+  return direction_;
+}
+inline void C_Shoot::set_direction(float value) {
+  set_has_direction();
+  direction_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.direction)
+}
+
+// -------------------------------------------------------------------
+
+// S_Shoot
+
+// required uint32 uid = 1;
+inline bool S_Shoot::has_uid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void S_Shoot::set_has_uid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void S_Shoot::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void S_Shoot::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+inline ::google::protobuf::uint32 S_Shoot::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.uid)
+  return uid_;
+}
+inline void S_Shoot::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.uid)
+}
+
+// required float x = 2;
+inline bool S_Shoot::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void S_Shoot::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void S_Shoot::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void S_Shoot::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline float S_Shoot::x() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.x)
+  return x_;
+}
+inline void S_Shoot::set_x(float value) {
+  set_has_x();
+  x_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.x)
+}
+
+// required float y = 3;
+inline bool S_Shoot::has_y() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void S_Shoot::set_has_y() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void S_Shoot::clear_has_y() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void S_Shoot::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline float S_Shoot::y() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.y)
+  return y_;
+}
+inline void S_Shoot::set_y(float value) {
+  set_has_y();
+  y_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.y)
+}
+
+// required float damage = 4;
+inline bool S_Shoot::has_damage() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void S_Shoot::set_has_damage() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void S_Shoot::clear_has_damage() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void S_Shoot::clear_damage() {
+  damage_ = 0;
+  clear_has_damage();
+}
+inline float S_Shoot::damage() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.damage)
+  return damage_;
+}
+inline void S_Shoot::set_damage(float value) {
+  set_has_damage();
+  damage_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.damage)
+}
+
+// required float velocity = 5;
+inline bool S_Shoot::has_velocity() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void S_Shoot::set_has_velocity() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void S_Shoot::clear_has_velocity() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void S_Shoot::clear_velocity() {
+  velocity_ = 0;
+  clear_has_velocity();
+}
+inline float S_Shoot::velocity() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.velocity)
+  return velocity_;
+}
+inline void S_Shoot::set_velocity(float value) {
+  set_has_velocity();
+  velocity_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.velocity)
+}
+
+// required float direction = 6;
+inline bool S_Shoot::has_direction() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void S_Shoot::set_has_direction() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void S_Shoot::clear_has_direction() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void S_Shoot::clear_direction() {
+  direction_ = 0;
+  clear_has_direction();
+}
+inline float S_Shoot::direction() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.direction)
+  return direction_;
+}
+inline void S_Shoot::set_direction(float value) {
+  set_has_direction();
+  direction_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.direction)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

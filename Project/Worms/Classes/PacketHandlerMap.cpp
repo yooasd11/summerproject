@@ -4,6 +4,7 @@
 #include "InGamePacket.pb.h"
 #include "MyScene.h"
 #include "JYPlayer.h"
+#include "JYArm.h"
 #include "JYObjectManager.h"
 #include <vector>
 
@@ -78,11 +79,13 @@ void SMovePacketHandler(Packet& p){
 	UINT nUID = sMovePacket.uid();
 	float fX = sMovePacket.x();
 	float fY = sMovePacket.y();
+	float fDirection = sMovePacket.direction();
 	float fVelocity = sMovePacket.velocity();
 	CCLOG("S_Move from server : UID - %d, X - %.1f, Y - %.1f, V - %.1f", nUID, fX, fY, fVelocity);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer != nullptr){
-		pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+		pJYPlayer->setVelocity(fVelocity);
+		pJYPlayer->setDirection(fDirection);
 	}
 }
 
@@ -99,6 +102,30 @@ void SStopPacketHandler(Packet& p){
 	CCLOG("Position from server : (%.2f, %.2f)", fX, fY);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	pJYPlayer->setVelocity(0.0f);
+	pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+}
+
+REGIST_HANDLER(PACKET_TYPE::PKT_S_SHOOT, SShootPacketHandler);
+void SShootPacketHandler(Packet& p){
+	char* PktBody = p.getMsg();
+	InGamePacket::S_Shoot sShootPacket;
+	sShootPacket.ParseFromArray(PktBody, p.getLength());
+
+	UINT nUID = sShootPacket.uid();
+	float fX = sShootPacket.x();
+	float fY = sShootPacket.y();
+	float fDirection = sShootPacket.direction();
+	float fVelocity = sShootPacket.velocity();
+	float fDamage = sShootPacket.damage();
+
+	CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
+	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByName("JYBullet");
+	cocos2d::CCNode* pCCPlayer = pJYPlayer->getCCObject();
+	pCCPlayer->setPosition(cocos2d::ccp(fX, fY));
+	pJYBullet->setDirection(fDirection);
+	pJYBullet->setVelocity(fVelocity);
+	pJYBullet->setDamage(fDamage);
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_DISCONNECT, SDisconnectHandler);

@@ -1,0 +1,7 @@
+enum JYOBJECT_TYPE{
+	JY_OBJECT = 0,
+	JY_PLAYER,
+	JY_ARM,
+	JY_ITEM,
+	JY_END
+};

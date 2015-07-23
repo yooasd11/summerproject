@@ -5,14 +5,16 @@ message C_Move{
 	required uint32 uid=1;
 	required float x=2;
 	required float y=3;
-	required float velocity=4;
+	required float direction=4;
+	required float velocity=5;
 }
 
 message S_Move{
 	required uint32 uid=1;
 	required float x=2;
 	required float y=3;
-	required float velocity=4;
+	required float direction=4;
+	required float velocity=5;
 }
 
 message C_Stop{
@@ -29,14 +31,18 @@ message S_Stop{
 
 message C_Shoot{
 	required uint32 uid=1;
-	required float damage=2;
-	required float velocity=3;
-	required float direction=4;
+	required float x=2;
+	required float y=3;
+	required float damage=4;
+	required float velocity=5;
+	required float direction=6;
 }
 
 message S_Shoot{
 	required uint32 uid=1;
-	required float damage=2;
-	required float x=3;
-	required float y=4;
+	required float x=2;
+	required float y=3;
+	required float damage=4;
+	required float velocity=5;
+	required float direction=6;
 }

@@ -141,6 +141,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
   <ItemGroup>
     <ClCompile Include="..\Classes\AccountPacket.pb.cc" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\AssaultExecutor.cpp" />
     <ClCompile Include="..\Classes\BaseExecutor.cpp" />
     <ClCompile Include="..\Classes\CollisionExecutor.cpp" />
     <ClCompile Include="..\Classes\ConnectionManager.cpp" />
@@ -152,6 +153,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClCompile Include="..\Classes\JYObjectManager.cpp" />
     <ClCompile Include="..\Classes\JYPlayer.cpp" />
     <ClCompile Include="..\Classes\MoveExecutor.cpp" />
+    <ClCompile Include="..\Classes\MoveRequestExecutor.cpp" />
     <ClCompile Include="..\Classes\MyScene.cpp" />
     <ClCompile Include="..\Classes\PacketHandlerMap.cpp" />
     <ClCompile Include="main.cpp" />
@@ -159,6 +161,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
   <ItemGroup>
     <ClInclude Include="..\Classes\AccountPacket.pb.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\AssaultExecutor.h" />
     <ClInclude Include="..\Classes\BaseExecutor.h" />
     <ClInclude Include="..\Classes\CollisionExecutor.h" />
     <ClInclude Include="..\Classes\ConnectionManager.h" />
@@ -169,10 +172,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\JYArm.h" />
     <ClInclude Include="..\Classes\JYItem.h" />
     <ClInclude Include="..\Classes\JYObject.h" />
+    <ClInclude Include="..\Classes\JYObjectList.h" />
     <ClInclude Include="..\Classes\JYObjectManager.h" />
     <ClInclude Include="..\Classes\JYPlayer.h" />
     <ClInclude Include="..\Classes\JYRealTimer.h" />
     <ClInclude Include="..\Classes\MoveExecutor.h" />
+    <ClInclude Include="..\Classes\MoveRequestExecutor.h" />
     <ClInclude Include="..\Classes\MyScene.h" />
     <ClInclude Include="..\Classes\Packet.h" />
     <ClInclude Include="..\Classes\PacketHandlerMap.h" />

@@ -21,8 +21,6 @@ public:
 	static cocos2d::Scene* createScene();
 
 	UINT nPlayerUID;
-	CCSprite* pFireAim;
-	JYArm * pJYArmBullet;
 	JYPlayer* pJYPlayerDragon;
 	CCParallaxNode* backgroundNode;
 	CCSize winSize;
