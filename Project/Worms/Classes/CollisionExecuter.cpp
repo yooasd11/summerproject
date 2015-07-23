@@ -1,11 +1,11 @@
-#include "CollisionExecutor.h"
+#include "CollisionExecuter.h"
 #include "JYObject.h"
 #include "MyScene.h"
 #include "ConnectionManager.h"
 #include "InGamePacket.pb.h"
 #include "Packet.h"
 
-cocos2d::CCPoint CollisionExecutor::getNextPos(cocos2d::CCPoint currentPos, float fDeltaTime){
+cocos2d::CCPoint CollisionExecuter::getNextPos(cocos2d::CCPoint currentPos, float fDeltaTime){
 	float fVelocity = this->getOwner()->getVelocity();
 	float fDistance = fVelocity * fDeltaTime;
 	float fDirection = this->getOwner()->getDirection();
@@ -14,7 +14,7 @@ cocos2d::CCPoint CollisionExecutor::getNextPos(cocos2d::CCPoint currentPos, floa
 	return cocos2d::ccp(x, y);
 }
 
-cocos2d::CCPoint CollisionExecutor::tileCoordForPostion(cocos2d::CCPoint pos){
+cocos2d::CCPoint CollisionExecuter::tileCoordForPostion(cocos2d::CCPoint pos){
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
 	int x = pos.x / pTmap->getTileSize().width;
@@ -22,7 +22,7 @@ cocos2d::CCPoint CollisionExecutor::tileCoordForPostion(cocos2d::CCPoint pos){
 	return cocos2d::ccp(x, y);
 }
 
-bool CollisionExecutor::boundaryCollisionChecker(cocos2d::CCPoint& pos){
+bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
 	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width - 1;
@@ -34,7 +34,7 @@ bool CollisionExecutor::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 	return true;
 }
 
-bool CollisionExecutor::objectCollisionChecker(cocos2d::CCPoint& pos){
+bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
 	cocos2d::CCPoint tileCoord = this->tileCoordForPostion(pos);
@@ -57,7 +57,7 @@ bool CollisionExecutor::objectCollisionChecker(cocos2d::CCPoint& pos){
 	return false;
 }
 
-void CollisionExecutor::tick(float fDeltaTime){
+void CollisionExecuter::tick(float fDeltaTime){
 	UINT nJYObjectType = this->getOwner()->getObjectType();
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");

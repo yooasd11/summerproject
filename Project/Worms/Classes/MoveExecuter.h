@@ -1,16 +1,15 @@
 #pragma once
-#include "cocos2d.h"
-#include "BaseExecutor.h"
+#include "BaseExecuter.h"
 
-class MoveExecutor : public BaseExecutor{
-	GENERATE_FUNC(MoveExecutor)
+class MoveExecuter : public BaseExecuter{
+	GENERATE_FUNC(MoveExecuter)
 private:
 	void setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst);
 public:
-	MoveExecutor(JYObject* pOwner) : BaseExecutor(pOwner) {
+	MoveExecuter(JYObject* pOwner) : BaseExecuter(pOwner) {
 		regist();
 	}
-	virtual ~MoveExecutor() {}
+	virtual ~MoveExecuter() {}
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onMouseMove(cocos2d::Event* pEvent);

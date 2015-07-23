@@ -1,5 +1,5 @@
 #pragma once
-#include "AssaultExecutor.h"
+#include "AssaultExecuter.h"
 #include "MyScene.h"
 #include "JYArm.h"
 #include "JYPlayer.h"
@@ -8,7 +8,16 @@
 #include "Packet.h"
 #include "ConnectionManager.h"
 
-void AssaultExecutor::onMouseMove(cocos2d::Event* pEvent){
+void AssaultExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+	if (cocos2d::EventKeyboard::KeyCode::KEY_1 <= keyCode && keyCode <= cocos2d::EventKeyboard::KeyCode::KEY_1){
+	}
+}
+
+void AssaultExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+
+}
+
+void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
 	cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
 	cocos2d::CCSprite* fireAim = (cocos2d::CCSprite*)pDragon->getChildByName("Aim");
 
@@ -17,7 +26,7 @@ void AssaultExecutor::onMouseMove(cocos2d::Event* pEvent){
 	fireAim->setRotation(degree);
 }
 
-void AssaultExecutor::onMouseDown(cocos2d::Event* pEvent){
+void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
 	JYArm* pJYBullet = (JYArm*)this->getOwner()->getChildByName("JYBullet");

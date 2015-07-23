@@ -141,9 +141,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
   <ItemGroup>
     <ClCompile Include="..\Classes\AccountPacket.pb.cc" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\Classes\AssaultExecutor.cpp" />
-    <ClCompile Include="..\Classes\BaseExecutor.cpp" />
-    <ClCompile Include="..\Classes\CollisionExecutor.cpp" />
+    <ClCompile Include="..\Classes\AssaultExecuter.cpp" />
+    <ClCompile Include="..\Classes\BaseExecuter.cpp" />
+    <ClCompile Include="..\Classes\CollisionExecuter.cpp" />
     <ClCompile Include="..\Classes\ConnectionManager.cpp" />
     <ClCompile Include="..\Classes\InGamePacket.pb.cc" />
     <ClCompile Include="..\Classes\InputHandler.cpp" />
@@ -152,8 +152,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClCompile Include="..\Classes\JYObject.cpp" />
     <ClCompile Include="..\Classes\JYObjectManager.cpp" />
     <ClCompile Include="..\Classes\JYPlayer.cpp" />
-    <ClCompile Include="..\Classes\MoveExecutor.cpp" />
-    <ClCompile Include="..\Classes\MoveRequestExecutor.cpp" />
+    <ClCompile Include="..\Classes\MoveExecuter.cpp" />
+    <ClCompile Include="..\Classes\MoveRequestExecuter.cpp" />
     <ClCompile Include="..\Classes\MyScene.cpp" />
     <ClCompile Include="..\Classes\PacketHandlerMap.cpp" />
     <ClCompile Include="main.cpp" />
@@ -161,12 +161,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
   <ItemGroup>
     <ClInclude Include="..\Classes\AccountPacket.pb.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\AssaultExecutor.h" />
-    <ClInclude Include="..\Classes\BaseExecutor.h" />
-    <ClInclude Include="..\Classes\CollisionExecutor.h" />
+    <ClInclude Include="..\Classes\AssaultExecuter.h" />
+    <ClInclude Include="..\Classes\BaseExecuter.h" />
+    <ClInclude Include="..\Classes\CollisionExecuter.h" />
     <ClInclude Include="..\Classes\ConnectionManager.h" />
     <ClInclude Include="..\Classes\CoordinateConverter.h" />
-    <ClInclude Include="..\Classes\ExecutorList.h" />
+    <ClInclude Include="..\Classes\ExecuterList.h" />
     <ClInclude Include="..\Classes\InGamePacket.pb.h" />
     <ClInclude Include="..\Classes\Inputhandler.h" />
     <ClInclude Include="..\Classes\JYArm.h" />
@@ -176,8 +176,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\JYObjectManager.h" />
     <ClInclude Include="..\Classes\JYPlayer.h" />
     <ClInclude Include="..\Classes\JYRealTimer.h" />
-    <ClInclude Include="..\Classes\MoveExecutor.h" />
-    <ClInclude Include="..\Classes\MoveRequestExecutor.h" />
+    <ClInclude Include="..\Classes\MoveExecuter.h" />
+    <ClInclude Include="..\Classes\MoveRequestExecuter.h" />
     <ClInclude Include="..\Classes\MyScene.h" />
     <ClInclude Include="..\Classes\Packet.h" />
     <ClInclude Include="..\Classes\PacketHandlerMap.h" />

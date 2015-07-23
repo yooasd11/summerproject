@@ -1,6 +1,6 @@
 #include "JYPlayer.h"
-#include "BaseExecutor.h"
-#include "MoveExecutor.h"
+#include "BaseExecuter.h"
+#include "MoveExecuter.h"
 #include "JYObjectManager.h"
 #include "CoordinateConverter.h"
 
@@ -11,31 +11,50 @@ JYObject::JYObject(cocos2d::CCNode* pCCObject) :
 	m_nUID(-1),
 	m_fVelocity(0.0f),
 	m_fDirection(0.0f){
-	memset(m_Executors, 0, sizeof(m_Executors));
+	memset(m_Executers, 0, sizeof(m_Executers));
 	JYObjectManager::getInstance()->pushObject(this);
 }
 
 JYObject::~JYObject() {
-	for (int i = 0; i < __MaxExecutor; ++i)
+	for (int i = 0; i < __Executer::__Executer_END; ++i)
 	{
-		delete m_Executors[i];
+		delete m_Executers[i];
 	}
+	this->getParent()->removeChildByJYObject(this);
 	JYObjectManager::getInstance()->popObject(this);
+	this->removeChildrenRecursive(this);
 }
 
-void JYObject::setExecutor(BaseExecutor* param) {
-	int type = param->getEnum();
-	m_Executors[type] = param;
+void JYObject::removeChildrenRecursive(JYObject* here){
+	if (here == nullptr) return;
+	for (int i = 0; i < this->m_pJYChildrenVector.size(); ++i){
+		removeChildrenRecursive(this->m_pJYChildrenVector[i]);
+	}
+	delete this;
 }
 
-void JYObject::ReleaseExecutor(BaseExecutor* param) {
+void JYObject::setExecuter(BaseExecuter* param) {
 	int type = param->getEnum();
-	m_Executors[type] = nullptr;
+	m_Executers[type] = param;
+}
+
+void JYObject::ReleaseExecuter(BaseExecuter* param) {
+	int type = param->getEnum();
+	m_Executers[type] = nullptr;
 }
 
 void JYObject::addChild(JYObject* const pJYObject){
 	this->m_pJYChildrenVector.push_back(pJYObject);
 	pJYObject->m_pJYObjectParent = this;
+}
+
+void JYObject::removeChildByJYObject(JYObject* pJYObject){
+	for (int i = 0; i < this->m_pJYChildrenVector.size(); ++i){
+		if (this->m_pJYChildrenVector[i] == pJYObject){
+			this->m_pJYChildrenVector.erase(this->m_pJYChildrenVector.begin() + i);
+			return;
+		}
+	}
 }
 
 void JYObject::removeChildByName(const std::string& sName){
@@ -67,11 +86,9 @@ JYObject* JYObject::getChildByName(const std::string& sName){
 }
 
 void JYObject::tick(float fDeltaTime){
-	for (int i = 0; i < _countof(m_Executors); ++i)
-	{
-		if (m_Executors[i] != nullptr)
-		{
-			m_Executors[i]->tick(fDeltaTime);
+	for (int i = 0; i < _countof(m_Executers); ++i){
+		if (m_Executers[i] != nullptr){
+			m_Executers[i]->tick(fDeltaTime);
 		}
 	}
 }

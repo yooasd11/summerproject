@@ -1,20 +1,20 @@
 #pragma once
 
-#include "BaseExecutor.h"
+#include "BaseExecuter.h"
 
 class JYObject;
 
-class CollisionExecutor : public BaseExecutor{
-	GENERATE_FUNC(CollisionExecutor)
+class CollisionExecuter : public BaseExecuter{
+	GENERATE_FUNC(CollisionExecuter)
 private:
 	cocos2d::CCPoint getNextPos(cocos2d::CCPoint currentPos, float fDeltaTime);
 	cocos2d::CCPoint tileCoordForPostion(cocos2d::CCPoint pos);
 	bool boundaryCollisionChecker(cocos2d::CCPoint& dst);
 	bool objectCollisionChecker(cocos2d::CCPoint& dst);
 public:
-	CollisionExecutor(JYObject* pJYObject) : BaseExecutor(pJYObject){
+	CollisionExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject){
 		regist();
 	}
-	virtual ~CollisionExecutor() {}
+	virtual ~CollisionExecuter() {}
 	virtual void tick(float fDeltaTime);
 };

@@ -1,7 +1,7 @@
 #pragma once
-#include "MoveExecutor.h"
+#include "MoveExecuter.h"
 #include "JYObject.h"
-#include "ExecutorList.h"
+#include "ExecuterList.h"
 #include "Inputhandler.h"
 #include "MyScene.h"
 #include "CoordinateConverter.h"
@@ -9,14 +9,14 @@
 #include "Packet.h"
 #include "ConnectionManager.h"
 
-void MoveExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+void MoveExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 
 }
 
-void MoveExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+void MoveExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 }
 
-void MoveExecutor::tick(float fDeltaTime){
+void MoveExecuter::tick(float fDeltaTime){
 	cocos2d::EventKeyboard::KeyCode keyCode;
 	static float fPassedTime = 0;
 	fPassedTime += fDeltaTime;
@@ -32,16 +32,16 @@ void MoveExecutor::tick(float fDeltaTime){
 	}
 }
 
-void MoveExecutor::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst){
+void MoveExecuter::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst){
 	cocos2d::CCActionInterval* moveAct = cocos2d::CCMoveTo::create(0.1f, dst);
 	this->getOwner()->getCCObject()->runAction(moveAct);
 }
 
 
-void MoveExecutor::onMouseMove(cocos2d::Event* pEvent){
+void MoveExecuter::onMouseMove(cocos2d::Event* pEvent){
 
 }
 
-void MoveExecutor::onMouseDown(cocos2d::Event* pEvent){
+void MoveExecuter::onMouseDown(cocos2d::Event* pEvent){
 
 }

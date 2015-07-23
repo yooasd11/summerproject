@@ -1,8 +1,7 @@
 #pragma once
-
 #include "cocos2d.h"
-#include "ExecutorList.h"
-#include "BaseExecutor.h"
+#include "ExecuterList.h"
+#include "BaseExecuter.h"
 #include "JYObjectList.h"
 
 class JYObject{
@@ -13,50 +12,26 @@ private:
 	float m_fDirection;
 	cocos2d::CCNode* m_pCCObject;
 	JYObject* m_pJYObjectParent;
-	BaseExecutor* m_Executors[__MaxExecutor];
+	BaseExecuter* m_Executers[__Executer::__Executer_END];
 	std::vector<JYObject*> m_pJYChildrenVector;
 	std::string m_sName;
 	std::vector<JYObject*>::iterator getChildIteratorByName(const std::string& sName);
+	void removeChildrenRecursive(JYObject* here);
 public:
 	JYObject(cocos2d::CCNode* pCCObject);
 	virtual ~JYObject();
 
-	UINT getObjectType(){
-		return m_nObjectType;
-	}
-
-	void setObjectType(const UINT& nType){
-		m_nObjectType = nType;
-	}
-
-	UINT getUID(){
-		return m_nUID;
-	}
-	void setUID(const UINT& nUID){
-		m_nUID = nUID;
-	}
-
-	float getVelocity(){
-		return m_fVelocity;
-	}
-
-	void setVelocity(const float& fVelocity){
-		m_fVelocity = fVelocity;
-	}
-
-	float getDirection(){
-		return m_fDirection;
-	}
-
-	void setDirection(const float& fDirection){
-		m_fDirection = fDirection;
-	}
-
-	BaseExecutor* getExecutor(int type) { 
-		return m_Executors[type]; 
-	}
-	void setExecutor(BaseExecutor* param);
-	void ReleaseExecutor(BaseExecutor* param);
+	UINT getObjectType() { return m_nObjectType; }
+	void setObjectType(const UINT& nType) { m_nObjectType = nType; }
+	UINT getUID() { return m_nUID; }
+	void setUID(const UINT& nUID) { m_nUID = nUID; }
+	float getVelocity() { return m_fVelocity; }
+	void setVelocity(const float& fVelocity) { m_fVelocity = fVelocity; }
+	float getDirection() { return m_fDirection; }
+	void setDirection(const float& fDirection) { m_fDirection = fDirection; }
+	BaseExecuter* getExecuter(int type) { return m_Executers[type]; }
+	void setExecuter(BaseExecuter* param);
+	void ReleaseExecuter(BaseExecuter* param);
 
 	cocos2d::CCNode* getCCObject() { return m_pCCObject; }
 	void setCCObject(cocos2d::CCNode* ccOb) { m_pCCObject = ccOb; }
@@ -67,6 +42,7 @@ public:
 	void addChild(JYObject* const pJYObject);
 	JYObject* getChildByName(const std::string& sName);
 	void removeChildByName(const std::string& sName);
+	void removeChildByJYObject(JYObject* const pJYObject);
 	
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);

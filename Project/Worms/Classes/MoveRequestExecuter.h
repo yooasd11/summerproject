@@ -1,14 +1,14 @@
 #pragma once
-#include "BaseExecutor.h"
+#include "BaseExecuter.h"
 
-class MoveRequestExecutor : public BaseExecutor{
-	GENERATE_FUNC(MoveRequestExecutor);
+class MoveRequestExecuter : public BaseExecuter{
+	GENERATE_FUNC(MoveRequestExecuter);
 private:
 public:
-	MoveRequestExecutor(JYObject* pJYObject) : BaseExecutor(pJYObject){
+	MoveRequestExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject){
 		regist();
 	};
-	virtual ~MoveRequestExecutor() {};
+	virtual ~MoveRequestExecuter() {};
 
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);

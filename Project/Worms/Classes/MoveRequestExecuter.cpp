@@ -1,11 +1,11 @@
 #pragma once
-#include "MoveRequestExecutor.h"
+#include "MoveRequestExecuter.h"
 #include "JYObject.h"
 #include "Packet.h"
 #include "InGamePacket.pb.h"
 #include "ConnectionManager.h"
 
-void MoveRequestExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 	cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
 	float fVelocity = 20.0f;
 	float fDirection = 0.0f;
@@ -30,7 +30,7 @@ void MoveRequestExecutor::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
 	ConnectionManager::getInstance()->transmit(c_move.ByteSize(), PACKET_TYPE::PKT_C_MOVE, sendBuf);
 }
 
-void MoveRequestExecutor::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
+void MoveRequestExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 	cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
 	float fX = pDragon->getPosition().x;
 	float fY = pDragon->getPosition().y;

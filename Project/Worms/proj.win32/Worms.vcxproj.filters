@@ -36,16 +36,7 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BaseExecutor.cpp">
-      <Filter>src\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CollisionExecutor.cpp">
-      <Filter>src\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\InputHandler.cpp">
-      <Filter>src\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MoveExecutor.cpp">
       <Filter>src\Managers</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\ConnectionManager.cpp">
@@ -72,17 +63,26 @@
     <ClCompile Include="..\Classes\MyScene.cpp">
       <Filter>src\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\AssaultExecutor.cpp">
-      <Filter>src\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\AccountPacket.pb.cc">
       <Filter>src\Network\Packets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\MoveRequestExecutor.cpp">
-      <Filter>src\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\InGamePacket.pb.cc">
       <Filter>src\Network\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AssaultExecuter.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BaseExecuter.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CollisionExecuter.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MoveExecuter.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MoveRequestExecuter.cpp">
+      <Filter>src\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,19 +92,7 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BaseExecutor.h">
-      <Filter>src\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CollisionExecutor.h">
-      <Filter>src\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ExecutorList.h">
-      <Filter>src\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Inputhandler.h">
-      <Filter>src\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MoveExecutor.h">
       <Filter>src\Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Packet.h">
@@ -140,14 +128,8 @@
     <ClInclude Include="..\Classes\JYRealTimer.h">
       <Filter>src\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\AssaultExecutor.h">
-      <Filter>src\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\AccountPacket.pb.h">
       <Filter>src\Network\Packets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MoveRequestExecutor.h">
-      <Filter>src\Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CoordinateConverter.h">
       <Filter>src\Utility</Filter>
@@ -157,6 +139,24 @@
     </ClInclude>
     <ClInclude Include="..\Classes\InGamePacket.pb.h">
       <Filter>src\Network\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AssaultExecuter.h">
+      <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BaseExecuter.h">
+      <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CollisionExecuter.h">
+      <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ExecuterList.h">
+      <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveExecuter.h">
+      <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveRequestExecuter.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
