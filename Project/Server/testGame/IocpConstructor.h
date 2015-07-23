@@ -31,7 +31,7 @@ public:
 	HANDLE getPort();
 	void closeSocket(SOCKET);
 
-	//
+	
 	void AutoNPC(int);
 
 };

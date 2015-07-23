@@ -7,15 +7,18 @@ const int PKTBODY = PKTLENGTH - PKTHEADER;
 
 enum PACKET_HANDLER_TYPE
 {
-	PKT_BEGIN =0,
-	PKT_ECHO,
-	PKT_ACCOUNT,
-	PKT_ACCOUNT_LIST,
-	PKT_S_MOVE, //right =0, left =1
-	PKT_C_MOVE,
-	PKT_S_STOP,
-	PKT_C_STOP,
-	PKT_END,
+	PKT_BEGIN = 0,
+	PKT_ECHO,			//1
+	PKT_ACCOUNT,		//2
+	PKT_ACCOUNT_LIST,	//3
+	PKT_S_MOVE,			//4
+	PKT_C_MOVE,			//5
+	PKT_S_STOP,			//6
+	PKT_C_STOP,			//7
+	PKT_C_SHOOT,		//8
+	PKT_S_SHOOT,		//9
+	PKT_S_DISCONNECT,	//10
+	PKT_END,			//11
 };
 
 class Packet

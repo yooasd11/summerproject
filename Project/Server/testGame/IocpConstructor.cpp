@@ -101,8 +101,6 @@ void IocpConstructor::AutoNPC(int count)
 }
 
 
-
-
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
@@ -208,7 +206,7 @@ void IocpConstructor::ThreadFunction()
 				{
 					//유저정보의 삭제...
 					TimerJob disConnectJob;
-					disConnectJob.exectime = GetTickCount() + 5000;
+					disConnectJob.exectime = GetTickCount() + 500;
 					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
 					this->jobs.push_back(disConnectJob);
 					User->connect = false;

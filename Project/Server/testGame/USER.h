@@ -7,9 +7,11 @@ public:
 	int hp;
 	float x;
 	float y;
+	float direction;
+	float velocity;
 	int state; //WAITNG = 1, MOVE = 2, ATTACK = 3;
 	//받은 데이터와 현재까지 받은 데이터 크기...
-	float velocity;
+	
 	int total;
 	int current;
 	char Buffer[BUFSIZE];

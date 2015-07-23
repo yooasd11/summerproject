@@ -116,6 +116,7 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	//유저정보 수정...
 	user->state = MOVE;
 	user->velocity = MovePacket.velocity();
+	user->direction = MovePacket.direction();
 	type = PKT_S_MOVE;
 
 	
@@ -129,7 +130,7 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(MovePacket.uid()); ServerMovePacket.set_velocity(MovePacket.velocity());
-	ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y);
+	ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y); ServerMovePacket.set_direction(MovePacket.direction());
 	size = ServerMovePacket.ByteSize();	
 
 	//버퍼를 만들고, 전달
@@ -148,13 +149,13 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 
 void PacketHandler::C_MOVE_Handler(std::shared_ptr<USER> user)
 {
-
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size = 0, type, current = 0;
 
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(user->uid); ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y); ServerMovePacket.set_velocity(user->velocity);
+	ServerMovePacket.set_direction(user->direction);
 	size = ServerMovePacket.ByteSize();
 	type = PKT_S_MOVE;
 
@@ -169,7 +170,6 @@ void PacketHandler::C_MOVE_Handler(std::shared_ptr<USER> user)
 
 void PacketHandler::C_STOP_handler(Packet& p)
 {
-	printf("stop call \n");
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size = 0, type = 0, current = 0;
@@ -191,11 +191,29 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	ServerStopPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
 	BroadCast(buffer, size + sizeof(unsigned short)* 2);
 	
-	printf("c stop 를 보냄\n");
 	delete[] buffer;
 	return;
 }
 
+void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type = 0;
+
+	AccountPacket::S_Account_List::Disconnect disconnect;
+	type = PKT_S_DISCONNECT;
+	disconnect.set_uid(sock);
+	size = disconnect.ByteSize();
+
+	memcpy(buffer, &size, sizeof(unsigned short));
+	memcpy(buffer + sizeof(unsigned short), &type, sizeof(unsigned short));
+	disconnect.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	delete[] buffer;
+	return;
+}
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
@@ -219,6 +237,9 @@ void PacketHandler::BroadCast(char *buffer, int size)
 	printf("%d\n", count);
 	return;
 }
+
+
+
 
 bool PacketHandler::HandlePacket(Packet& p){
 

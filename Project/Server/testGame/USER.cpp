@@ -5,6 +5,7 @@
 USER::USER()
 {
 	this->connect = true;
+	this->direction = 0;
 	this->x = 10.0f;
 	this->y = 10.0f;
 	this->hp = 100;
@@ -17,6 +18,7 @@ USER::USER()
 
 USER::USER(int _id, int _hp, float _x, float _y)
 {
+	this->direction = 0;
 	this->connect = true;
 	this->uid = _id;
 	this->hp = _hp;
