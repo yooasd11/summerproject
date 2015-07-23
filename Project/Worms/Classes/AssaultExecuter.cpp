@@ -18,18 +18,26 @@ void AssaultExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, coc
 }
 
 void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
-	cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
-	cocos2d::CCSprite* fireAim = (cocos2d::CCSprite*)pDragon->getChildByName("Aim");
+	JYObject* pOwner = this->getOwner();
+	if (pOwner == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	if (pCCOwner == nullptr) return;
+	cocos2d::CCSprite* pFireAim = (cocos2d::CCSprite*)pCCOwner->getChildByName("Aim");
+	if (pFireAim == nullptr) return;
+	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pFireAim, pEvent);
 
-	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(fireAim, pEvent);
-
-	fireAim->setRotation(degree);
+	pFireAim->setRotation(degree);
 }
 
 void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
+	JYObject* pOwner = this->getOwner();
+	if (pOwner == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	if (pCCOwner == nullptr) return;
+	JYArm* pJYBullet = (JYArm*)pOwner->getChildByName("JYBullet");
+	if (pJYBullet == nullptr) return;
+
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
-	JYArm* pJYBullet = (JYArm*)this->getOwner()->getChildByName("JYBullet");
 	cocos2d::CCSprite* pCCBullet = (cocos2d::CCSprite*)pJYBullet->getCCObject();
 	cocos2d::CCSprite* pAim = (cocos2d::CCSprite*)pCCOwner->getChildByName("Aim");
 	cocos2d::CCPoint bulletPos = pAim->convertToWorldSpace(pAim->getPosition());

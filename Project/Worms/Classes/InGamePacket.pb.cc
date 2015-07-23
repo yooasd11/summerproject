@@ -121,8 +121,9 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Stop, _internal_metadata_),
       -1);
   C_Shoot_descriptor_ = file->message_type(4);
-  static const int C_Shoot_offsets_[6] = {
+  static const int C_Shoot_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Shoot, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Shoot, th_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Shoot, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Shoot, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Shoot, damage_),
@@ -141,8 +142,9 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Shoot, _internal_metadata_),
       -1);
   S_Shoot_descriptor_ = file->message_type(5);
-  static const int S_Shoot_offsets_[6] = {
+  static const int S_Shoot_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Shoot, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Shoot, th_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Shoot, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Shoot, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Shoot, damage_),
@@ -217,12 +219,12 @@ void protobuf_AddDesc_InGamePacket_2eproto() {
     "\002\022\021\n\tdirection\030\004 \002(\002\022\020\n\010velocity\030\005 \002(\002\"+"
     "\n\006C_Stop\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 "
     "\002(\002\"+\n\006S_Stop\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n"
-    "\001y\030\003 \002(\002\"a\n\007C_Shoot\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 "
-    "\002(\002\022\t\n\001y\030\003 \002(\002\022\016\n\006damage\030\004 \002(\002\022\020\n\010veloci"
-    "ty\030\005 \002(\002\022\021\n\tdirection\030\006 \002(\002\"a\n\007S_Shoot\022\013"
-    "\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002(\002\022\016\n\006dam"
-    "age\030\004 \002(\002\022\020\n\010velocity\030\005 \002(\002\022\021\n\tdirection"
-    "\030\006 \002(\002", 486);
+    "\001y\030\003 \002(\002\"m\n\007C_Shoot\022\013\n\003uid\030\001 \002(\r\022\n\n\002th\030\002"
+    " \002(\r\022\t\n\001x\030\003 \002(\002\022\t\n\001y\030\004 \002(\002\022\016\n\006damage\030\005 \002"
+    "(\002\022\020\n\010velocity\030\006 \002(\002\022\021\n\tdirection\030\007 \002(\002\""
+    "m\n\007S_Shoot\022\013\n\003uid\030\001 \002(\r\022\n\n\002th\030\002 \002(\r\022\t\n\001x"
+    "\030\003 \002(\002\022\t\n\001y\030\004 \002(\002\022\016\n\006damage\030\005 \002(\002\022\020\n\010vel"
+    "ocity\030\006 \002(\002\022\021\n\tdirection\030\007 \002(\002", 510);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "InGamePacket.proto", &protobuf_RegisterTypes);
   C_Move::default_instance_ = new C_Move();
@@ -2165,6 +2167,7 @@ void S_Stop::clear_y() {
 
 #ifndef _MSC_VER
 const int C_Shoot::kUidFieldNumber;
+const int C_Shoot::kThFieldNumber;
 const int C_Shoot::kXFieldNumber;
 const int C_Shoot::kYFieldNumber;
 const int C_Shoot::kDamageFieldNumber;
@@ -2192,6 +2195,7 @@ C_Shoot::C_Shoot(const C_Shoot& from)
 void C_Shoot::SharedCtor() {
   _cached_size_ = 0;
   uid_ = 0u;
+  th_ = 0u;
   x_ = 0;
   y_ = 0;
   damage_ = 0;
@@ -2244,7 +2248,7 @@ void C_Shoot::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  if (_has_bits_[0 / 32] & 63u) {
+  if (_has_bits_[0 / 32] & 127u) {
     ZR_(uid_, direction_);
   }
 
@@ -2277,13 +2281,28 @@ bool C_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(21)) goto parse_x;
+        if (input->ExpectTag(16)) goto parse_th;
         break;
       }
 
-      // required float x = 2;
+      // required uint32 th = 2;
       case 2: {
-        if (tag == 21) {
+        if (tag == 16) {
+         parse_th:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &th_)));
+          set_has_th();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(29)) goto parse_x;
+        break;
+      }
+
+      // required float x = 3;
+      case 3: {
+        if (tag == 29) {
          parse_x:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2292,13 +2311,13 @@ bool C_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(29)) goto parse_y;
+        if (input->ExpectTag(37)) goto parse_y;
         break;
       }
 
-      // required float y = 3;
-      case 3: {
-        if (tag == 29) {
+      // required float y = 4;
+      case 4: {
+        if (tag == 37) {
          parse_y:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2307,13 +2326,13 @@ bool C_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(37)) goto parse_damage;
+        if (input->ExpectTag(45)) goto parse_damage;
         break;
       }
 
-      // required float damage = 4;
-      case 4: {
-        if (tag == 37) {
+      // required float damage = 5;
+      case 5: {
+        if (tag == 45) {
          parse_damage:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2322,13 +2341,13 @@ bool C_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(45)) goto parse_velocity;
+        if (input->ExpectTag(53)) goto parse_velocity;
         break;
       }
 
-      // required float velocity = 5;
-      case 5: {
-        if (tag == 45) {
+      // required float velocity = 6;
+      case 6: {
+        if (tag == 53) {
          parse_velocity:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2337,13 +2356,13 @@ bool C_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(53)) goto parse_direction;
+        if (input->ExpectTag(61)) goto parse_direction;
         break;
       }
 
-      // required float direction = 6;
-      case 6: {
-        if (tag == 53) {
+      // required float direction = 7;
+      case 7: {
+        if (tag == 61) {
          parse_direction:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2386,29 +2405,34 @@ void C_Shoot::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
   }
 
-  // required float x = 2;
+  // required uint32 th = 2;
+  if (has_th()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->th(), output);
+  }
+
+  // required float x = 3;
   if (has_x()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->x(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->x(), output);
   }
 
-  // required float y = 3;
+  // required float y = 4;
   if (has_y()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->y(), output);
   }
 
-  // required float damage = 4;
+  // required float damage = 5;
   if (has_damage()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->damage(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->damage(), output);
   }
 
-  // required float velocity = 5;
+  // required float velocity = 6;
   if (has_velocity()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->velocity(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(6, this->velocity(), output);
   }
 
-  // required float direction = 6;
+  // required float direction = 7;
   if (has_direction()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(6, this->direction(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(7, this->direction(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2426,29 +2450,34 @@ void C_Shoot::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
   }
 
-  // required float x = 2;
+  // required uint32 th = 2;
+  if (has_th()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->th(), target);
+  }
+
+  // required float x = 3;
   if (has_x()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->x(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->x(), target);
   }
 
-  // required float y = 3;
+  // required float y = 4;
   if (has_y()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->y(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->y(), target);
   }
 
-  // required float damage = 4;
+  // required float damage = 5;
   if (has_damage()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->damage(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->damage(), target);
   }
 
-  // required float velocity = 5;
+  // required float velocity = 6;
   if (has_velocity()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->velocity(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(6, this->velocity(), target);
   }
 
-  // required float direction = 6;
+  // required float direction = 7;
   if (has_direction()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(6, this->direction(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(7, this->direction(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2469,28 +2498,35 @@ int C_Shoot::RequiredFieldsByteSizeFallback() const {
         this->uid());
   }
 
+  if (has_th()) {
+    // required uint32 th = 2;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->th());
+  }
+
   if (has_x()) {
-    // required float x = 2;
+    // required float x = 3;
     total_size += 1 + 4;
   }
 
   if (has_y()) {
-    // required float y = 3;
+    // required float y = 4;
     total_size += 1 + 4;
   }
 
   if (has_damage()) {
-    // required float damage = 4;
+    // required float damage = 5;
     total_size += 1 + 4;
   }
 
   if (has_velocity()) {
-    // required float velocity = 5;
+    // required float velocity = 6;
     total_size += 1 + 4;
   }
 
   if (has_direction()) {
-    // required float direction = 6;
+    // required float direction = 7;
     total_size += 1 + 4;
   }
 
@@ -2499,25 +2535,30 @@ int C_Shoot::RequiredFieldsByteSizeFallback() const {
 int C_Shoot::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x0000003f) ^ 0x0000003f) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x0000007f) ^ 0x0000007f) == 0) {  // All required fields are present.
     // required uint32 uid = 1;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->uid());
 
-    // required float x = 2;
+    // required uint32 th = 2;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->th());
+
+    // required float x = 3;
     total_size += 1 + 4;
 
-    // required float y = 3;
+    // required float y = 4;
     total_size += 1 + 4;
 
-    // required float damage = 4;
+    // required float damage = 5;
     total_size += 1 + 4;
 
-    // required float velocity = 5;
+    // required float velocity = 6;
     total_size += 1 + 4;
 
-    // required float direction = 6;
+    // required float direction = 7;
     total_size += 1 + 4;
 
   } else {
@@ -2551,6 +2592,9 @@ void C_Shoot::MergeFrom(const C_Shoot& from) {
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_uid()) {
       set_uid(from.uid());
+    }
+    if (from.has_th()) {
+      set_th(from.th());
     }
     if (from.has_x()) {
       set_x(from.x());
@@ -2586,7 +2630,7 @@ void C_Shoot::CopyFrom(const C_Shoot& from) {
 }
 
 bool C_Shoot::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
+  if ((_has_bits_[0] & 0x0000007f) != 0x0000007f) return false;
 
   return true;
 }
@@ -2597,6 +2641,7 @@ void C_Shoot::Swap(C_Shoot* other) {
 }
 void C_Shoot::InternalSwap(C_Shoot* other) {
   std::swap(uid_, other->uid_);
+  std::swap(th_, other->th_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
   std::swap(damage_, other->damage_);
@@ -2642,15 +2687,39 @@ void C_Shoot::clear_uid() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.uid)
 }
 
-// required float x = 2;
-bool C_Shoot::has_x() const {
+// required uint32 th = 2;
+bool C_Shoot::has_th() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-void C_Shoot::set_has_x() {
+void C_Shoot::set_has_th() {
   _has_bits_[0] |= 0x00000002u;
 }
-void C_Shoot::clear_has_x() {
+void C_Shoot::clear_has_th() {
   _has_bits_[0] &= ~0x00000002u;
+}
+void C_Shoot::clear_th() {
+  th_ = 0u;
+  clear_has_th();
+}
+ ::google::protobuf::uint32 C_Shoot::th() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.th)
+  return th_;
+}
+ void C_Shoot::set_th(::google::protobuf::uint32 value) {
+  set_has_th();
+  th_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.th)
+}
+
+// required float x = 3;
+bool C_Shoot::has_x() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void C_Shoot::set_has_x() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void C_Shoot::clear_has_x() {
+  _has_bits_[0] &= ~0x00000004u;
 }
 void C_Shoot::clear_x() {
   x_ = 0;
@@ -2666,15 +2735,15 @@ void C_Shoot::clear_x() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.x)
 }
 
-// required float y = 3;
+// required float y = 4;
 bool C_Shoot::has_y() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 void C_Shoot::set_has_y() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 void C_Shoot::clear_has_y() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 void C_Shoot::clear_y() {
   y_ = 0;
@@ -2690,15 +2759,15 @@ void C_Shoot::clear_y() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.y)
 }
 
-// required float damage = 4;
+// required float damage = 5;
 bool C_Shoot::has_damage() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 void C_Shoot::set_has_damage() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 void C_Shoot::clear_has_damage() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 void C_Shoot::clear_damage() {
   damage_ = 0;
@@ -2714,15 +2783,15 @@ void C_Shoot::clear_damage() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.damage)
 }
 
-// required float velocity = 5;
+// required float velocity = 6;
 bool C_Shoot::has_velocity() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 void C_Shoot::set_has_velocity() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 void C_Shoot::clear_has_velocity() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 void C_Shoot::clear_velocity() {
   velocity_ = 0;
@@ -2738,15 +2807,15 @@ void C_Shoot::clear_velocity() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.velocity)
 }
 
-// required float direction = 6;
+// required float direction = 7;
 bool C_Shoot::has_direction() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 void C_Shoot::set_has_direction() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000040u;
 }
 void C_Shoot::clear_has_direction() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 void C_Shoot::clear_direction() {
   direction_ = 0;
@@ -2768,6 +2837,7 @@ void C_Shoot::clear_direction() {
 
 #ifndef _MSC_VER
 const int S_Shoot::kUidFieldNumber;
+const int S_Shoot::kThFieldNumber;
 const int S_Shoot::kXFieldNumber;
 const int S_Shoot::kYFieldNumber;
 const int S_Shoot::kDamageFieldNumber;
@@ -2795,6 +2865,7 @@ S_Shoot::S_Shoot(const S_Shoot& from)
 void S_Shoot::SharedCtor() {
   _cached_size_ = 0;
   uid_ = 0u;
+  th_ = 0u;
   x_ = 0;
   y_ = 0;
   damage_ = 0;
@@ -2847,7 +2918,7 @@ void S_Shoot::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  if (_has_bits_[0 / 32] & 63u) {
+  if (_has_bits_[0 / 32] & 127u) {
     ZR_(uid_, direction_);
   }
 
@@ -2880,13 +2951,28 @@ bool S_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(21)) goto parse_x;
+        if (input->ExpectTag(16)) goto parse_th;
         break;
       }
 
-      // required float x = 2;
+      // required uint32 th = 2;
       case 2: {
-        if (tag == 21) {
+        if (tag == 16) {
+         parse_th:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &th_)));
+          set_has_th();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(29)) goto parse_x;
+        break;
+      }
+
+      // required float x = 3;
+      case 3: {
+        if (tag == 29) {
          parse_x:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2895,13 +2981,13 @@ bool S_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(29)) goto parse_y;
+        if (input->ExpectTag(37)) goto parse_y;
         break;
       }
 
-      // required float y = 3;
-      case 3: {
-        if (tag == 29) {
+      // required float y = 4;
+      case 4: {
+        if (tag == 37) {
          parse_y:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2910,13 +2996,13 @@ bool S_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(37)) goto parse_damage;
+        if (input->ExpectTag(45)) goto parse_damage;
         break;
       }
 
-      // required float damage = 4;
-      case 4: {
-        if (tag == 37) {
+      // required float damage = 5;
+      case 5: {
+        if (tag == 45) {
          parse_damage:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2925,13 +3011,13 @@ bool S_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(45)) goto parse_velocity;
+        if (input->ExpectTag(53)) goto parse_velocity;
         break;
       }
 
-      // required float velocity = 5;
-      case 5: {
-        if (tag == 45) {
+      // required float velocity = 6;
+      case 6: {
+        if (tag == 53) {
          parse_velocity:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2940,13 +3026,13 @@ bool S_Shoot::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(53)) goto parse_direction;
+        if (input->ExpectTag(61)) goto parse_direction;
         break;
       }
 
-      // required float direction = 6;
-      case 6: {
-        if (tag == 53) {
+      // required float direction = 7;
+      case 7: {
+        if (tag == 61) {
          parse_direction:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -2989,29 +3075,34 @@ void S_Shoot::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
   }
 
-  // required float x = 2;
+  // required uint32 th = 2;
+  if (has_th()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->th(), output);
+  }
+
+  // required float x = 3;
   if (has_x()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->x(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->x(), output);
   }
 
-  // required float y = 3;
+  // required float y = 4;
   if (has_y()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->y(), output);
   }
 
-  // required float damage = 4;
+  // required float damage = 5;
   if (has_damage()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->damage(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->damage(), output);
   }
 
-  // required float velocity = 5;
+  // required float velocity = 6;
   if (has_velocity()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->velocity(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(6, this->velocity(), output);
   }
 
-  // required float direction = 6;
+  // required float direction = 7;
   if (has_direction()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(6, this->direction(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(7, this->direction(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -3029,29 +3120,34 @@ void S_Shoot::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
   }
 
-  // required float x = 2;
+  // required uint32 th = 2;
+  if (has_th()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->th(), target);
+  }
+
+  // required float x = 3;
   if (has_x()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->x(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->x(), target);
   }
 
-  // required float y = 3;
+  // required float y = 4;
   if (has_y()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->y(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->y(), target);
   }
 
-  // required float damage = 4;
+  // required float damage = 5;
   if (has_damage()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->damage(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->damage(), target);
   }
 
-  // required float velocity = 5;
+  // required float velocity = 6;
   if (has_velocity()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->velocity(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(6, this->velocity(), target);
   }
 
-  // required float direction = 6;
+  // required float direction = 7;
   if (has_direction()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(6, this->direction(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(7, this->direction(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -3072,28 +3168,35 @@ int S_Shoot::RequiredFieldsByteSizeFallback() const {
         this->uid());
   }
 
+  if (has_th()) {
+    // required uint32 th = 2;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->th());
+  }
+
   if (has_x()) {
-    // required float x = 2;
+    // required float x = 3;
     total_size += 1 + 4;
   }
 
   if (has_y()) {
-    // required float y = 3;
+    // required float y = 4;
     total_size += 1 + 4;
   }
 
   if (has_damage()) {
-    // required float damage = 4;
+    // required float damage = 5;
     total_size += 1 + 4;
   }
 
   if (has_velocity()) {
-    // required float velocity = 5;
+    // required float velocity = 6;
     total_size += 1 + 4;
   }
 
   if (has_direction()) {
-    // required float direction = 6;
+    // required float direction = 7;
     total_size += 1 + 4;
   }
 
@@ -3102,25 +3205,30 @@ int S_Shoot::RequiredFieldsByteSizeFallback() const {
 int S_Shoot::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x0000003f) ^ 0x0000003f) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x0000007f) ^ 0x0000007f) == 0) {  // All required fields are present.
     // required uint32 uid = 1;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->uid());
 
-    // required float x = 2;
+    // required uint32 th = 2;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->th());
+
+    // required float x = 3;
     total_size += 1 + 4;
 
-    // required float y = 3;
+    // required float y = 4;
     total_size += 1 + 4;
 
-    // required float damage = 4;
+    // required float damage = 5;
     total_size += 1 + 4;
 
-    // required float velocity = 5;
+    // required float velocity = 6;
     total_size += 1 + 4;
 
-    // required float direction = 6;
+    // required float direction = 7;
     total_size += 1 + 4;
 
   } else {
@@ -3154,6 +3262,9 @@ void S_Shoot::MergeFrom(const S_Shoot& from) {
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_uid()) {
       set_uid(from.uid());
+    }
+    if (from.has_th()) {
+      set_th(from.th());
     }
     if (from.has_x()) {
       set_x(from.x());
@@ -3189,7 +3300,7 @@ void S_Shoot::CopyFrom(const S_Shoot& from) {
 }
 
 bool S_Shoot::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
+  if ((_has_bits_[0] & 0x0000007f) != 0x0000007f) return false;
 
   return true;
 }
@@ -3200,6 +3311,7 @@ void S_Shoot::Swap(S_Shoot* other) {
 }
 void S_Shoot::InternalSwap(S_Shoot* other) {
   std::swap(uid_, other->uid_);
+  std::swap(th_, other->th_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
   std::swap(damage_, other->damage_);
@@ -3245,15 +3357,39 @@ void S_Shoot::clear_uid() {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.uid)
 }
 
-// required float x = 2;
-bool S_Shoot::has_x() const {
+// required uint32 th = 2;
+bool S_Shoot::has_th() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-void S_Shoot::set_has_x() {
+void S_Shoot::set_has_th() {
   _has_bits_[0] |= 0x00000002u;
 }
-void S_Shoot::clear_has_x() {
+void S_Shoot::clear_has_th() {
   _has_bits_[0] &= ~0x00000002u;
+}
+void S_Shoot::clear_th() {
+  th_ = 0u;
+  clear_has_th();
+}
+ ::google::protobuf::uint32 S_Shoot::th() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.th)
+  return th_;
+}
+ void S_Shoot::set_th(::google::protobuf::uint32 value) {
+  set_has_th();
+  th_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.th)
+}
+
+// required float x = 3;
+bool S_Shoot::has_x() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void S_Shoot::set_has_x() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void S_Shoot::clear_has_x() {
+  _has_bits_[0] &= ~0x00000004u;
 }
 void S_Shoot::clear_x() {
   x_ = 0;
@@ -3269,15 +3405,15 @@ void S_Shoot::clear_x() {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.x)
 }
 
-// required float y = 3;
+// required float y = 4;
 bool S_Shoot::has_y() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 void S_Shoot::set_has_y() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 void S_Shoot::clear_has_y() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 void S_Shoot::clear_y() {
   y_ = 0;
@@ -3293,15 +3429,15 @@ void S_Shoot::clear_y() {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.y)
 }
 
-// required float damage = 4;
+// required float damage = 5;
 bool S_Shoot::has_damage() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 void S_Shoot::set_has_damage() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 void S_Shoot::clear_has_damage() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 void S_Shoot::clear_damage() {
   damage_ = 0;
@@ -3317,15 +3453,15 @@ void S_Shoot::clear_damage() {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.damage)
 }
 
-// required float velocity = 5;
+// required float velocity = 6;
 bool S_Shoot::has_velocity() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 void S_Shoot::set_has_velocity() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 void S_Shoot::clear_has_velocity() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 void S_Shoot::clear_velocity() {
   velocity_ = 0;
@@ -3341,15 +3477,15 @@ void S_Shoot::clear_velocity() {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.velocity)
 }
 
-// required float direction = 6;
+// required float direction = 7;
 bool S_Shoot::has_direction() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 void S_Shoot::set_has_direction() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000040u;
 }
 void S_Shoot::clear_has_direction() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 void S_Shoot::clear_direction() {
   direction_ = 0;

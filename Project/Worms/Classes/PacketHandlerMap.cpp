@@ -83,10 +83,9 @@ void SMovePacketHandler(Packet& p){
 	float fVelocity = sMovePacket.velocity();
 	CCLOG("S_Move from server : UID - %d, X - %.1f, Y - %.1f, V - %.1f", nUID, fX, fY, fVelocity);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
-	if (pJYPlayer != nullptr){
-		pJYPlayer->setVelocity(fVelocity);
-		pJYPlayer->setDirection(fDirection);
-	}
+	if (pJYPlayer == nullptr) return;
+	pJYPlayer->setVelocity(fVelocity);
+	pJYPlayer->setDirection(fDirection);
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_STOP, SStopPacketHandler);
@@ -101,6 +100,7 @@ void SStopPacketHandler(Packet& p){
 
 	CCLOG("Position from server : (%.2f, %.2f)", fX, fY);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pJYPlayer == nullptr) return;
 	pJYPlayer->setVelocity(0.0f);
 	pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
 }
@@ -120,8 +120,11 @@ void SShootPacketHandler(Packet& p){
 
 	CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pJYPlayer == nullptr) return;
 	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByName("JYBullet");
+	if (pJYBullet == nullptr) return;
 	cocos2d::CCNode* pCCPlayer = pJYPlayer->getCCObject();
+	if (pCCPlayer == nullptr) return;
 	pCCPlayer->setPosition(cocos2d::ccp(fX, fY));
 	pJYBullet->setDirection(fDirection);
 	pJYBullet->setVelocity(fVelocity);

@@ -58,10 +58,13 @@ bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
 }
 
 void CollisionExecuter::tick(float fDeltaTime){
+	JYObject* pOwner = this->getOwner();
+	if (pOwner == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	if (pCCOwner == nullptr) return;
 	UINT nJYObjectType = this->getOwner()->getObjectType();
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
-	cocos2d::CCNode* pCCOwner = this->getOwner()->getCCObject();
 	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(pCCOwner->getPosition());
 	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
 	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){

@@ -6,11 +6,14 @@
 #include "ConnectionManager.h"
 
 void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
-	cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
+	JYObject* pOwner = this->getOwner();
+	if (pOwner == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	if (pCCOwner == nullptr) return;
 	float fVelocity = 20.0f;
 	float fDirection = 0.0f;
-	float fX = pDragon->getPosition().x;
-	float fY = pDragon->getPosition().y;
+	float fX = pCCOwner->getPosition().x;
+	float fY = pCCOwner->getPosition().y;
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A){
 		fDirection = 180.0f;
 	}
@@ -31,9 +34,12 @@ void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
 }
 
 void MoveRequestExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
-	cocos2d::CCSprite* pDragon = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
-	float fX = pDragon->getPosition().x;
-	float fY = pDragon->getPosition().y;
+	JYObject* pOwner = this->getOwner();
+	if (pOwner == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	if (pCCOwner == nullptr) return;
+	float fX = pCCOwner->getPosition().x;
+	float fY = pCCOwner->getPosition().y;
 
 	char sendBuf[PKTBODYSIZE];
 	InGamePacket::C_Stop c_stop;

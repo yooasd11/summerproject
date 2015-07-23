@@ -15,6 +15,7 @@ JYPlayer::JYPlayer(cocos2d::CCNode* pCCObject) : JYObject(pCCObject){
 	new AssaultExecuter(this);
 	this->setObjectType(JYOBJECT_TYPE::JY_PLAYER);
 }
+
 void JYPlayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 	MoveRequestExecuter* pMoveRequestExecuter = (MoveRequestExecuter*)this->getExecuter(__Executer::__MoveRequestExecuter);
 	if (pMoveRequestExecuter != nullptr){

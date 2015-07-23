@@ -20,17 +20,10 @@ JYObject::~JYObject() {
 	{
 		delete m_Executers[i];
 	}
-	this->getParent()->removeChildByJYObject(this);
-	JYObjectManager::getInstance()->popObject(this);
-	this->removeChildrenRecursive(this);
-}
-
-void JYObject::removeChildrenRecursive(JYObject* here){
-	if (here == nullptr) return;
-	for (int i = 0; i < this->m_pJYChildrenVector.size(); ++i){
-		removeChildrenRecursive(this->m_pJYChildrenVector[i]);
+	if (this->getParent() != nullptr){
+		this->getParent()->removeChildByJYObject(this);
 	}
-	delete this;
+	JYObjectManager::getInstance()->popObject(this);
 }
 
 void JYObject::setExecuter(BaseExecuter* param) {
@@ -49,12 +42,13 @@ void JYObject::addChild(JYObject* const pJYObject){
 }
 
 void JYObject::removeChildByJYObject(JYObject* pJYObject){
-	for (int i = 0; i < this->m_pJYChildrenVector.size(); ++i){
-		if (this->m_pJYChildrenVector[i] == pJYObject){
-			this->m_pJYChildrenVector.erase(this->m_pJYChildrenVector.begin() + i);
-			return;
-		}
+	auto iteratorTarget = this->getChildIteratorByObject(pJYObject);
+	if (iteratorTarget == m_pJYChildrenVector.end()) {
+		CCLOG("No Child");
+		return;
 	}
+	(*iteratorTarget)->m_pJYObjectParent = nullptr;
+	this->m_pJYChildrenVector.erase(iteratorTarget);
 }
 
 void JYObject::removeChildByName(const std::string& sName){
@@ -65,6 +59,15 @@ void JYObject::removeChildByName(const std::string& sName){
 	}
 	(*iteratorTarget)->m_pJYObjectParent = nullptr;
 	this->m_pJYChildrenVector.erase(iteratorTarget);
+}
+
+std::vector<JYObject*>::iterator JYObject::getChildIteratorByObject(JYObject* const pJYObject){
+	for (auto it = m_pJYChildrenVector.begin(); it < m_pJYChildrenVector.end(); ++it){
+		if ((*it) == pJYObject){
+			return it;
+		}
+	}
+	return m_pJYChildrenVector.end();
 }
 
 std::vector<JYObject*>::iterator JYObject::getChildIteratorByName(const std::string& sName){

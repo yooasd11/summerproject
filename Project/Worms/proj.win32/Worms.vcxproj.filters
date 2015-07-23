@@ -66,9 +66,6 @@
     <ClCompile Include="..\Classes\AccountPacket.pb.cc">
       <Filter>src\Network\Packets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\InGamePacket.pb.cc">
-      <Filter>src\Network\Packets</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\AssaultExecuter.cpp">
       <Filter>src\Managers</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\MoveRequestExecuter.cpp">
       <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\InGamePacket.pb.cc">
+      <Filter>src\Network\Packets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +137,6 @@
     <ClInclude Include="..\Classes\JYObjectList.h">
       <Filter>src\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\InGamePacket.pb.h">
-      <Filter>src\Network\Packets</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\AssaultExecuter.h">
       <Filter>src\Managers</Filter>
     </ClInclude>
@@ -157,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\MoveRequestExecuter.h">
       <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\InGamePacket.pb.h">
+      <Filter>src\Network\Packets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

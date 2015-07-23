@@ -18,6 +18,7 @@ public:
 		return &instance;
 	}
 
+	int getSize() { return m_pJYObjectVector.size(); }
 	void pushObject(JYObject* const pObject);
 	void popObject(JYObject* const pObject);
 	JYObject* findObjectByName(const std::string& sName);
@@ -25,5 +26,6 @@ public:
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onMouseMove(cocos2d::Event* pEvent);
+	void removeObject(JYObject* pJYObject, bool bCleanUp = true);
 	void tick(float fDeltaTime);
 };

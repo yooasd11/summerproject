@@ -54,6 +54,19 @@ JYObject* JYObjectManager::findObjectByUID(const UINT& nUID){
 	return *retIt;
 }
 
+void JYObjectManager::removeObject(JYObject* pJYObject, bool bCleanUp){
+	std::vector<JYObject*>::iterator retIt = findIteratorByObject(pJYObject);
+	if (retIt == m_pJYObjectVector.end()) return;
+	this->popObject(pJYObject);
+	JYObject* pJYParent = pJYObject->getParent();
+	if (pJYParent != nullptr){
+		pJYParent->removeChildByJYObject(pJYObject);
+	}
+	if (bCleanUp == true){
+		//자식들 싹다 지우자
+	}
+}
+
 void JYObjectManager::tick(float fDeltaTime){
 	for (int i = 0; i < m_pJYObjectVector.size(); ++i){
 		m_pJYObjectVector[i]->tick(fDeltaTime);

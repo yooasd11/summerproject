@@ -22,7 +22,7 @@ public:
 
 	UINT nPlayerUID;
 	JYPlayer* pJYPlayerDragon;
-	CCParallaxNode* backgroundNode;
+	CCParallaxNode* pBackgroundNode;
 	CCSize winSize;
 	JYRealTimer* pTimer;
 

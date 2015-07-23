@@ -16,7 +16,7 @@ private:
 	std::vector<JYObject*> m_pJYChildrenVector;
 	std::string m_sName;
 	std::vector<JYObject*>::iterator getChildIteratorByName(const std::string& sName);
-	void removeChildrenRecursive(JYObject* here);
+	std::vector<JYObject*>::iterator getChildIteratorByObject(JYObject* const pJYObject);
 public:
 	JYObject(cocos2d::CCNode* pCCObject);
 	virtual ~JYObject();
@@ -39,6 +39,7 @@ public:
 	void setName(const std::string& sName) { m_sName = sName; }
 	std::string getName() { return m_sName; }
 	JYObject* getParent() { return m_pJYObjectParent; }
+	void setParent(JYObject* pJYObject) { m_pJYObjectParent = pJYObject; }
 	void addChild(JYObject* const pJYObject);
 	JYObject* getChildByName(const std::string& sName);
 	void removeChildByName(const std::string& sName);

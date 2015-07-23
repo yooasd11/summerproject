@@ -90,10 +90,10 @@ bool MyScene::init()
 void MyScene::addBackground(){
 	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestDesert.tmx");
 	pTmap->setName("Tmap");
-	backgroundNode = CCParallaxNode::create();
-	backgroundNode->setName("Background");
-	backgroundNode->addChild(pTmap, 1, ccp(1.0f, 1.0f), ccp(0, 0));
-	this->addChild(backgroundNode, 0);
+	pBackgroundNode = CCParallaxNode::create();
+	pBackgroundNode->setName("Background");
+	pBackgroundNode->addChild(pTmap, 1, ccp(1.0f, 1.0f), ccp(0, 0));
+	this->addChild(pBackgroundNode, 0);
 	CCLOG("TMAP size : (%.1f, %.1f)", pTmap->getContentSize().width, pTmap->getContentSize().height);
 	CCTMXObjectGroup* objects = pTmap->objectGroupNamed("Objects");
 	CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
@@ -116,7 +116,7 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	pDragon->setFlippedX(true);
 	pDragon->setScale(0.5);
 	pDragon->setName("Dragon");
-	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)backgroundNode->getChildByName("Tmap");
+	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pBackgroundNode->getChildByName("Tmap");
 	pTmap->addChild(pDragon, 3, 15);
 
 	//Run action : flying animation
@@ -151,8 +151,12 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 //등등 많은 추가 소스 필요함
 void MyScene::deleteDragon(const UINT& nUID){
 	JYPlayer* pTarget = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
-	this->removeChild(pTarget->getCCObject());
-	delete pTarget;
+	if (pTarget != nullptr){
+		CCLOG("JYObjects count : %d", JYObjectManager::getInstance()->getSize());
+		this->getChildByName("Background")->getChildByName("Tmap")->removeChild(pTarget->getCCObject(), true);
+		JYObjectManager::getInstance()->removeObject(pTarget);
+		CCLOG("JYObjects count : %d", JYObjectManager::getInstance()->getSize());
+	}
 }
 
 //Make pJYPlayer as a actual player of the scene
@@ -178,14 +182,14 @@ bool MyScene::onTouchBegan(Touch* pTouch, Event* pEvent){
 void MyScene::onTouchMoved(Touch* pTouch, Event* pEvent){
 	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pJYPlayerDragon->getCCObject()->getParent();
 	CCPoint diff = pTouch->getDelta();
-	CCPoint currentPos = backgroundNode->getPosition();
+	CCPoint currentPos = pBackgroundNode->getPosition();
 	CCPoint newPos = currentPos + diff;
 	if (newPos.x < 0) newPos.x = 0;
 	if (newPos.x + pTmap->getContentSize().width >= winSize.width) newPos.x = winSize.width - pTmap->getContentSize().width;
 	if (newPos.y < 0) newPos.y = 0;
 	if (newPos.y + pTmap->getContentSize().height >= winSize.height) newPos.y = winSize.height - pTmap->getContentSize().height;
-	backgroundNode->setPosition(newPos);
-	CCLOG("changed pos : %f %f", backgroundNode->getPosition().x, backgroundNode->getPosition().y);
+	pBackgroundNode->setPosition(newPos);
+	CCLOG("changed pos : %f %f", pBackgroundNode->getPosition().x, pBackgroundNode->getPosition().y);
 }
 
 void MyScene::onTouchEnded(Touch* pTouch, Event* pEvent){
