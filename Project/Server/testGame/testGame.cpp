@@ -34,7 +34,7 @@ int _tmain()
 		PacketHandler::GetInstance()->SendAccountPacket(sock);
 		PacketHandler::GetInstance()->BroadCastAccountPacket();
 
-		handle.ReadMode();
+		handle.ReadMode();	// °í¹ÎÇØº¼°Í
 		CompletionPort.RecvMessage(handle);
 	}
 	return 0;

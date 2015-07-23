@@ -176,8 +176,9 @@ void IocpConstructor::ThreadFunction()
 	char* TempBuffer = new char[BUFSIZE];
 
 	while (1){
-		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), INFINITE);
+		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), 100);
 
+		//printf("%d\n", GetLastError());
 		//위치가 
 		//sock = tempHandle.handleinfo->ClntSock;
 		//바로 에러처리해줌...getlasterror 'INFINITE'모드가 아닐 때 사용...
@@ -191,7 +192,7 @@ void IocpConstructor::ThreadFunction()
 		//클라이언트 통신
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
-			USER& User = this->cm->retUser(sock);
+			USER* User = this->cm->retUser(sock);
 
 			if (tempHandle.ioinfo->rwMode == READ)   
 			{
@@ -203,12 +204,12 @@ void IocpConstructor::ThreadFunction()
 					closesocket(sock);
 				}
 				//user에 관한 정보를 저장하고....
-				User.setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
-				User.setTotal(tempHandle.bytesTrans);
+				User->setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
+				User->setTotal(tempHandle.bytesTrans);
 				//User.setCurrent(User.getCurrent() + tempHandle.bytesTrans);
-				User.setCurrent(tempHandle.bytesTrans);
-				User.uid = sock;
-				User.UserpacketHandle();
+				User->setCurrent(tempHandle.bytesTrans);
+				User->uid = sock;
+				User->UserpacketHandle();
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
 			}
@@ -216,14 +217,13 @@ void IocpConstructor::ThreadFunction()
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
 				//send 부분을 바꾸자...
-				JobSchedule();
-				printf("메시지 전송 완료\n");
+				
 			
 			}
 		}
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...
 		else{
-
+			JobSchedule();
 			//JobSchedule();
 			//printf("완료통지가 없는 경우...\n");
 			/*if (GetLastError() == 64){

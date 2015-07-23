@@ -9,7 +9,7 @@ public:
 	ClientManager();
 	~ClientManager();
 	void mapping(SOCKET);
-	USER retUser(SOCKET);
+	USER* retUser(SOCKET);
 	void removesocket(SOCKET);
 };
 

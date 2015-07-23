@@ -104,11 +104,11 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	//패킷을 받아서 유저의 상태가 이동상태로 변한다...이정보를 모든 클라이언트에게 전달해야함..
 	InGamePacket::C_Move MovePacket;
 	MovePacket.ParseFromArray(p.Msg, p.getLength());
-	USER &user = IocpConstructor::cm->retUser(MovePacket.uid());
+	USER* user = IocpConstructor::cm->retUser(MovePacket.uid());
 
 	//유저정보 수정...
-	user.state = MOVE;
-	user.velocity = MovePacket.velocity();
+	user->state = MOVE;
+	user->velocity = MovePacket.velocity();
 	type = PKT_S_MOVE;
 
 	
@@ -122,7 +122,7 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(MovePacket.uid()); ServerMovePacket.set_velocity(MovePacket.velocity());
-	ServerMovePacket.set_x(user.x); ServerMovePacket.set_y(user.y);
+	ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y);
 	size = ServerMovePacket.ByteSize();	
 
 	//버퍼를 만들고, 전달
@@ -148,6 +148,7 @@ void PacketHandler::C_MOVE_Handler(USER* user)
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(user->uid); ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y); ServerMovePacket.set_velocity(user->velocity);
 	size = ServerMovePacket.ByteSize();
+	type = PKT_S_MOVE;
 
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
@@ -168,13 +169,13 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	InGamePacket::C_Stop StopPacket;
 	StopPacket.ParseFromArray(p.Msg, p.getLength());
 	
-	USER& user = IocpConstructor::cm->retUser(StopPacket.uid());
-	user.state = WAIT;
+	USER* user = IocpConstructor::cm->retUser(StopPacket.uid());
+	user->state = WAIT;
 
 	type = PKT_S_STOP;
 
 	InGamePacket::S_Stop ServerStopPacket;
-	ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user.x); ServerStopPacket.set_y(user.y);
+	ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user->x); ServerStopPacket.set_y(user->y);
 	size = ServerStopPacket.ByteSize();
 
 	memcpy(buffer, &size, sizeof(size));
@@ -182,6 +183,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	ServerStopPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
 	BroadCast(buffer, size + sizeof(unsigned short)* 2);
 	
+	printf("c stop 를 보냄\n");
 	delete[] buffer;
 	return;
 }
@@ -212,7 +214,10 @@ bool PacketHandler::HandlePacket(Packet& p){
 	else if (p.getType() == PKT_C_STOP){
 		C_STOP_handler(p);
 	}
-
+	else
+	{
+		return false;
+	}
 
 	return true;
 

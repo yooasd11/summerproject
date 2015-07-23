@@ -26,9 +26,9 @@ void ClientManager::mapping(SOCKET clnt)
 
 }
 
-USER ClientManager::retUser(SOCKET clnt)
+USER* ClientManager::retUser(SOCKET clnt)
 {
-	return this->mappingClient[clnt];
+	return &this->mappingClient[clnt];
 }
 
 void ClientManager::removesocket(SOCKET clnt)
