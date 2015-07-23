@@ -15,8 +15,8 @@
 #include "JYObjectManager.h"
 USING_NS_CC;
 
-#define SERVER_IP_ADDRESS "10.1.4.85"
-//#define SERVER_IP_ADDRESS "localhost"
+//#define SERVER_IP_ADDRESS "10.1.4.85"
+#define SERVER_IP_ADDRESS "localhost"
 #define SERVER_PORT_NUMBER 9200
 
 Scene* MyScene::createScene()

@@ -26,7 +26,7 @@ void MoveExecuter::tick(float fDeltaTime){
 		float fDistance = fVelolcity * fPassedTime;
 		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)this->getOwner()->getCCObject();
 		cocos2d::CCPoint currPos = pCCOwner->getPosition();
-		cocos2d::CCPoint nextPos = cocos2d::ccp(currPos.x + fDistance *cos(fDirection), currPos.y + fDistance * tan(fDirection));
+		cocos2d::CCPoint nextPos = cocos2d::ccp(currPos.x + fDistance *cos(fDirection), currPos.y + fDistance * sin(fDirection));
 		this->setPlayerPosition(currPos, nextPos);
 		fPassedTime = 0.0f;
 	}
