@@ -164,6 +164,7 @@ void IocpConstructor::JobSchedule()
 
 void IocpConstructor::closeSocket(SOCKET sock)
 {
+	PacketHandler::GetInstance()->C_DISCONNECT_Handler(sock);
 	this->cm->removesocket(sock);
 	return;
 }
@@ -204,6 +205,7 @@ void IocpConstructor::ThreadFunction()
 				//접속종료에 대한 완료 통지
 				if (tempHandle.bytesTrans == 0)
 				{
+					printf("유저나감\n");
 					//유저정보의 삭제...
 					TimerJob disConnectJob;
 					disConnectJob.exectime = GetTickCount() + 500;

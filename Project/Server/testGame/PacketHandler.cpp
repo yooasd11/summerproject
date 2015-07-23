@@ -120,6 +120,7 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	type = PKT_S_MOVE;
 
 	
+	
 	//최초의 작업을 잡큐에 넣어줌..
 	TimerJob job;
 	job.current = job.state::UserMove;
@@ -217,7 +218,7 @@ void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
-	int count = 0;
+
 	ClientHandle tempHandle;
 	//std::map<SOCKET, USER>::iterator it;
 	std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
@@ -231,10 +232,10 @@ void PacketHandler::BroadCast(char *buffer, int size)
 	{
 		if (it->second->connect){
 			WSASend(it->second->uid, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
-			count++;
+			
 		}
 	}
-	printf("%d\n", count);
+	
 	return;
 }
 

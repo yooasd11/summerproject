@@ -34,6 +34,7 @@ void ErrorHandling(char *msg);
 #include <WinNT.h>
 #include <functional>
 #include <ctime>
+#include <math.h>
 
 #include <string>
 #include <queue>
