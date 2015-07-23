@@ -21,6 +21,7 @@
 #define MAXGETTICK (1<<28);
 
 #define LOCKING(key) LockHelper lockHelper (key);
+//#define LOCK(key) LockHelper lockHelper (key);
 
 void ErrorHandling(char *msg);
 
@@ -39,6 +40,7 @@ void ErrorHandling(char *msg);
 #include <vector>
 #include <list>
 #include <map>
+#include <memory>
 
 #include "Lock.h"
 #include "IoData.h"

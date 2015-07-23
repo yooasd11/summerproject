@@ -68,13 +68,15 @@ void PacketHandler::BroadCastAccountPacket()
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	current = (sizeof(unsigned short)*2);
 
-	std::map<SOCKET, USER>::iterator it;
+	//std::map<SOCKET, USER>::iterator it;
+	std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
 
+	
 	//패킷을 만드는 과정...데이터를 읽고 있는데 변환되면 안된다. 'LOCK'이 필요한가
 	for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 	{
 		AccountPacket::S_Account_List::Account *tempAccount = tempList.add_account_member();
-		tempAccount->set_uid(it->second.uid); tempAccount->set_hp(it->second.hp); tempAccount->set_x(it->second.x); tempAccount->set_y(it->second.y);
+		tempAccount->set_uid(it->second->uid); tempAccount->set_hp(it->second->hp); tempAccount->set_x(it->second->x); tempAccount->set_y(it->second->y);
 	}
 	size = tempList.ByteSize();
 
@@ -104,7 +106,12 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	//패킷을 받아서 유저의 상태가 이동상태로 변한다...이정보를 모든 클라이언트에게 전달해야함..
 	InGamePacket::C_Move MovePacket;
 	MovePacket.ParseFromArray(p.Msg, p.getLength());
-	USER* user = IocpConstructor::cm->retUser(MovePacket.uid());
+	//USER* user = IocpConstructor::cm->retUser(MovePacket.uid());
+
+
+	//유저를 불러와서 만약 연결이 끊어진 상태라면 패킷을 전송하지 않고 종료
+	std::shared_ptr<USER> user = IocpConstructor::cm->retUser(MovePacket.uid());
+	if (!user->connect) return;
 
 	//유저정보 수정...
 	user->state = MOVE;
@@ -139,8 +146,9 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	return;
 }
 
-void PacketHandler::C_MOVE_Handler(USER* user)
+void PacketHandler::C_MOVE_Handler(std::shared_ptr<USER> user)
 {
+
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size = 0, type, current = 0;
@@ -169,7 +177,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	InGamePacket::C_Stop StopPacket;
 	StopPacket.ParseFromArray(p.Msg, p.getLength());
 	
-	USER* user = IocpConstructor::cm->retUser(StopPacket.uid());
+	std::shared_ptr<USER> user = IocpConstructor::cm->retUser(StopPacket.uid());
 	user->state = WAIT;
 
 	type = PKT_S_STOP;
@@ -191,8 +199,10 @@ void PacketHandler::C_STOP_handler(Packet& p)
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
+	int count = 0;
 	ClientHandle tempHandle;
-	std::map<SOCKET, USER>::iterator it;
+	//std::map<SOCKET, USER>::iterator it;
+	std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
 
 	tempHandle.ioinfo = new IoData;
 	memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
@@ -201,8 +211,12 @@ void PacketHandler::BroadCast(char *buffer, int size)
 	tempHandle.ioinfo->rwMode = WRITE;
 	for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 	{
-		WSASend(it->second.uid, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
+		if (it->second->connect){
+			WSASend(it->second->uid, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
+			count++;
+		}
 	}
+	printf("%d\n", count);
 	return;
 }
 

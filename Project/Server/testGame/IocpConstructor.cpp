@@ -103,8 +103,6 @@ void IocpConstructor::AutoNPC(int count)
 
 
 
-//#define LOCK(key) LockHelper lockHelper (key);
-
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
@@ -112,7 +110,7 @@ void IocpConstructor::JobSchedule()
 	//'lock'이 여기 있어야되는게 맞나....
 	LOCKING(this->queueLock);
 	if (this->jobs.empty()){
-		printf("queue가 비었습니다\n");
+		//printf("queue가 비었습니다\n");
 		return;
 	}
 
@@ -166,6 +164,12 @@ void IocpConstructor::JobSchedule()
 
 
 
+void IocpConstructor::closeSocket(SOCKET sock)
+{
+	this->cm->removesocket(sock);
+	return;
+}
+
 void IocpConstructor::ThreadFunction()
 {
 	SOCKET sock;
@@ -192,33 +196,40 @@ void IocpConstructor::ThreadFunction()
 		//클라이언트 통신
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
-			USER* User = this->cm->retUser(sock);
 
-			if (tempHandle.ioinfo->rwMode == READ)   
+			//USER* User = this->cm->retUser(sock);
+			//USER* User= cm->retUser(sock).get();
+			std::shared_ptr<USER> User = this->cm->retUser(sock);
+
+			if (tempHandle.ioinfo->rwMode == READ)
 			{
 				//접속종료에 대한 완료 통지
 				if (tempHandle.bytesTrans == 0)
 				{
 					//유저정보의 삭제...
-					this->cm->removesocket(sock);
-					closesocket(sock);
+					TimerJob disConnectJob;
+					disConnectJob.exectime = GetTickCount() + 5000;
+					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
+					this->jobs.push_back(disConnectJob);
+					User->connect = false;
+					continue;
 				}
 				//user에 관한 정보를 저장하고....
 				User->setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
 				User->setTotal(tempHandle.bytesTrans);
-				//User.setCurrent(User.getCurrent() + tempHandle.bytesTrans);
-				User->setCurrent(tempHandle.bytesTrans);
 				User->uid = sock;
 				User->UserpacketHandle();
+
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
+				//cm->UserSetting(sock, tempHandle.bytesTrans, tempHandle.bytesTrans, tempHandle.ioinfo->wsaBuf.buf, User);
+				//cm->UserPacketHandle(User);
 			}
 			//
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
 				//send 부분을 바꾸자...
-				
-			
+
 			}
 		}
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...

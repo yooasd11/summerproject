@@ -4,6 +4,7 @@
 
 USER::USER()
 {
+	this->connect = true;
 	this->x = 10.0f;
 	this->y = 10.0f;
 	this->hp = 100;
@@ -16,6 +17,7 @@ USER::USER()
 
 USER::USER(int _id, int _hp, float _x, float _y)
 {
+	this->connect = true;
 	this->uid = _id;
 	this->hp = _hp;
 	this->x = _x;
@@ -93,14 +95,17 @@ void USER::UserpacketHandle()
 
 	//계속해서 유저를 처리할 수 있도록
 	LOCKING(this->key);
-	while ( current < this->getTotal()){
-		memcpy(&userPacket.Length, this->Buffer + current, sizeof(unsigned short));
-		current += sizeof(unsigned short);
-		memcpy(&userPacket.Type, this->Buffer + current, sizeof(unsigned short));
-		current += sizeof(unsigned short);
-		memcpy(userPacket.Msg, this->Buffer + current, userPacket.Length);
-		current += userPacket.Length;
-		PacketHandler::GetInstance()->HandlePacket(userPacket);
+	//연결성을 확인...연결이 안되어 있다면
+	if (this->isConnecting()){
+		while (current < this->getTotal()){
+			memcpy(&userPacket.Length, this->Buffer + current, sizeof(unsigned short));
+			current += sizeof(unsigned short);
+			memcpy(&userPacket.Type, this->Buffer + current, sizeof(unsigned short));
+			current += sizeof(unsigned short);
+			memcpy(userPacket.Msg, this->Buffer + current, userPacket.Length);
+			current += userPacket.Length;
+			PacketHandler::GetInstance()->HandlePacket(userPacket);
+		}
 	}
 	//'clear'의 위치를 잘 생각해주어함.....
 	this->clear();
@@ -111,19 +116,21 @@ void USER::UserMove(){
 	TimerJob userMoveJob;
 	//LOCKING(this->key);
 	//시간초보다 작으면 수행되겠지..잡큐에서 알아서 수행해줌
-	if (this->state == MOVE){
-		printf("캐릭터 이동중\n");
-		//현재위치 갱신과 위치를 위치를 브로드캐스팅
-		this->x += (this->velocity * 0.1f);
-		printf("%f\n", this->x);
-		PacketHandler::GetInstance()->C_MOVE_Handler(this);
+	if (this->isConnecting()){
+		if (this->state == MOVE){
+			//현재위치 갱신과 위치를 위치를 브로드캐스팅
+			this->x += (this->velocity * 0.1f);
+			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->uid));
 
-
-		//움직일 작업에 대해서 처리..
-		userMoveJob.func = std::bind(&USER::UserMove, this);
-		userMoveJob.exectime = GetTickCount() + 100;
-		IocpConstructor::jobs.push_back(userMoveJob);
+			//움직일 작업에 대해서 처리..
+			userMoveJob.func = std::bind(&USER::UserMove, this);
+			userMoveJob.exectime = GetTickCount() + 100;
+			IocpConstructor::jobs.push_back(userMoveJob);
+		}
 	}
-	else printf("멈춤\n");
 	return;
+}
+
+bool USER::isConnecting(){
+	return this->connect;
 }

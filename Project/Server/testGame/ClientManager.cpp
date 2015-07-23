@@ -17,25 +17,73 @@ ClientManager::~ClientManager()
 void ClientManager::mapping(SOCKET clnt)
 {
 	LOCKING(this->key);
-	
-	//클라이언트가 접속되었을때 기본적인 유저정보가 입력된다...
-	USER temp(int(clnt), 100, rand() % 640 + 1.0f, rand() % 320 + 1.0f);
-	this->mappingClient[clnt] = temp;
+	//스마트 포인터의 생성...
+	this->mappingClient[clnt] = std::shared_ptr<USER>(new USER(int(clnt), 100, rand() % 640 + 1.0f, rand() % 320 + 1.0f));
 	this->clntCount += 1;
-
-
 }
 
-USER* ClientManager::retUser(SOCKET clnt)
+std::shared_ptr<USER> ClientManager::retUser(SOCKET clnt)
 {
-	return &this->mappingClient[clnt];
+	return this->mappingClient[clnt];
 }
+
+
+
+//이전의 함수
+//USER* ClientManager::retUser(SOCKET clnt)
+//{
+//	return &this->mappingClient[clnt];
+//}
 
 void ClientManager::removesocket(SOCKET clnt)
 {
 	LOCKING(this->key);
-	printf("%d 유저정보가 삭제됩니다\n", clnt);
+	//printf("%d 유저정보가 삭제됩니다\n", clnt);
+	//'shared_ptr'을 사용했을 경우 삭제할 필요가 음..
 	this->mappingClient.erase(clnt);
 	this->clntCount -= 1;
 	return;
 }
+
+void ClientManager::UserSetting(int _uid, int _current, int _total, char* _msg, std::shared_ptr<USER> user)
+{
+	LOCKING(this->key);
+	user.get()->setTotal(_total);
+	user.get()->setCurrent(_current);
+	user.get()->setBuffer(_msg, _total);
+	user.get()->uid = _uid;
+	return;
+}
+
+char* ClientManager::getUserBuffer(std::shared_ptr<USER> user)
+{
+	return user.get()->getBuffer();
+}
+
+int ClientManager::getUserTotal(std::shared_ptr<USER> user)
+{
+	return user.get()->getCurrent();
+}
+
+int ClientManager::getUserCurrent(std::shared_ptr<USER> user)
+{
+	return user.get()->getCurrent();
+}
+
+bool ClientManager::UserConnecting(std::shared_ptr<USER> user)
+{
+	return user.get()->isConnecting();
+}
+
+void ClientManager::UserClear(std::shared_ptr<USER> user)
+{
+	user.get()->clear();
+}
+
+void ClientManager::UserPacketHandle(std::shared_ptr<USER> user)
+{
+	LOCKING(this->key);
+	user.get()->UserpacketHandle();
+	return;
+}
+

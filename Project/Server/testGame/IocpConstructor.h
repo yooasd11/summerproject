@@ -29,7 +29,7 @@ public:
 	void setServSock(SOCKET);
 	void JobSchedule();
 	HANDLE getPort();
-
+	void closeSocket(SOCKET);
 
 	//
 	void AutoNPC(int);

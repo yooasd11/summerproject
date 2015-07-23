@@ -2,6 +2,7 @@
 class USER
 {
 public:
+	bool connect;
 	int uid; //소켓번호
 	int hp;
 	float x;
@@ -27,6 +28,7 @@ public:
 	bool finished();
 	void clear();
 	void UserpacketHandle();
+	bool isConnecting();
 
 	//잡큐에 관한 작업정의...
 	void UserMove();
