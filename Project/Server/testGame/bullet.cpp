@@ -35,10 +35,19 @@ void bullet::bulletMove()
 	}
 	else 
 	{
+		//유저의 위치랑 일치하는지 확인해야함..공격범위를 어느정도까지 ? 
+		std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
+		for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
+		{
+
+
+		}
+
 		TimerJob bulletMoveJob;
 		this->x += (this->velocity * 0.1f * cos(this->direction * PI / 180));
 		this->y += (this->velocity * 0.1f * sin(this->direction * PI / 180));
 		PacketHandler::GetInstance()->C_SHOOT_Handler(IocpConstructor::manageGame->retBullet(this->th));
+		
 
 		bulletMoveJob.func = std::bind(&bullet::bulletMove, this);
 		bulletMoveJob.exectime = GetTickCount() + 100;
