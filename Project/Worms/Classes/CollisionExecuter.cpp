@@ -16,7 +16,7 @@ cocos2d::CCPoint CollisionExecuter::getNextPos(cocos2d::CCPoint currentPos, floa
 
 cocos2d::CCPoint CollisionExecuter::tileCoordForPostion(cocos2d::CCPoint pos){
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
+	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
 	int x = pos.x / pTmap->getTileSize().width;
 	int y = (pTmap->getMapSize().height * pTmap->getTileSize().height - pos.y) / pTmap->getTileSize().height;
 	return cocos2d::ccp(x, y);
@@ -24,7 +24,7 @@ cocos2d::CCPoint CollisionExecuter::tileCoordForPostion(cocos2d::CCPoint pos){
 
 bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
+	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
 	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width - 1;
 	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height - 1;
 	//정상적인 좌표
@@ -36,7 +36,7 @@ bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 
 bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
+	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
 	cocos2d::CCPoint tileCoord = this->tileCoordForPostion(pos);
 	cocos2d::CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
 	cocos2d::CCTMXLayer* items = pTmap->getLayer("Items");
@@ -64,8 +64,9 @@ void CollisionExecuter::tick(float fDeltaTime){
 	if (pCCOwner == nullptr) return;
 	UINT nJYObjectType = this->getOwner()->getObjectType();
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
-	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(pCCOwner->getPosition());
+	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background");
+	cocos2d::CCPoint currentWorldPos = pCCOwner->getParent()->convertToWorldSpace(pCCOwner->getPosition());
+	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(currentWorldPos);
 	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
 	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
 		char sendBuf[PKTBODYSIZE];

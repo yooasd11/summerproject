@@ -40,7 +40,6 @@ void JYObject::ReleaseExecuter(__Executer eType) {
 void JYObject::addChild(JYObject* const pJYObject){
 	this->m_pJYChildrenVector.push_back(pJYObject);
 	pJYObject->m_pJYObjectParent = this;
-	this->getCCObject()->addChild(pJYObject->getCCObject());
 }
 
 void JYObject::removeChildByJYObject(JYObject* pJYObject){
@@ -95,7 +94,7 @@ std::vector<JYObject*>::iterator JYObject::getChildIteratorByName(const std::str
 JYObject* JYObject::getChildByTag(const UINT& nTag){
 	auto iteratorChild = this->getChildIteratorByTag(nTag);
 	if (iteratorChild == m_pJYChildrenVector.end()){
-		CCLOG("No child taged %s", nTag);
+		CCLOG("No child taged %d", nTag);
 		return nullptr;
 	}
 	return *iteratorChild;

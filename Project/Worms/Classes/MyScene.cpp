@@ -100,7 +100,7 @@ void MyScene::addBackground(){
 	metaInfo->setVisible(false);
 }
 
-void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
+JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	CCTexture2D* texture = CCDirector::getInstance()->getTextureCache()->addImage("Animations/dragon_animation.png");
 	CCAnimation* animation = Animation::create();
 	animation->setDelayPerUnit(0.05f);
@@ -117,7 +117,7 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	pDragon->setScale(0.5);
 	pDragon->setName("Dragon");
 	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pBackgroundNode->getChildByName("Tmap");
-	pTmap->addChild(pDragon, 3, 15);
+	pTmap->addChild(pDragon, 3);
 
 	//Run action : flying animation
 	Animate* animate = Animate::create(animation);
@@ -131,6 +131,28 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	if (nUID == nPlayerUID){
 		this->makePlayer(pJYPlayer);
 	}
+	return pJYPlayer;
+}
+
+JYObject* MyScene::createBullet(const UINT& nUID, const UINT& nTh, const cocos2d::CCPoint& pos){
+	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pJYPlayer == nullptr) return nullptr;
+	CCSprite* pCCOwner = (cocos2d::CCSprite*)pJYPlayer->getCCObject();
+	if (pCCOwner == nullptr) return nullptr;
+
+	CCTMXTiledMap* pTmap = GET_TMAP;
+
+	//Create CCSprite bullet
+	CCSprite* bullet = CCSprite::create("bullet.PNG");
+	bullet->setScale(0.3f);
+	bullet->setPosition(pos);
+
+	//Create JYArm with CCSprite bullet and add
+	JYArm* pJYArmBullet = new JYArm(bullet);
+	pJYPlayer->addChild(pJYArmBullet);
+	pJYArmBullet->setTag(nTh);
+	pTmap->addChild(bullet);
+	return pJYArmBullet;
 }
 
 //Manager에서 삭제
@@ -156,6 +178,7 @@ void MyScene::makePlayer(JYObject* const pJYPlayer){
 	pFireAim->setName("Aim");
 	pFireAim->setScale(0.3f);
 	pFireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
+	pFireAim->setFlippedY(true);
 	pNode->addChild(pFireAim);
 
 	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
@@ -168,7 +191,7 @@ bool MyScene::onTouchBegan(Touch* pTouch, Event* pEvent){
 
 void MyScene::onTouchMoved(Touch* pTouch, Event* pEvent){
 	MyScene* pMyScene = GET_MYSCENE;
-	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
+	CCTMXTiledMap* pTmap = GET_TMAP;
 	CCPoint diff = pTouch->getDelta();
 	CCPoint currentPos = pBackgroundNode->getPosition();
 	CCPoint newPos = currentPos + diff;

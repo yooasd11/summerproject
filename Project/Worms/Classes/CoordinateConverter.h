@@ -12,28 +12,27 @@ public:
 		return &instance;
 	}
 
+	cocos2d::CCPoint convertToTmapPos(cocos2d::CCNode* pCCNode){
+		cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
+		cocos2d::CCPoint nodeWorldPos = pCCNode->getParent()->convertToWorldSpace(pCCNode->getPosition());
+		return pTmap->convertToNodeSpace(nodeWorldPos);
+	}
+
 	cocos2d::CCPoint getMouseGlobalPos(cocos2d::Event* pEvent){
 		cocos2d::EventMouse* e = (cocos2d::EventMouse*)pEvent;
-		cocos2d::CCLayer* currentScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+		cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
+		cocos2d::CCPoint mouseGLPos = e->getLocationInView();
+		mouseGLPos.y += 640.0f;
 
-		cocos2d::CCPoint mouseWinPos = currentScene->convertToNodeSpace(e->getLocation());
-		mouseWinPos.y -= currentScene->getContentSize().height * 2;
-		mouseWinPos.y = abs(mouseWinPos.y);
-
-		return mouseWinPos;
+		return mouseGLPos;
 	}
 
-	cocos2d::CCPoint getGlobalPos(cocos2d::CCNode* pCCNode){
-		cocos2d::CCLayer* currentScene = (cocos2d::CCLayer*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
-		cocos2d::CCPoint ret = currentScene->convertToNodeSpace(pCCNode->getPosition());
-		return ret;
-	}
-
-	float getDegreeBetweenCCNodeAndMouse(cocos2d::CCNode* pCCNode, cocos2d::Event* pEvent){
+	//returns degree between VIEW CCPoint and mouse cursur location
+	float getDegreeBetweenCCPosAndMouse(cocos2d::CCPoint pos, cocos2d::Event* pEvent){
 		cocos2d::CCPoint mouseWinPos = getMouseGlobalPos(pEvent);
-		cocos2d::CCPoint aimNodePos = pCCNode->getParent()->convertToWorldSpace(pCCNode->getPosition());
-		
-		float ret = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - aimNodePos.x, mouseWinPos.y - aimNodePos.y)) - 90.0f;
+		float ret = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - pos.x, mouseWinPos.y - pos.y)) - 90.0f;
+		ret *= -1.0f;
+		CCLOG("Node : (%.2f, %.2f) / Mouse : (%.2f, %.2f) / degree : %.2f", pos.x, pos.y, mouseWinPos.x, mouseWinPos.y, ret);
 		return ret;
 	}
 };

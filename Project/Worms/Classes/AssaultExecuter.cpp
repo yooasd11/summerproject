@@ -24,7 +24,8 @@ void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
 	if (pCCOwner == nullptr) return;
 	cocos2d::CCSprite* pFireAim = (cocos2d::CCSprite*)pCCOwner->getChildByName("Aim");
 	if (pFireAim == nullptr) return;
-	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pFireAim, pEvent);
+	cocos2d::CCPoint aimPos = pFireAim->getParent()->convertToWorldSpace(pFireAim->getPosition());
+	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(aimPos, pEvent);
 
 	pFireAim->setRotation(degree);
 }
@@ -35,23 +36,18 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
 
-	this->createBullet();
-
-	JYArm* pJYBullet = (JYArm*)pOwner->getChildByTag(m_nBulletCounter);
-	if (pJYBullet == nullptr) return;
-
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCSprite* pCCBullet = (cocos2d::CCSprite*)pJYBullet->getCCObject();
-
-	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pCCBullet, pEvent);
-	pCCBullet->setRotation(fDirection);
+	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
+	cocos2d::CCPoint ownerWorldPos = pTmap->convertToWorldSpace(pCCOwner->getPosition());
+	cocos2d::CCPoint ownerTmapPos = pTmap->convertToNodeSpace(ownerWorldPos);
+	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(ownerWorldPos, pEvent);
 
 	char sendBuf[PKTLENGTH];
 	InGamePacket::C_Shoot c_shoot;
 	c_shoot.set_uid(this->getOwner()->getUID());
-	c_shoot.set_th(m_nBulletCounter);
-	c_shoot.set_x(pCCOwner->getPosition().x);
-	c_shoot.set_y(pCCOwner->getPosition().y);
+	c_shoot.set_th(0);
+	c_shoot.set_x(ownerTmapPos.x);
+	c_shoot.set_y(ownerTmapPos.y);
 	c_shoot.set_damage(10.0f);
 	c_shoot.set_direction(fDirection);
 	c_shoot.set_velocity(30.0f);
@@ -59,25 +55,4 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	c_shoot.SerializeToArray(sendBuf, c_shoot.ByteSize());
 	
 	ConnectionManager::getInstance()->transmit(c_shoot.ByteSize(), PACKET_TYPE::PKT_C_SHOOT, sendBuf);
-}
-
-void AssaultExecuter::createBullet(){
-	this->m_nBulletCounter++;
-	JYPlayer* pJYPlayer = (JYPlayer*)this->getOwner();
-	if (pJYPlayer == nullptr) return;
-	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pJYPlayer->getCCObject();
-	if (pCCOwner == nullptr) return;
-
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)GET_MYSCENE->getChildByName("Background")->getChildByName("Tmap");
-	cocos2d::CCSprite* pAim = (cocos2d::CCSprite*)pCCOwner->getChildByName("Aim");
-
-	//Create CCSprite bullet
-	CCSprite* bullet = CCSprite::create("bullet.PNG");
-	bullet->setScale(0.3f);
-	bullet->setPosition(pCCOwner->convertToNodeSpace(pAim->getPosition()));
-
-	//Create JYArm with CCSprite bullet and add
-	JYArm* pJYArmBullet = new JYArm(bullet);
-	pJYPlayer->addChild(pJYArmBullet);
-	pJYArmBullet->setTag(m_nBulletCounter);
 }

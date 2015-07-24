@@ -8,6 +8,7 @@ class JYRealTimer;
 USING_NS_CC;
 
 #define GET_MYSCENE (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene")
+#define GET_TMAP (cocos2d::CCTMXTiledMap*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene")->getChildByName("Background")->getChildByName("Tmap")
 
 class JYObject;
 class JYPlayer;
@@ -38,7 +39,8 @@ public:
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	void addBackground();
-	void createDragon(const UINT& nUID, const CCPoint& pos);
+	JYObject* createBullet(const UINT& nUID, const UINT& nTh, const cocos2d::CCPoint& pos);
+	JYObject* createDragon(const UINT& nUID, const CCPoint& pos);
 	void deleteDragon(const UINT& nUID);
 	void makePlayer(JYObject* const pJYPlayer);
 	void setViewPointCenter(CCPoint pos);
