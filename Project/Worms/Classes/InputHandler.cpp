@@ -15,6 +15,7 @@ void InputHandler::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
 	bIsKeyPressed[(int)keyCode] = true;
 	MyScene* pMyScene = GET_MYSCENE;
 	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onKeyPressed(keyCode, pEvent);
 }
 
@@ -22,18 +23,21 @@ void InputHandler::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
  	bIsKeyPressed[(int)keyCode] = false;
 	MyScene* pMyScene = GET_MYSCENE;
 	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onKeyReleased(keyCode, pEvent);
 }
 
 void InputHandler::onMouseMove(cocos2d::Event* pEvent){
 	MyScene* pMyScene = GET_MYSCENE;
 	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onMouseMove(pEvent);
 }
 
 void InputHandler::onMouseDown(cocos2d::Event* pEvent){
 	MyScene* pMyScene = GET_MYSCENE;
 	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onMouseDown(pEvent);
 }
 
