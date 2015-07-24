@@ -176,28 +176,12 @@ void IocpConstructor::ThreadFunction()
 	ClientHandle tempHandle;
 	int Ty, DataSize;
 	bool hasJob = false;
-	char* TempBuffer = new char[BUFSIZE];
 
 	while (1){
 		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), 100);
 
-		//printf("%d\n", GetLastError());
-		//위치가 
-		//sock = tempHandle.handleinfo->ClntSock;
-		//바로 에러처리해줌...getlasterror 'INFINITE'모드가 아닐 때 사용...
-		//if (GetLastError() == WAIT_TIMEOUT || GetLastError() == 64){
-		//	sock = tempHandle.handleinfo->ClntSock;
-		//	this->cm->removesocket(sock);
-		//	closesocket(sock);
-		//	//소켓을 닫아준다...
-		//	continue;
-		//}
-		//클라이언트 통신
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
-
-			//USER* User = this->cm->retUser(sock);
-			//USER* User= cm->retUser(sock).get();
 			std::shared_ptr<USER> User = this->cm->retUser(sock);
 
 			if (tempHandle.ioinfo->rwMode == READ)
@@ -222,8 +206,6 @@ void IocpConstructor::ThreadFunction()
 
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
-				//cm->UserSetting(sock, tempHandle.bytesTrans, tempHandle.bytesTrans, tempHandle.ioinfo->wsaBuf.buf, User);
-				//cm->UserPacketHandle(User);
 			}
 			//
 			else if (tempHandle.ioinfo->rwMode == WRITE)
@@ -233,16 +215,10 @@ void IocpConstructor::ThreadFunction()
 			}
 		}
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...
-		else{
+		else
+		{
 			JobSchedule();
-			//JobSchedule();
-			//printf("완료통지가 없는 경우...\n");
-			/*if (GetLastError() == 64){
-				this->cm->removesocket(sock);
-				closesocket(sock);
-				printf("비정상 종료\n");
-			}
-			else JobSchedule();*/
+
 		}
 	}
 	return;

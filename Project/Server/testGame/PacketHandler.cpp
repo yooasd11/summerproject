@@ -214,7 +214,7 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 	
 	TimerJob job;
 	job.exectime = GetTickCount() + 100;
-	job.func = std::bind(&bullet::bulletMove, Bullet.get());  //만약에 안되면 여기 의심
+	job.func = std::bind(&bullet::bulletMove, Bullet);  //만약에 안되면 여기 의심
 	IocpConstructor::jobs.push_back(job);
 
 	type = PKT_S_SHOOT;

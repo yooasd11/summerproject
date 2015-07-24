@@ -28,18 +28,9 @@ std::shared_ptr<USER> ClientManager::retUser(SOCKET clnt)
 }
 
 
-
-//이전의 함수
-//USER* ClientManager::retUser(SOCKET clnt)
-//{
-//	return &this->mappingClient[clnt];
-//}
-
 void ClientManager::removesocket(SOCKET clnt)
 {
 	LOCKING(this->key);
-	//printf("%d 유저정보가 삭제됩니다\n", clnt);
-	//'shared_ptr'을 사용했을 경우 삭제할 필요가 음..
 	this->mappingClient.erase(clnt);
 	this->clntCount -= 1;
 	return;
