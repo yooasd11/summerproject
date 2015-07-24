@@ -31,14 +31,15 @@ void JYObject::setExecuter(BaseExecuter* param) {
 	m_Executers[type] = param;
 }
 
-void JYObject::ReleaseExecuter(BaseExecuter* param) {
-	int type = param->getEnum();
-	m_Executers[type] = nullptr;
+void JYObject::ReleaseExecuter(__Executer eType) {
+	delete m_Executers[eType];
+	m_Executers[eType] = nullptr;
 }
 
 void JYObject::addChild(JYObject* const pJYObject){
 	this->m_pJYChildrenVector.push_back(pJYObject);
 	pJYObject->m_pJYObjectParent = this;
+	this->getCCObject()->addChild(pJYObject->getCCObject());
 }
 
 void JYObject::removeChildByJYObject(JYObject* pJYObject){
@@ -49,6 +50,7 @@ void JYObject::removeChildByJYObject(JYObject* pJYObject){
 	}
 	(*iteratorTarget)->m_pJYObjectParent = nullptr;
 	this->m_pJYChildrenVector.erase(iteratorTarget);
+	this->getCCObject()->removeChild(pJYObject->getCCObject());
 }
 
 void JYObject::removeChildByName(const std::string& sName){
@@ -59,6 +61,16 @@ void JYObject::removeChildByName(const std::string& sName){
 	}
 	(*iteratorTarget)->m_pJYObjectParent = nullptr;
 	this->m_pJYChildrenVector.erase(iteratorTarget);
+	this->getCCObject()->removeChildByName(sName);
+}
+
+std::vector<JYObject*>::iterator JYObject::getChildIteratorByTag(const UINT& nTag){
+	for (auto it = m_pJYChildrenVector.begin(); it < m_pJYChildrenVector.end(); ++it){
+		if ((*it)->getTag() == nTag){
+			return it;
+		}
+	}
+	return m_pJYChildrenVector.end();
 }
 
 std::vector<JYObject*>::iterator JYObject::getChildIteratorByObject(JYObject* const pJYObject){
@@ -77,6 +89,15 @@ std::vector<JYObject*>::iterator JYObject::getChildIteratorByName(const std::str
 		}
 	}
 	return m_pJYChildrenVector.end();
+}
+
+JYObject* JYObject::getChildByTag(const UINT& nTag){
+	auto iteratorChild = this->getChildIteratorByTag(nTag);
+	if (iteratorChild == m_pJYChildrenVector.end()){
+		CCLOG("No child taged %s", nTag);
+		return nullptr;
+	}
+	return *iteratorChild;
 }
 
 JYObject* JYObject::getChildByName(const std::string& sName){

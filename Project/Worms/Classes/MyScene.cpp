@@ -128,19 +128,6 @@ void MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
 	JYPlayer* pJYPlayer = new JYPlayer(pDragon);
 	pJYPlayer->setUID(nUID);
 
-	//Create CCSprite bullet
-	CCSprite* bullet = CCSprite::create("bullet.PNG");
-	bullet->setName("Bullet");
-	bullet->setVisible(false);
-	bullet->setScale(0.3f);
-	bullet->setPosition(pDragon->getPosition());
-
-	//Create JYArm with CCSprite bullet and add
-	JYArm* pJYArmBullet = new JYArm(bullet);
-	pJYArmBullet->setName("JYBullet");
-	pJYPlayer->addChild(pJYArmBullet);
-	this->addChild(bullet);
-
 	if (nUID == nPlayerUID){
 		this->makePlayer(pJYPlayer);
 	}
@@ -180,7 +167,8 @@ bool MyScene::onTouchBegan(Touch* pTouch, Event* pEvent){
 }
 
 void MyScene::onTouchMoved(Touch* pTouch, Event* pEvent){
-	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pJYPlayerDragon->getCCObject()->getParent();
+	MyScene* pMyScene = GET_MYSCENE;
+	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pMyScene->getChildByName("Background")->getChildByName("Tmap");
 	CCPoint diff = pTouch->getDelta();
 	CCPoint currentPos = pBackgroundNode->getPosition();
 	CCPoint newPos = currentPos + diff;

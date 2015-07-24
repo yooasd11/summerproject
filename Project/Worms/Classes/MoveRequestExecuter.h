@@ -5,7 +5,7 @@ class MoveRequestExecuter : public BaseExecuter{
 	GENERATE_FUNC(MoveRequestExecuter);
 private:
 public:
-	MoveRequestExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject){
+	MoveRequestExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject, __MoveRequestExecuter){
 		regist();
 	};
 	virtual ~MoveRequestExecuter() {};

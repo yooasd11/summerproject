@@ -7,13 +7,15 @@ enum __Executer;
 class JYObject;
 
 class BaseExecuter{
-public:
-	virtual char* getName() = 0;
-	virtual __Executer getEnum() = 0;
+//	public:
+//	virtual char* getName() = 0;
+//	virtual __Executer getEnum() = 0;
 private:
 	JYObject* m_pOwner;
+	__Executer m_eType;
 public:
-	BaseExecuter(JYObject* pOwner) : m_pOwner(pOwner) {}
+	BaseExecuter(JYObject* pOwner, __Executer eType) : m_pOwner(pOwner), m_eType(eType) {}
+	__Executer getEnum() { return m_eType; }
 	virtual ~BaseExecuter(); 
 	void regist();
 
@@ -24,6 +26,5 @@ public:
 
 #define GENERATE_FUNC(PARAM) \
 	public: \
-	virtual char* getName() override { return #PARAM; } \
-	virtual __Executer getEnum() override { return __##PARAM; } \
+	static char* getName() { return #PARAM; } \
 	private: 

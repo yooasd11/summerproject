@@ -12,7 +12,7 @@ private:
 	bool boundaryCollisionChecker(cocos2d::CCPoint& dst);
 	bool objectCollisionChecker(cocos2d::CCPoint& dst);
 public:
-	CollisionExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject){
+	CollisionExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject, __CollisionExecuter){
 		regist();
 	}
 	virtual ~CollisionExecuter() {}

@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h";
+#include "MyScene.h"
 
 class CoordinateConverter{
 private:
@@ -28,11 +29,11 @@ public:
 		return ret;
 	}
 
-	float getDegreeBetweenCCNodeAndMouse(cocos2d::CCNode* pCCNode1, cocos2d::Event* pEvent){
+	float getDegreeBetweenCCNodeAndMouse(cocos2d::CCNode* pCCNode, cocos2d::Event* pEvent){
 		cocos2d::CCPoint mouseWinPos = getMouseGlobalPos(pEvent);
-		cocos2d::CCPoint aimWinPos = pCCNode1->getParent()->convertToWorldSpace(pCCNode1->getPosition() - pCCNode1->getAnchorPoint());
-
-		float ret = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - aimWinPos.x, mouseWinPos.y - aimWinPos.y)) - 90.0f;
+		cocos2d::CCPoint aimNodePos = pCCNode->getParent()->convertToWorldSpace(pCCNode->getPosition());
+		
+		float ret = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - aimNodePos.x, mouseWinPos.y - aimNodePos.y)) - 90.0f;
 		return ret;
 	}
 };

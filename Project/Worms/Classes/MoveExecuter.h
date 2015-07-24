@@ -6,10 +6,10 @@ class MoveExecuter : public BaseExecuter{
 private:
 	void setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst);
 public:
-	MoveExecuter(JYObject* pOwner) : BaseExecuter(pOwner) {
+	MoveExecuter(JYObject* pOwner) : BaseExecuter(pOwner, __MoveExecuter) {
 		regist();
 	}
-	virtual ~MoveExecuter() {}
+	virtual ~MoveExecuter() { BaseExecuter::~BaseExecuter(); }
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onMouseMove(cocos2d::Event* pEvent);

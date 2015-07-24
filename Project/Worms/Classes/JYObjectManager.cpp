@@ -62,6 +62,7 @@ void JYObjectManager::removeObject(JYObject* pJYObject, bool bCleanUp){
 	if (pJYParent != nullptr){
 		pJYParent->removeChildByJYObject(pJYObject);
 	}
+	delete pJYObject;
 	if (bCleanUp == true){
 		//자식들 싹다 지우자
 	}

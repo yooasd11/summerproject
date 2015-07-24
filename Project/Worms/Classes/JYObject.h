@@ -8,6 +8,7 @@ class JYObject{
 private:
 	UINT m_nObjectType;
 	UINT m_nUID;
+	UINT m_nTag;
 	float m_fVelocity;
 	float m_fDirection;
 	cocos2d::CCNode* m_pCCObject;
@@ -15,6 +16,7 @@ private:
 	BaseExecuter* m_Executers[__Executer::__Executer_END];
 	std::vector<JYObject*> m_pJYChildrenVector;
 	std::string m_sName;
+	std::vector<JYObject*>::iterator getChildIteratorByTag(const UINT& nTag);
 	std::vector<JYObject*>::iterator getChildIteratorByName(const std::string& sName);
 	std::vector<JYObject*>::iterator getChildIteratorByObject(JYObject* const pJYObject);
 public:
@@ -25,13 +27,15 @@ public:
 	void setObjectType(const UINT& nType) { m_nObjectType = nType; }
 	UINT getUID() { return m_nUID; }
 	void setUID(const UINT& nUID) { m_nUID = nUID; }
+	UINT getTag() { return m_nTag; }
+	void setTag(const UINT& nTag) { m_nTag = nTag; }
 	float getVelocity() { return m_fVelocity; }
 	void setVelocity(const float& fVelocity) { m_fVelocity = fVelocity; }
 	float getDirection() { return m_fDirection; }
 	void setDirection(const float& fDirection) { m_fDirection = fDirection; }
 	BaseExecuter* getExecuter(int type) { return m_Executers[type]; }
 	void setExecuter(BaseExecuter* param);
-	void ReleaseExecuter(BaseExecuter* param);
+	void ReleaseExecuter(__Executer _eType);
 
 	cocos2d::CCNode* getCCObject() { return m_pCCObject; }
 	void setCCObject(cocos2d::CCNode* ccOb) { m_pCCObject = ccOb; }
@@ -42,6 +46,7 @@ public:
 	void setParent(JYObject* pJYObject) { m_pJYObjectParent = pJYObject; }
 	void addChild(JYObject* const pJYObject);
 	JYObject* getChildByName(const std::string& sName);
+	JYObject* getChildByTag(const UINT& nTag);
 	void removeChildByName(const std::string& sName);
 	void removeChildByJYObject(JYObject* const pJYObject);
 	

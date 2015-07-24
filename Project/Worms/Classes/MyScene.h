@@ -7,7 +7,7 @@ class JYRealTimer;
 
 USING_NS_CC;
 
-#define GET_MYSCENE (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene");
+#define GET_MYSCENE (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene")
 
 class JYObject;
 class JYPlayer;

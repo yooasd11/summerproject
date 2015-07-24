@@ -3,7 +3,7 @@
 
 BaseExecuter::~BaseExecuter(){
 	if (m_pOwner != nullptr)
-		m_pOwner->ReleaseExecuter(this);
+		m_pOwner->ReleaseExecuter(this->getEnum());
 
 }
 

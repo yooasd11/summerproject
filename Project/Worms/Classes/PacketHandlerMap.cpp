@@ -46,7 +46,7 @@ void AccountPacketHandler(Packet& p){
 	UINT nUID;
 	memcpy(&nUID, PktBody, sizeof(UINT));
 
-	MyScene* pMyScene = GET_MYSCENE
+	MyScene* pMyScene = GET_MYSCENE;
 	pMyScene->nPlayerUID = nUID;
 }
 
@@ -64,7 +64,7 @@ void AccountListPacketHandler(Packet& p){
 		float fY = mAccount.y();
 
 		if (JYObjectManager::getInstance()->findObjectByUID(nUID) == nullptr){
-			MyScene* pMyScene = GET_MYSCENE
+			MyScene* pMyScene = GET_MYSCENE;
 			pMyScene->createDragon(nUID, ccp(fX, fY));
 		}
 	}
@@ -112,6 +112,7 @@ void SShootPacketHandler(Packet& p){
 	sShootPacket.ParseFromArray(PktBody, p.getLength());
 
 	UINT nUID = sShootPacket.uid();
+	UINT nTh = sShootPacket.th();
 	float fX = sShootPacket.x();
 	float fY = sShootPacket.y();
 	float fDirection = sShootPacket.direction();
@@ -121,7 +122,7 @@ void SShootPacketHandler(Packet& p){
 	CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer == nullptr) return;
-	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByName("JYBullet");
+	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
 	if (pJYBullet == nullptr) return;
 	cocos2d::CCNode* pCCPlayer = pJYPlayer->getCCObject();
 	if (pCCPlayer == nullptr) return;
@@ -139,7 +140,7 @@ void SDisconnectHandler(Packet& p){
 	
 	UINT nUID = sDisconnect.uid();
 
-	MyScene* pMyScene = GET_MYSCENE
+	MyScene* pMyScene = GET_MYSCENE;
 	pMyScene->deleteDragon(nUID);
 }
 
