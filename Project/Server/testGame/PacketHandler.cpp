@@ -200,7 +200,7 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 {
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
-	unsigned size = 0, type = 0;
+	unsigned short size = 0, type = 0;
 
 	InGamePacket::C_Shoot ClientBullet;
 	ClientBullet.ParseFromArray(p.Msg, p.getLength());

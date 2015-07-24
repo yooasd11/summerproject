@@ -39,6 +39,7 @@ void bullet::bulletMove()
 		std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
 		for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 		{
+			float userX = it->second->x; float userY = it->second->y;
 
 
 		}
