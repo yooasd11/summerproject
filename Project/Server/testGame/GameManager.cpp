@@ -4,11 +4,9 @@
 
 GameManager::GameManager()
 {
-	this->manageNPC = new NPCManager;
 	this->key = new Lock();
 	this->bulletCount = 1;
 }
-
 
 GameManager::~GameManager()
 {

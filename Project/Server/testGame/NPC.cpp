@@ -4,44 +4,31 @@
 
 NPC::NPC()
 {
-	this->x = 0;
-	this->y = 0;
-	this->LIFE = 100;
-	this->th = 0;
-	this->Key = new Lock;
+	this->key = new Lock();
 }
 
 NPC::NPC(int _x, int _y, int _life, int _th)
 {
-	this->x = _x;
-	this->y = _y;
-	this->LIFE = _life;
-	this->th = _th;
-	this->Key = new Lock;
+	this->key = new Lock();
 }
 
 NPC::~NPC()
 {
+
+
 }
 
-void NPC::Move()
-{
-	LOCKING(this->Key);
-	this->x += 4; this->y += 6;
-	printf("%d MOVE %d %d\n", this->th, this->x, this->y);
-	return;
-}
 
-void NPC::Attack(std::map<SOCKET, USER> t)
+//이동함수는 적이 있나 없나 판단하고 , 주변에 있다고 판단했을 경우 attack을 시도..
+//attack 함수는 attack을 
+void NPC::NPCmove()
 {
-	if (t.empty()){
-		printf("접속한 유저가 없습니다\n");
-		return;
-	}
-	std::map<SOCKET, USER>::iterator it;
-	for (it = t.begin(); it != t.end(); ++it){
+	if (this->state)
+	{
 		
 
+
+
+
 	}
-	printf("%d Attack\n", this->th);
 }

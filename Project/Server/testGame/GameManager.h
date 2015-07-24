@@ -12,7 +12,6 @@ public:
 	std::shared_ptr<bullet> retBullet(int);
 	void removeBullet(int);
 
-	NPCManager *manageNPC;
 	GameManager();
 	~GameManager();
 	void ChangeState(int);

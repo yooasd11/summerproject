@@ -11,6 +11,7 @@
 //'static'으로 선언한 경우 'cpp'에 다시 정의 해주어야 한다.
 GameManager* IocpConstructor::manageGame;
 ClientManager* IocpConstructor::cm;
+NPCManager* IocpConstructor::nm;
 std::vector<TimerJob> IocpConstructor::jobs;
 
 
@@ -19,12 +20,12 @@ IocpConstructor::IocpConstructor()
 {
 	this->manageGame = new GameManager;
 	this->cm = new ClientManager;
+	this->nm = new NPCManager;
 	this->queueLock = new Lock;
 	this->UserLock = new Lock;
 	this->flags = 0;
 	this->ComPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 
-	
 	GetSystemInfo(&this->sysinfo);
 	for (int i = 0; i < this->sysinfo.dwNumberOfProcessors; i++)
 		_beginthreadex(NULL, 0, startThread, this, 0, NULL);
@@ -38,7 +39,6 @@ IocpConstructor::~IocpConstructor()
 	delete this->manageGame;
 	delete this->queueLock;
 	delete this->UserLock;
-
 }
 
 void IocpConstructor::registerObject(ClientHandle& client)
@@ -104,7 +104,6 @@ void IocpConstructor::AutoNPC(int count)
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
-	
 	//'lock'이 여기 있어야되는게 맞나....
 	LOCKING(this->queueLock);
 	if (this->jobs.empty()){
@@ -211,14 +210,12 @@ void IocpConstructor::ThreadFunction()
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
 				//send 부분을 바꾸자...
-
 			}
 		}
 		//잡큐 일처리 -> 락처리를 잘해줘야한다...
 		else
 		{
 			JobSchedule();
-
 		}
 	}
 	return;

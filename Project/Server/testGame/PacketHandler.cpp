@@ -191,6 +191,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	}
 	else if (receiveType == BULLET)
 	{
+		//총알 멈추는 처리...
 		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(StopPacket.th());
 		ServerStopPacket.set_uid(shoot->uid); ServerStopPacket.set_type(BULLET); ServerStopPacket.set_x(shoot->x); ServerStopPacket.set_y(shoot->y);
 		ServerStopPacket.set_th(shoot->th);
@@ -218,6 +219,7 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 	std::shared_ptr<bullet> Bullet(new bullet(IocpConstructor::manageGame->bulletCount, ClientBullet.uid(), ClientBullet.x(), ClientBullet.y(),
 		ClientBullet.damage(), ClientBullet.velocity(), ClientBullet.direction()));
 
+	Bullet->working = true;
 	IocpConstructor::manageGame->registBullet(Bullet);
 
 	//총 움직임에 대한 'JOB'처리
@@ -277,6 +279,29 @@ void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
 	memcpy(buffer, &size, sizeof(unsigned short));
 	memcpy(buffer + sizeof(unsigned short), &type, sizeof(unsigned short));
 	disconnect.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	delete[] buffer;
+	return;
+}
+
+
+void PacketHandler::C_STOP_handler(std::shared_ptr<bullet> b)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type = 0;
+
+	InGamePacket::S_Stop BulletStopPacket;
+	BulletStopPacket.set_uid(b->uid); BulletStopPacket.set_th(b->th); BulletStopPacket.set_type(BULLET);
+	BulletStopPacket.set_x(b->x); BulletStopPacket.set_y(b->y);
+
+	type = PKT_S_STOP;
+	size = BulletStopPacket.ByteSize();
+
+	memcpy(buffer, &size, sizeof(unsigned short));
+	memcpy(buffer + sizeof(unsigned short), &type, sizeof(unsigned short));
+	BulletStopPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
 
 	BroadCast(buffer, size + sizeof(unsigned short)* 2);
 	delete[] buffer;

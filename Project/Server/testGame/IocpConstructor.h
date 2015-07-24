@@ -14,6 +14,8 @@ private:
 public:
 	static GameManager *manageGame;
 	static ClientManager *cm;
+	static NPCManager *nm;
+
 	static std::vector<TimerJob> jobs;
 	
 	IocpConstructor();

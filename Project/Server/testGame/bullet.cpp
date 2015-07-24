@@ -27,28 +27,33 @@ bullet::~bullet()
 
 void bullet::bulletMove()
 {
-	//총알이 언제 안보여야 되는지 알아야함...640 X 320
-	if (x >= 640.0f || x < 0 || y >= 320.f || y < 0)
-	{
-		//총알을 지워줘야 함..
-		IocpConstructor::manageGame->removeBullet(this->th);
-	}
-	else 
-	{
+	//존재하는 총알에 대한 작업을 처리
+	if (this->working){
+		//총알이 언제 안보여야 되는지 알아야함...640 X 320
+		float dx = this->x + (this->velocity * 0.1f * cos(this->direction * PI / 180));
+		float dy = this->y + (this->velocity * 0.1f * sin(this->direction * PI / 180));
+		if (dx >= 640.0f || dx < 0 || dy >= 320.0f || dy < 0)
+		{
+			//총알을 지워줘야 함..
+			//stop 패킷을 보내야함
+			this->working = false;
+			PacketHandler::GetInstance()->C_STOP_handler(IocpConstructor::manageGame->retBullet(this->th));
+			IocpConstructor::manageGame->removeBullet(this->th);
+			return;
+		}
+
 		//유저의 위치랑 일치하는지 확인해야함..공격범위를 어느정도까지 ? 
 		std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
 		for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 		{
+			//맞았을 경우 어떻게 처리..
 			float userX = it->second->x; float userY = it->second->y;
-
-
 		}
 
 		TimerJob bulletMoveJob;
 		this->x += (this->velocity * 0.1f * cos(this->direction * PI / 180));
 		this->y += (this->velocity * 0.1f * sin(this->direction * PI / 180));
 		PacketHandler::GetInstance()->C_SHOOT_Handler(IocpConstructor::manageGame->retBullet(this->th));
-		
 
 		bulletMoveJob.func = std::bind(&bullet::bulletMove, this);
 		bulletMoveJob.exectime = GetTickCount() + 100;
