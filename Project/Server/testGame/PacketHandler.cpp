@@ -174,19 +174,29 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size = 0, type = 0, current = 0;
+	int receiveType;
 
 	InGamePacket::C_Stop StopPacket;
 	StopPacket.ParseFromArray(p.Msg, p.getLength());
-	
-	std::shared_ptr<USER> user = IocpConstructor::cm->retUser(StopPacket.uid());
-	user->state = WAIT;
-
-	type = PKT_S_STOP;
-
+	receiveType = StopPacket.type();
 	InGamePacket::S_Stop ServerStopPacket;
-	ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user->x); ServerStopPacket.set_y(user->y);
-	size = ServerStopPacket.ByteSize();
-
+	if (receiveType == PLAYER)
+	{
+		std::shared_ptr<USER> user = IocpConstructor::cm->retUser(StopPacket.uid());
+		user->state = WAIT;
+		
+		ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user->x); ServerStopPacket.set_y(user->y);
+		ServerStopPacket.set_type(PLAYER);
+		size = ServerStopPacket.ByteSize();
+	}
+	else if (receiveType == BULLET)
+	{
+		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(StopPacket.th());
+		ServerStopPacket.set_uid(shoot->uid); ServerStopPacket.set_type(BULLET); ServerStopPacket.set_x(shoot->x); ServerStopPacket.set_y(shoot->y);
+		ServerStopPacket.set_th(shoot->th);
+		size = ServerStopPacket.ByteSize();
+	}
+	type = PKT_S_STOP;
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerStopPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);

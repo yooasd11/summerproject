@@ -20,6 +20,8 @@
 #define ATTACK 3
 #define MAXGETTICK (1<<28)
 #define PI 3.14159265
+#define PLAYER 1
+#define BULLET 2
 
 #define LOCKING(key) LockHelper lockHelper (key);
 //#define LOCK(key) LockHelper lockHelper (key);
