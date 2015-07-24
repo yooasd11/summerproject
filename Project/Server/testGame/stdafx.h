@@ -18,7 +18,8 @@
 #define WAIT 1
 #define MOVE 2
 #define ATTACK 3
-#define MAXGETTICK (1<<28);
+#define MAXGETTICK (1<<28)
+#define PI 3.14159265
 
 #define LOCKING(key) LockHelper lockHelper (key);
 //#define LOCK(key) LockHelper lockHelper (key);
@@ -47,6 +48,7 @@ void ErrorHandling(char *msg);
 #include "IoData.h"
 #include "HandleData.h"
 #include "USER.h"
+#include "bullet.h"
 #include "TimerJob.h"
 #include "NPC.h"
 #include "NPCManager.h"

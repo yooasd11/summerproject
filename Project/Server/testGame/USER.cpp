@@ -121,8 +121,8 @@ void USER::UserMove(){
 	if (this->isConnecting()){
 		if (this->state == MOVE){
 			//현재위치 갱신과 위치를 위치를 브로드캐스팅
-			this->x += (this->velocity * 0.1f * cos(this->direction));
-			this->y += (this->velocity * 0.1f * sin(this->direction));
+			this->x += (this->velocity * 0.1f * cos(this->direction * PI / 180));
+			this->y += (this->velocity * 0.1f * sin(this->direction * PI / 180));
 			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->uid));
 
 			//움직일 작업에 대해서 처리..

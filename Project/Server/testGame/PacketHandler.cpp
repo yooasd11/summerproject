@@ -196,6 +196,63 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	return;
 }
 
+void PacketHandler::C_SHOOT_handler(Packet& p)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned size = 0, type = 0;
+
+	InGamePacket::C_Shoot ClientBullet;
+	ClientBullet.ParseFromArray(p.Msg, p.getLength());
+
+	std::shared_ptr<bullet> Bullet(new bullet(IocpConstructor::manageGame->bulletCount, ClientBullet.uid(), ClientBullet.x(), ClientBullet.y(),
+		ClientBullet.damage(), ClientBullet.velocity(), ClientBullet.direction()));
+
+	IocpConstructor::manageGame->registBullet(Bullet);
+
+	//총 움직임에 대한 'JOB'처리
+	
+	TimerJob job;
+	job.exectime = GetTickCount() + 100;
+	job.func = std::bind(&bullet::bulletMove, Bullet.get());  //만약에 안되면 여기 의심
+	IocpConstructor::jobs.push_back(job);
+
+	type = PKT_S_SHOOT;
+	InGamePacket::S_Shoot ServerShootPacket;
+	ServerShootPacket.set_uid(Bullet->uid); ServerShootPacket.set_th(Bullet->th); ServerShootPacket.set_x(Bullet->x); ServerShootPacket.set_y(Bullet->y);
+	ServerShootPacket.set_damage(Bullet->damage); ServerShootPacket.set_direction(Bullet->direction); ServerShootPacket.set_velocity(Bullet->velocity);
+	size = ServerShootPacket.ByteSize();
+
+	memcpy(buffer, &size, sizeof(size));
+	memcpy(buffer + sizeof(size), &type, sizeof(type));
+	ServerShootPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+
+	delete[] buffer;
+	return;
+}
+
+void PacketHandler::C_SHOOT_Handler(std::shared_ptr<bullet> b)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type, current = 0;
+
+	InGamePacket::S_Shoot ServerShootPacket;
+	ServerShootPacket.set_uid(b->uid); ServerShootPacket.set_th(b->th); ServerShootPacket.set_x(b->x); ServerShootPacket.set_y(b->y);
+	ServerShootPacket.set_direction(b->direction); ServerShootPacket.set_velocity(b->velocity); ServerShootPacket.set_damage(b->damage);
+	size = ServerShootPacket.ByteSize();
+	type = PKT_S_SHOOT;
+
+	memcpy(buffer, &size, sizeof(size));
+	memcpy(buffer + sizeof(size), &type, sizeof(type));
+	ServerShootPacket.SerializePartialToArray(buffer + sizeof(unsigned short)* 2, size);
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+
+	delete[] buffer;
+	return;
+}
+
 void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
 {
 	char* buffer = new char[BUFSIZE];
@@ -250,18 +307,13 @@ bool PacketHandler::HandlePacket(Packet& p){
 	else if (p.getType() == PKT_C_STOP){
 		C_STOP_handler(p);
 	}
+	else if (p.getType() == PKT_C_SHOOT){
+		C_SHOOT_handler(p);
+
+	}
 	else
 	{
 		return false;
 	}
-
 	return true;
-
-	//printf("여기까지 호출??\n");
-	//int type = p.getType();
-	//if (this->HandlerTable[type] == nullptr){
-	//	return false;
-	//}
-	//this->HandlerTable[type](p);
-	//return true;
 }

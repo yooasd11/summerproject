@@ -21,8 +21,10 @@ public:
 	void BroadCast(char*, int);
 	void C_MOVE_Handler(Packet&);
 	void C_STOP_handler(Packet&);
+	void C_SHOOT_handler(Packet&);
 	void C_DISCONNECT_Handler(SOCKET);
 	void C_MOVE_Handler(std::shared_ptr<USER>);
+	void C_SHOOT_Handler(std::shared_ptr<bullet>);
 };
 
 class HandlerRegistHelper
