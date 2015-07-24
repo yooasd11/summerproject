@@ -87,8 +87,10 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Move, _internal_metadata_),
       -1);
   C_Stop_descriptor_ = file->message_type(2);
-  static const int C_Stop_offsets_[3] = {
+  static const int C_Stop_offsets_[5] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, th_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, y_),
   };
@@ -104,8 +106,10 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Stop, _internal_metadata_),
       -1);
   S_Stop_descriptor_ = file->message_type(3);
-  static const int S_Stop_offsets_[3] = {
+  static const int S_Stop_offsets_[5] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Stop, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Stop, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Stop, th_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Stop, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Stop, y_),
   };
@@ -216,15 +220,17 @@ void protobuf_AddDesc_InGamePacket_2eproto() {
     "Move\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002(\002\022"
     "\021\n\tdirection\030\004 \002(\002\022\020\n\010velocity\030\005 \002(\002\"P\n\006"
     "S_Move\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 \002("
-    "\002\022\021\n\tdirection\030\004 \002(\002\022\020\n\010velocity\030\005 \002(\002\"+"
-    "\n\006C_Stop\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n\001y\030\003 "
-    "\002(\002\"+\n\006S_Stop\022\013\n\003uid\030\001 \002(\r\022\t\n\001x\030\002 \002(\002\022\t\n"
-    "\001y\030\003 \002(\002\"m\n\007C_Shoot\022\013\n\003uid\030\001 \002(\r\022\n\n\002th\030\002"
-    " \002(\r\022\t\n\001x\030\003 \002(\002\022\t\n\001y\030\004 \002(\002\022\016\n\006damage\030\005 \002"
-    "(\002\022\020\n\010velocity\030\006 \002(\002\022\021\n\tdirection\030\007 \002(\002\""
-    "m\n\007S_Shoot\022\013\n\003uid\030\001 \002(\r\022\n\n\002th\030\002 \002(\r\022\t\n\001x"
-    "\030\003 \002(\002\022\t\n\001y\030\004 \002(\002\022\016\n\006damage\030\005 \002(\002\022\020\n\010vel"
-    "ocity\030\006 \002(\002\022\021\n\tdirection\030\007 \002(\002", 510);
+    "\002\022\021\n\tdirection\030\004 \002(\002\022\020\n\010velocity\030\005 \002(\002\"E"
+    "\n\006C_Stop\022\014\n\004type\030\001 \002(\r\022\013\n\003uid\030\002 \002(\r\022\n\n\002t"
+    "h\030\003 \001(\r\022\t\n\001x\030\004 \002(\002\022\t\n\001y\030\005 \002(\002\"E\n\006S_Stop\022"
+    "\014\n\004type\030\001 \002(\r\022\013\n\003uid\030\002 \002(\r\022\n\n\002th\030\003 \001(\r\022\t"
+    "\n\001x\030\004 \002(\002\022\t\n\001y\030\005 \002(\002\"m\n\007C_Shoot\022\013\n\003uid\030\001"
+    " \002(\r\022\n\n\002th\030\002 \002(\r\022\t\n\001x\030\003 \002(\002\022\t\n\001y\030\004 \002(\002\022\016"
+    "\n\006damage\030\005 \002(\002\022\020\n\010velocity\030\006 \002(\002\022\021\n\tdire"
+    "ction\030\007 \002(\002\"m\n\007S_Shoot\022\013\n\003uid\030\001 \002(\r\022\n\n\002t"
+    "h\030\002 \002(\r\022\t\n\001x\030\003 \002(\002\022\t\n\001y\030\004 \002(\002\022\016\n\006damage\030"
+    "\005 \002(\002\022\020\n\010velocity\030\006 \002(\002\022\021\n\tdirection\030\007 \002"
+    "(\002", 562);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "InGamePacket.proto", &protobuf_RegisterTypes);
   C_Move::default_instance_ = new C_Move();
@@ -1342,7 +1348,9 @@ void S_Move::clear_velocity() {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int C_Stop::kTypeFieldNumber;
 const int C_Stop::kUidFieldNumber;
+const int C_Stop::kThFieldNumber;
 const int C_Stop::kXFieldNumber;
 const int C_Stop::kYFieldNumber;
 #endif  // !_MSC_VER
@@ -1366,7 +1374,9 @@ C_Stop::C_Stop(const C_Stop& from)
 
 void C_Stop::SharedCtor() {
   _cached_size_ = 0;
+  type_ = 0u;
   uid_ = 0u;
+  th_ = 0u;
   x_ = 0;
   y_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -1416,7 +1426,9 @@ void C_Stop::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(uid_, y_);
+  if (_has_bits_[0 / 32] & 31u) {
+    ZR_(type_, y_);
+  }
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -1437,9 +1449,24 @@ bool C_Stop::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required uint32 uid = 1;
+      // required uint32 type = 1;
       case 1: {
         if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &type_)));
+          set_has_type();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_uid;
+        break;
+      }
+
+      // required uint32 uid = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_uid:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &uid_)));
@@ -1447,13 +1474,28 @@ bool C_Stop::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(21)) goto parse_x;
+        if (input->ExpectTag(24)) goto parse_th;
         break;
       }
 
-      // required float x = 2;
-      case 2: {
-        if (tag == 21) {
+      // optional uint32 th = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_th:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &th_)));
+          set_has_th();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(37)) goto parse_x;
+        break;
+      }
+
+      // required float x = 4;
+      case 4: {
+        if (tag == 37) {
          parse_x:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -1462,13 +1504,13 @@ bool C_Stop::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(29)) goto parse_y;
+        if (input->ExpectTag(45)) goto parse_y;
         break;
       }
 
-      // required float y = 3;
-      case 3: {
-        if (tag == 29) {
+      // required float y = 5;
+      case 5: {
+        if (tag == 45) {
          parse_y:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -1506,19 +1548,29 @@ failure:
 void C_Stop::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:InGamePacket.C_Stop)
-  // required uint32 uid = 1;
+  // required uint32 type = 1;
+  if (has_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->type(), output);
+  }
+
+  // required uint32 uid = 2;
   if (has_uid()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->uid(), output);
   }
 
-  // required float x = 2;
+  // optional uint32 th = 3;
+  if (has_th()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->th(), output);
+  }
+
+  // required float x = 4;
   if (has_x()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->x(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->x(), output);
   }
 
-  // required float y = 3;
+  // required float y = 5;
   if (has_y()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->y(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1531,19 +1583,29 @@ void C_Stop::SerializeWithCachedSizes(
 ::google::protobuf::uint8* C_Stop::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:InGamePacket.C_Stop)
-  // required uint32 uid = 1;
+  // required uint32 type = 1;
+  if (has_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->type(), target);
+  }
+
+  // required uint32 uid = 2;
   if (has_uid()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->uid(), target);
   }
 
-  // required float x = 2;
+  // optional uint32 th = 3;
+  if (has_th()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->th(), target);
+  }
+
+  // required float x = 4;
   if (has_x()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->x(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->x(), target);
   }
 
-  // required float y = 3;
+  // required float y = 5;
   if (has_y()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->y(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->y(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1557,20 +1619,27 @@ void C_Stop::SerializeWithCachedSizes(
 int C_Stop::RequiredFieldsByteSizeFallback() const {
   int total_size = 0;
 
+  if (has_type()) {
+    // required uint32 type = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->type());
+  }
+
   if (has_uid()) {
-    // required uint32 uid = 1;
+    // required uint32 uid = 2;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->uid());
   }
 
   if (has_x()) {
-    // required float x = 2;
+    // required float x = 4;
     total_size += 1 + 4;
   }
 
   if (has_y()) {
-    // required float y = 3;
+    // required float y = 5;
     total_size += 1 + 4;
   }
 
@@ -1579,21 +1648,33 @@ int C_Stop::RequiredFieldsByteSizeFallback() const {
 int C_Stop::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required uint32 uid = 1;
+  if (((_has_bits_[0] & 0x0000001b) ^ 0x0000001b) == 0) {  // All required fields are present.
+    // required uint32 type = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->type());
+
+    // required uint32 uid = 2;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->uid());
 
-    // required float x = 2;
+    // required float x = 4;
     total_size += 1 + 4;
 
-    // required float y = 3;
+    // required float y = 5;
     total_size += 1 + 4;
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
   }
+  // optional uint32 th = 3;
+  if (has_th()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->th());
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -1620,8 +1701,14 @@ void C_Stop::MergeFrom(const ::google::protobuf::Message& from) {
 void C_Stop::MergeFrom(const C_Stop& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_type()) {
+      set_type(from.type());
+    }
     if (from.has_uid()) {
       set_uid(from.uid());
+    }
+    if (from.has_th()) {
+      set_th(from.th());
     }
     if (from.has_x()) {
       set_x(from.x());
@@ -1648,7 +1735,7 @@ void C_Stop::CopyFrom(const C_Stop& from) {
 }
 
 bool C_Stop::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x0000001b) != 0x0000001b) return false;
 
   return true;
 }
@@ -1658,7 +1745,9 @@ void C_Stop::Swap(C_Stop* other) {
   InternalSwap(other);
 }
 void C_Stop::InternalSwap(C_Stop* other) {
+  std::swap(type_, other->type_);
   std::swap(uid_, other->uid_);
+  std::swap(th_, other->th_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
@@ -1677,15 +1766,39 @@ void C_Stop::InternalSwap(C_Stop* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // C_Stop
 
-// required uint32 uid = 1;
-bool C_Stop::has_uid() const {
+// required uint32 type = 1;
+bool C_Stop::has_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-void C_Stop::set_has_uid() {
+void C_Stop::set_has_type() {
   _has_bits_[0] |= 0x00000001u;
 }
-void C_Stop::clear_has_uid() {
+void C_Stop::clear_has_type() {
   _has_bits_[0] &= ~0x00000001u;
+}
+void C_Stop::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+ ::google::protobuf::uint32 C_Stop::type() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Stop.type)
+  return type_;
+}
+ void C_Stop::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.type)
+}
+
+// required uint32 uid = 2;
+bool C_Stop::has_uid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+void C_Stop::set_has_uid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+void C_Stop::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 void C_Stop::clear_uid() {
   uid_ = 0u;
@@ -1701,15 +1814,39 @@ void C_Stop::clear_uid() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.uid)
 }
 
-// required float x = 2;
+// optional uint32 th = 3;
+bool C_Stop::has_th() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void C_Stop::set_has_th() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void C_Stop::clear_has_th() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+void C_Stop::clear_th() {
+  th_ = 0u;
+  clear_has_th();
+}
+ ::google::protobuf::uint32 C_Stop::th() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Stop.th)
+  return th_;
+}
+ void C_Stop::set_th(::google::protobuf::uint32 value) {
+  set_has_th();
+  th_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.th)
+}
+
+// required float x = 4;
 bool C_Stop::has_x() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 void C_Stop::set_has_x() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000008u;
 }
 void C_Stop::clear_has_x() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 void C_Stop::clear_x() {
   x_ = 0;
@@ -1725,15 +1862,15 @@ void C_Stop::clear_x() {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Stop.x)
 }
 
-// required float y = 3;
+// required float y = 5;
 bool C_Stop::has_y() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 void C_Stop::set_has_y() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000010u;
 }
 void C_Stop::clear_has_y() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 void C_Stop::clear_y() {
   y_ = 0;
@@ -1754,7 +1891,9 @@ void C_Stop::clear_y() {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int S_Stop::kTypeFieldNumber;
 const int S_Stop::kUidFieldNumber;
+const int S_Stop::kThFieldNumber;
 const int S_Stop::kXFieldNumber;
 const int S_Stop::kYFieldNumber;
 #endif  // !_MSC_VER
@@ -1778,7 +1917,9 @@ S_Stop::S_Stop(const S_Stop& from)
 
 void S_Stop::SharedCtor() {
   _cached_size_ = 0;
+  type_ = 0u;
   uid_ = 0u;
+  th_ = 0u;
   x_ = 0;
   y_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -1828,7 +1969,9 @@ void S_Stop::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(uid_, y_);
+  if (_has_bits_[0 / 32] & 31u) {
+    ZR_(type_, y_);
+  }
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -1849,9 +1992,24 @@ bool S_Stop::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required uint32 uid = 1;
+      // required uint32 type = 1;
       case 1: {
         if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &type_)));
+          set_has_type();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_uid;
+        break;
+      }
+
+      // required uint32 uid = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_uid:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &uid_)));
@@ -1859,13 +2017,28 @@ bool S_Stop::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(21)) goto parse_x;
+        if (input->ExpectTag(24)) goto parse_th;
         break;
       }
 
-      // required float x = 2;
-      case 2: {
-        if (tag == 21) {
+      // optional uint32 th = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_th:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &th_)));
+          set_has_th();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(37)) goto parse_x;
+        break;
+      }
+
+      // required float x = 4;
+      case 4: {
+        if (tag == 37) {
          parse_x:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -1874,13 +2047,13 @@ bool S_Stop::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(29)) goto parse_y;
+        if (input->ExpectTag(45)) goto parse_y;
         break;
       }
 
-      // required float y = 3;
-      case 3: {
-        if (tag == 29) {
+      // required float y = 5;
+      case 5: {
+        if (tag == 45) {
          parse_y:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
@@ -1918,19 +2091,29 @@ failure:
 void S_Stop::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:InGamePacket.S_Stop)
-  // required uint32 uid = 1;
+  // required uint32 type = 1;
+  if (has_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->type(), output);
+  }
+
+  // required uint32 uid = 2;
   if (has_uid()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->uid(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->uid(), output);
   }
 
-  // required float x = 2;
+  // optional uint32 th = 3;
+  if (has_th()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->th(), output);
+  }
+
+  // required float x = 4;
   if (has_x()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->x(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->x(), output);
   }
 
-  // required float y = 3;
+  // required float y = 5;
   if (has_y()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->y(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1943,19 +2126,29 @@ void S_Stop::SerializeWithCachedSizes(
 ::google::protobuf::uint8* S_Stop::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:InGamePacket.S_Stop)
-  // required uint32 uid = 1;
+  // required uint32 type = 1;
+  if (has_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->type(), target);
+  }
+
+  // required uint32 uid = 2;
   if (has_uid()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->uid(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->uid(), target);
   }
 
-  // required float x = 2;
+  // optional uint32 th = 3;
+  if (has_th()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->th(), target);
+  }
+
+  // required float x = 4;
   if (has_x()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->x(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->x(), target);
   }
 
-  // required float y = 3;
+  // required float y = 5;
   if (has_y()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->y(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->y(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1969,20 +2162,27 @@ void S_Stop::SerializeWithCachedSizes(
 int S_Stop::RequiredFieldsByteSizeFallback() const {
   int total_size = 0;
 
+  if (has_type()) {
+    // required uint32 type = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->type());
+  }
+
   if (has_uid()) {
-    // required uint32 uid = 1;
+    // required uint32 uid = 2;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->uid());
   }
 
   if (has_x()) {
-    // required float x = 2;
+    // required float x = 4;
     total_size += 1 + 4;
   }
 
   if (has_y()) {
-    // required float y = 3;
+    // required float y = 5;
     total_size += 1 + 4;
   }
 
@@ -1991,21 +2191,33 @@ int S_Stop::RequiredFieldsByteSizeFallback() const {
 int S_Stop::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required uint32 uid = 1;
+  if (((_has_bits_[0] & 0x0000001b) ^ 0x0000001b) == 0) {  // All required fields are present.
+    // required uint32 type = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->type());
+
+    // required uint32 uid = 2;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->uid());
 
-    // required float x = 2;
+    // required float x = 4;
     total_size += 1 + 4;
 
-    // required float y = 3;
+    // required float y = 5;
     total_size += 1 + 4;
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
   }
+  // optional uint32 th = 3;
+  if (has_th()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->th());
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -2032,8 +2244,14 @@ void S_Stop::MergeFrom(const ::google::protobuf::Message& from) {
 void S_Stop::MergeFrom(const S_Stop& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_type()) {
+      set_type(from.type());
+    }
     if (from.has_uid()) {
       set_uid(from.uid());
+    }
+    if (from.has_th()) {
+      set_th(from.th());
     }
     if (from.has_x()) {
       set_x(from.x());
@@ -2060,7 +2278,7 @@ void S_Stop::CopyFrom(const S_Stop& from) {
 }
 
 bool S_Stop::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x0000001b) != 0x0000001b) return false;
 
   return true;
 }
@@ -2070,7 +2288,9 @@ void S_Stop::Swap(S_Stop* other) {
   InternalSwap(other);
 }
 void S_Stop::InternalSwap(S_Stop* other) {
+  std::swap(type_, other->type_);
   std::swap(uid_, other->uid_);
+  std::swap(th_, other->th_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
@@ -2089,15 +2309,39 @@ void S_Stop::InternalSwap(S_Stop* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // S_Stop
 
-// required uint32 uid = 1;
-bool S_Stop::has_uid() const {
+// required uint32 type = 1;
+bool S_Stop::has_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-void S_Stop::set_has_uid() {
+void S_Stop::set_has_type() {
   _has_bits_[0] |= 0x00000001u;
 }
-void S_Stop::clear_has_uid() {
+void S_Stop::clear_has_type() {
   _has_bits_[0] &= ~0x00000001u;
+}
+void S_Stop::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+ ::google::protobuf::uint32 S_Stop::type() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Stop.type)
+  return type_;
+}
+ void S_Stop::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Stop.type)
+}
+
+// required uint32 uid = 2;
+bool S_Stop::has_uid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+void S_Stop::set_has_uid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+void S_Stop::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000002u;
 }
 void S_Stop::clear_uid() {
   uid_ = 0u;
@@ -2113,15 +2357,39 @@ void S_Stop::clear_uid() {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Stop.uid)
 }
 
-// required float x = 2;
+// optional uint32 th = 3;
+bool S_Stop::has_th() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void S_Stop::set_has_th() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void S_Stop::clear_has_th() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+void S_Stop::clear_th() {
+  th_ = 0u;
+  clear_has_th();
+}
+ ::google::protobuf::uint32 S_Stop::th() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Stop.th)
+  return th_;
+}
+ void S_Stop::set_th(::google::protobuf::uint32 value) {
+  set_has_th();
+  th_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Stop.th)
+}
+
+// required float x = 4;
 bool S_Stop::has_x() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 void S_Stop::set_has_x() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000008u;
 }
 void S_Stop::clear_has_x() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 void S_Stop::clear_x() {
   x_ = 0;
@@ -2137,15 +2405,15 @@ void S_Stop::clear_x() {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Stop.x)
 }
 
-// required float y = 3;
+// required float y = 5;
 bool S_Stop::has_y() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 void S_Stop::set_has_y() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000010u;
 }
 void S_Stop::clear_has_y() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 void S_Stop::clear_y() {
   y_ = 0;
