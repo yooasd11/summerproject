@@ -18,7 +18,8 @@ JYObject::JYObject(cocos2d::CCNode* pCCObject) :
 JYObject::~JYObject() {
 	for (int i = 0; i < __Executer::__Executer_END; ++i)
 	{
-		delete m_Executers[i];
+		if (m_Executers[i] != nullptr)
+			delete m_Executers[i];
 	}
 	if (this->getParent() != nullptr){
 		this->getParent()->removeChildByJYObject(this);

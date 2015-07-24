@@ -18,7 +18,7 @@ message S_Move{
 }
 
 message C_Stop{
-  required uint32 type=1;
+	required uint32 type=1;
 	required uint32 uid=2;
 	optional uint32 th=3;
 	required float x=4;
