@@ -24,6 +24,7 @@ public:
 	void C_SHOOT_handler(Packet&);
 	void C_DISCONNECT_Handler(SOCKET);
 	void C_STOP_handler(std::shared_ptr<bullet>);
+	void C_COLLISION_Handler(Packet& p);
 	void S_COLLISION_Handler(std::shared_ptr<bullet>);
 	void S_COLLISION_Handler(std::shared_ptr<bullet>,int,int);
 	void S_COLLISION_Handler(std::shared_ptr<USER>);

@@ -193,6 +193,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	{
 		//ÃÑ¾Ë ¸ØÃß´Â Ã³¸®...
 		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(StopPacket.th());
+		IocpConstructor::manageGame->removeBullet(StopPacket.th());
 		shoot->working = false;
 		ServerStopPacket.set_uid(shoot->uid); ServerStopPacket.set_type(BULLET); ServerStopPacket.set_x(shoot->x); ServerStopPacket.set_y(shoot->y);
 		ServerStopPacket.set_th(shoot->th);
@@ -207,6 +208,37 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	delete[] buffer;
 	return;
 }
+
+void PacketHandler::C_COLLISION_Handler(Packet& p)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type = 0, current = 0;
+	int receiveType;
+
+	InGamePacket::C_Collision ClientCollisionPacket;
+	ClientCollisionPacket.ParseFromArray(p.Msg, p.getLength());
+	
+
+	InGamePacket::S_Collision ServerCollisionPacket;
+
+	std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.th());
+	IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.th());
+	shoot->working = false;
+	ServerCollisionPacket.set_uid1(shoot->uid); ServerCollisionPacket.set_th(shoot->th); ServerCollisionPacket.set_x(shoot->x);
+	ServerCollisionPacket.set_y(shoot->y);
+	size = ServerCollisionPacket.ByteSize();
+	
+	type = PKT_S_STOP;
+	memcpy(buffer, &size, sizeof(size));
+	memcpy(buffer + sizeof(size), &type, sizeof(type));
+	ServerCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+
+	delete[] buffer;
+	return;
+}
+
 
 void PacketHandler::C_SHOOT_handler(Packet& p)
 {
