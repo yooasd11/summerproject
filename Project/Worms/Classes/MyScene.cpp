@@ -100,7 +100,7 @@ void MyScene::addBackground(){
 	metaInfo->setVisible(false);
 }
 
-JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition){
+JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition, const UINT& nHP){
 	CCTexture2D* texture = CCDirector::getInstance()->getTextureCache()->addImage("Animations/dragon_animation.png");
 	CCAnimation* animation = Animation::create();
 	animation->setDelayPerUnit(0.05f);
@@ -127,6 +127,7 @@ JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition)
 	//Create JYPlayer with CCSprite dragon
 	JYPlayer* pJYPlayer = new JYPlayer(pDragon);
 	pJYPlayer->setUID(nUID);
+	pJYPlayer->setHP(nHP);
 
 	if (nUID == nPlayerUID){
 		this->makePlayer(pJYPlayer);
@@ -177,8 +178,7 @@ void MyScene::makePlayer(JYObject* const pJYPlayer){
 	pFireAim->setPosition(pNode->getContentSize().width / 2, pNode->getContentSize().height / 3);
 	pFireAim->setName("Aim");
 	pFireAim->setScale(0.3f);
-	pFireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
-	pFireAim->setFlippedY(false);
+	pFireAim->setAnchorPoint(ccp(0.0f, -0.5f));
 	pNode->addChild(pFireAim);
 
 	pJYPlayerDragon = (JYPlayer*)pJYPlayer;

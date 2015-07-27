@@ -3,8 +3,12 @@
 
 class JYPlayer : public JYObject{
 private:
+	UINT m_nHP;
 public:
 	JYPlayer(cocos2d::CCNode* pCCObject);
+
+	void setHP(const UINT& nHP){ m_nHP = nHP; }
+	UINT getHP() { return m_nHP; }
 
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);

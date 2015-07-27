@@ -40,7 +40,7 @@ public:
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	void addBackground();
 	JYObject* createBullet(const UINT& nUID, const UINT& nTh, const cocos2d::CCPoint& pos);
-	JYObject* createDragon(const UINT& nUID, const CCPoint& pos);
+	JYObject* createDragon(const UINT& nUID, const CCPoint& pos, const UINT& nHP);
 	void deleteDragon(const UINT& nUID);
 	void makePlayer(JYObject* const pJYPlayer);
 	void setViewPointCenter(CCPoint pos);

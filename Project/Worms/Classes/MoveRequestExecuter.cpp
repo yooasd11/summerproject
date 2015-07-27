@@ -15,10 +15,10 @@ void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
 	float fX = pCCOwner->getPosition().x;
 	float fY = pCCOwner->getPosition().y;
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A){
-		fDirection = 180.0f;
+		fDirection = 90.0f;
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_D){
-		fDirection = 0.0f;
+		fDirection = -90.0f;
 	}
 
 	char sendBuf[PKTBODYSIZE];

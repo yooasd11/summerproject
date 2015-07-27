@@ -65,7 +65,7 @@ void AccountListPacketHandler(Packet& p){
 
 		if (JYObjectManager::getInstance()->findObjectByUID(nUID) == nullptr){
 			MyScene* pMyScene = GET_MYSCENE;
-			pMyScene->createDragon(nUID, ccp(fX, fY));
+			pMyScene->createDragon(nUID, ccp(fX, fY), nHP);
 		}
 	}
 }
@@ -107,12 +107,6 @@ void SStopPacketHandler(Packet& p){
 		pJYPlayer->setVelocity(0.0f);
 		pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
 	}
-
-	else if (nType == JYOBJECT_TYPE::JY_ARM){
-		UINT nTh = sStopPacket.th();
-		JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
-		JYObjectManager::getInstance()->removeObject(pJYBullet);
-	}
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_SHOOT, SShootPacketHandler);
@@ -148,6 +142,41 @@ void SShootPacketHandler(Packet& p){
 	pJYBullet->setDamage(fDamage);
 }
 
+REGIST_HANDLER(PACKET_TYPE::PKT_S_COLLISION, SCollisionHandler);
+void SCollisionHandler(Packet& p){
+	char* PktBody = p.getMsg();
+	InGamePacket::S_Collision sCollision;
+	sCollision.ParseFromArray(PktBody, p.getLength());
+
+	UINT nUID1 = sCollision.uid1();
+	float fX = sCollision.x();
+	float fY = sCollision.y();
+
+	JYObject* pJYUID1 = JYObjectManager::getInstance()->findObjectByUID(nUID1);
+	if (pJYUID1 == nullptr) return;
+
+	//bullet collision
+	if (sCollision.has_th() == true){
+		UINT nTh = sCollision.th();
+		JYObject* pJYBullet = pJYUID1->getChildByTag(nTh);
+		if (pJYBullet == nullptr) return;
+		//bullet - player
+		if (sCollision.has_uid2() == true){
+			UINT nUID2 = sCollision.uid2();
+			UINT nHP = sCollision.hp();
+			JYPlayer* pJYUID2 = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID2);
+			if (pJYUID2 == nullptr) return;
+			pJYUID2->setHP(nHP);
+			CCLOG("Victim - %d, HP - %d", pJYUID2->getUID(), pJYUID2->getHP());
+		}
+		JYObjectManager::getInstance()->removeObject(pJYBullet);
+	}
+	//player collision
+	else{
+		pJYUID1->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+	}
+
+}
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_DISCONNECT, SDisconnectHandler);
 void SDisconnectHandler(Packet& p){

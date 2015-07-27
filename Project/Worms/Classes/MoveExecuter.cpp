@@ -32,8 +32,8 @@ void MoveExecuter::tick(float fDeltaTime){
 
 		cocos2d::CCPoint currPos = pCCOwner->getPosition();
 
-		float fDX = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
-		float fDY = fDistance *sin(MATH_DEG_TO_RAD(fDirection));
+		float fDX = fDistance *sin(MATH_DEG_TO_RAD(fDirection + 180.0f));
+		float fDY = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
 		//CCLOG("dx : %.2f, dy : %.2f", fDX, fDY);	
 
 		cocos2d::CCPoint nextPos = cocos2d::ccp(fDX, fDY);
