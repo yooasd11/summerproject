@@ -6,7 +6,7 @@
 
 class JYObject{
 private:
-	UINT m_nObjectType;
+	JYOBJECT_TYPE m_nObjectType;
 	UINT m_nUID;
 	UINT m_nTag;
 	float m_fVelocity;
@@ -23,8 +23,8 @@ public:
 	JYObject(cocos2d::CCNode* pCCObject);
 	virtual ~JYObject();
 
-	UINT getObjectType() { return m_nObjectType; }
-	void setObjectType(const UINT& nType) { m_nObjectType = nType; }
+	JYOBJECT_TYPE getObjectType() { return m_nObjectType; }
+	void setObjectType(const JYOBJECT_TYPE& nType) { m_nObjectType = nType; }
 	UINT getUID() { return m_nUID; }
 	void setUID(const UINT& nUID) { m_nUID = nUID; }
 	UINT getTag() { return m_nTag; }

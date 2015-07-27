@@ -58,15 +58,8 @@ void AccountListPacketHandler(Packet& p){
 	USHORT nSize = sAccountList.account_member_size();
 	for (USHORT i = 0; i < nSize; ++i){
 		AccountPacket::S_Account_List::Account mAccount = sAccountList.account_member(i);
-		UINT nUID = mAccount.uid();
-		UINT nHP = mAccount.hp();
-		float fX = mAccount.x();
-		float fY = mAccount.y();
-
-		if (JYObjectManager::getInstance()->findObjectByUID(nUID) == nullptr){
-			MyScene* pMyScene = GET_MYSCENE;
-			pMyScene->createDragon(nUID, ccp(fX, fY), nHP);
-		}
+		MyScene* pMyScene = GET_MYSCENE;
+		pMyScene->createDragon(mAccount);
 	}
 }
 
@@ -115,31 +108,9 @@ void SShootPacketHandler(Packet& p){
 	InGamePacket::S_Shoot sShootPacket;
 	sShootPacket.ParseFromArray(PktBody, p.getLength());
 
-	UINT nUID = sShootPacket.uid();
-	UINT nTh = sShootPacket.th();
-	float fX = sShootPacket.x();
-	float fY = sShootPacket.y();
-	float fDirection = sShootPacket.direction();
-	float fVelocity = sShootPacket.velocity();
-	float fDamage = sShootPacket.damage();
-
 	//CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;;
-	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
-	if (pJYPlayer == nullptr) return;
-	cocos2d::CCNode* pCCPlayer = pJYPlayer->getCCObject();
-	if (pCCPlayer == nullptr) return;
-	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
-	if (pJYBullet == nullptr) {
-		pJYBullet = (JYArm*)pMyScene->createBullet(nUID, nTh, cocos2d::ccp(fX, fY));
-	}
-	CCSprite* pCCBullet = (CCSprite*)pJYBullet->getCCObject();
-	pCCBullet->setPosition(cocos2d::ccp(fX,fY));
-	pCCBullet->setRotation(fDirection);
-	pJYBullet->setDirection(fDirection);
-	pJYBullet->setVelocity(fVelocity);
-	pJYBullet->setDamage(fDamage);
+	pMyScene->createBullet(sShootPacket);
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_COLLISION, SCollisionHandler);

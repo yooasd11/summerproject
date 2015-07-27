@@ -53,6 +53,7 @@ void MyScene::onEnter(){
 	EventListenerMouse* mouseListener = EventListenerMouse::create();
 	mouseListener->onMouseMove = CC_CALLBACK_1(InputHandler::onMouseMove, InputHandler::getInstance());
 	mouseListener->onMouseDown = CC_CALLBACK_1(InputHandler::onMouseDown, InputHandler::getInstance());
+	mouseListener->onMouseScroll = CC_CALLBACK_1(InputHandler::onMouseScroll, InputHandler::getInstance());
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
@@ -100,7 +101,15 @@ void MyScene::addBackground(){
 	metaInfo->setVisible(false);
 }
 
-JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition, const UINT& nHP){
+JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sAccountPacket){
+	UINT nUID = sAccountPacket.uid();
+	UINT nHP = sAccountPacket.hp();
+	float fX = sAccountPacket.x();
+	float fY = sAccountPacket.y();
+
+	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pJYPlayer != nullptr) return nullptr;		//already created
+
 	CCTexture2D* texture = CCDirector::getInstance()->getTextureCache()->addImage("Animations/dragon_animation.png");
 	CCAnimation* animation = Animation::create();
 	animation->setDelayPerUnit(0.05f);
@@ -112,7 +121,7 @@ JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition,
 
 	//Create CCSprite dragon, and add to Tiled map
 	CCSprite* pDragon = Sprite::createWithTexture(texture, Rect(0, 0, 130, 140));
-	pDragon->setPosition(dragonPosition);
+	pDragon->setPosition(ccp(fX,fY));
 	pDragon->setFlippedX(true);
 	pDragon->setScale(0.5);
 	pDragon->setName("Dragon");
@@ -125,7 +134,7 @@ JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition,
 	pDragon->runAction(rep);
 
 	//Create JYPlayer with CCSprite dragon
-	JYPlayer* pJYPlayer = new JYPlayer(pDragon);
+	pJYPlayer = new JYPlayer(pDragon);
 	pJYPlayer->setUID(nUID);
 	pJYPlayer->setHP(nHP);
 
@@ -135,18 +144,29 @@ JYObject* MyScene::createDragon(const UINT& nUID, const CCPoint& dragonPosition,
 	return pJYPlayer;
 }
 
-JYObject* MyScene::createBullet(const UINT& nUID, const UINT& nTh, const cocos2d::CCPoint& pos){
+JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
+	UINT nUID = sShootPacket.uid();
+	UINT nTh = sShootPacket.th();
+	float fX = sShootPacket.x();
+	float fY = sShootPacket.y();
+	float fDirection = sShootPacket.direction();
+	float fVelocity = sShootPacket.velocity();
+	float fDamage = sShootPacket.damage();
+
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer == nullptr) return nullptr;
 	CCSprite* pCCOwner = (cocos2d::CCSprite*)pJYPlayer->getCCObject();
 	if (pCCOwner == nullptr) return nullptr;
-
+	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
+	if (pJYBullet != nullptr) return nullptr;			//already created
 	CCTMXTiledMap* pTmap = GET_TMAP;
+	if (pTmap == nullptr) return nullptr;
 
 	//Create CCSprite bullet
 	CCSprite* bullet = CCSprite::create("bullet.PNG");
 	bullet->setScale(0.3f);
-	bullet->setPosition(pos);
+	bullet->setPosition(ccp(fX,fY));
+	bullet->setRotation(fDirection);
 
 	//Create JYArm with CCSprite bullet and add
 	JYArm* pJYArmBullet = new JYArm(bullet);
@@ -154,6 +174,9 @@ JYObject* MyScene::createBullet(const UINT& nUID, const UINT& nTh, const cocos2d
 	pJYArmBullet->setObjectType(JYOBJECT_TYPE::JY_ARM);
 	pJYArmBullet->setUID(nUID);
 	pJYArmBullet->setTag(nTh);
+	pJYArmBullet->setVelocity(fVelocity);
+	pJYArmBullet->setDamage(fDamage);
+	pJYArmBullet->setDirection(fDirection);
 	pTmap->addChild(bullet);
 	return pJYArmBullet;
 }

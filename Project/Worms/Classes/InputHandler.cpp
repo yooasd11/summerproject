@@ -41,6 +41,17 @@ void InputHandler::onMouseDown(cocos2d::Event* pEvent){
 	pJYPlayer->onMouseDown(pEvent);
 }
 
+void InputHandler::onMouseScroll(cocos2d::Event* pEvent){
+	cocos2d::EventMouse* e = (cocos2d::EventMouse*)pEvent;
+	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
+	cocos2d::CCParallaxNode* pBackground = (cocos2d::CCParallaxNode*)pTmap->getParent();
+	float fScrollY = e->getScrollY() * -0.1f;
+	float fCurrentScale = pBackground->getScale();
+	float fNextScale = fCurrentScale + fScrollY;
+	CCLOG("Current map scale : %.2f, next map scale : %.2f", fCurrentScale, fNextScale);
+	pBackground->setScale(fNextScale);
+}
+
 
 void InputHandler::tick(float fDeltaTime){
 	JYObjectManager::getInstance()->tick(fDeltaTime);

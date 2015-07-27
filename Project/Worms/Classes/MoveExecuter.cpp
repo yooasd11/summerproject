@@ -26,6 +26,8 @@ void MoveExecuter::tick(float fDeltaTime){
 		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 		if (pCCOwner == nullptr) return;
 
+		JYOBJECT_TYPE eType = pOwner->getObjectType();
+
 		float fDirection = this->getOwner()->getDirection();
 		float fVelolcity = this->getOwner()->getVelocity();
 		float fDistance = fVelolcity * fPassedTime;
@@ -34,9 +36,6 @@ void MoveExecuter::tick(float fDeltaTime){
 
 		float fDX = fDistance *sin(MATH_DEG_TO_RAD(fDirection));
 		float fDY = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
-		
-		if (this->getOwner()->getObjectType() == JYOBJECT_TYPE::JY_ARM)
-		CCLOG("dx : %.2f, dy : %.2f", fDX, fDY);	
 
 		cocos2d::CCPoint nextPos = cocos2d::ccp(fDX, fDY);
 		this->setPlayerPosition(nextPos);
