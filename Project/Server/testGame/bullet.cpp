@@ -56,6 +56,7 @@ void bullet::bulletMove()
 				//유저의 데미지 감소..
 				printf("damage\n");
 				it->second->hp -= this->damage;
+				//이정보를 패킷으로 보내줘야함....
 			}
 		}
 

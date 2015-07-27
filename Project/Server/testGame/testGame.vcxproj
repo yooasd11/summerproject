@@ -85,6 +85,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="ClientHandle.h" />
     <ClInclude Include="ClientManager.h" />
+    <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="HandleData.h" />
     <ClInclude Include="IocpConstructor.h" />
@@ -92,6 +93,7 @@
     <ClInclude Include="Lock.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="NPCManager.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketHandler.h" />
     <ClInclude Include="SocketListener.h" />
@@ -110,6 +112,7 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="ClientHandle.cpp" />
     <ClCompile Include="ClientManager.cpp" />
+    <ClCompile Include="CollisionObject.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="HandleData.cpp" />
     <ClCompile Include="IocpConstructor.cpp" />
@@ -117,6 +120,7 @@
     <ClCompile Include="Lock.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="NPCManager.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="SocketListener.cpp" />
     <ClCompile Include="stdafx.cpp">

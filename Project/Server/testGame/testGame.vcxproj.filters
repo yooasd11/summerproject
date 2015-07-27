@@ -19,6 +19,12 @@
     <Filter Include="protocolBuffer">
       <UniqueIdentifier>{f357f4f0-8495-4333-a3d3-fef4c22e04a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{d56146fa-607d-44db-824c-6687cb21e84e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managedata">
+      <UniqueIdentifier>{642e57bf-1799-4a88-9600-449c3ef1ccb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -48,22 +54,7 @@
     <ClInclude Include="Lock.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="USER.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="NPCManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TimerJob.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Packet.h">
@@ -72,14 +63,35 @@
     <ClInclude Include="PacketHandler.h">
       <Filter>Packet</Filter>
     </ClInclude>
-    <ClInclude Include="bullet.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="..\protobuffer\AccountPacket.pb.h">
       <Filter>protocolBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ProtoBuf\packets\InGamePacket.pb.h">
+    <ClInclude Include="..\protobuffer\InGamePacket.pb.h">
       <Filter>protocolBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>Managedata</Filter>
+    </ClInclude>
+    <ClInclude Include="USER.h">
+      <Filter>Managedata</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Managedata</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionObject.h">
+      <Filter>Managedata</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,22 +119,7 @@
     <ClCompile Include="Lock.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="USER.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NPCManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TimerJob.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Packet.cpp">
@@ -131,14 +128,35 @@
     <ClCompile Include="PacketHandler.cpp">
       <Filter>Packet</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="..\protobuffer\AccountPacket.pb.cc">
       <Filter>protocolBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ProtoBuf\packets\InGamePacket.pb.cc">
+    <ClCompile Include="..\protobuffer\InGamePacket.pb.cc">
       <Filter>protocolBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>Managedata</Filter>
+    </ClCompile>
+    <ClCompile Include="USER.cpp">
+      <Filter>Managedata</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Managedata</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionObject.cpp">
+      <Filter>Managedata</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
