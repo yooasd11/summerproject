@@ -32,7 +32,6 @@ public:
 		cocos2d::CCPoint nodeWinPos = pCCNode->getParent()->convertToWorldSpace(pCCNode->getPosition());
 		cocos2d::CCPoint mouseWinPos = getMouseGlobalPos(pEvent);
 		float ret = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - nodeWinPos.x, mouseWinPos.y - nodeWinPos.y));
-		//ret *= -1.0f;
 		CCLOG("Node : (%.2f, %.2f) / Mouse : (%.2f, %.2f) / degree : %.2f", nodeWinPos.x, nodeWinPos.y, mouseWinPos.x, mouseWinPos.y, ret);
 		return ret;
 	}
