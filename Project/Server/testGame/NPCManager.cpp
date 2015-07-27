@@ -8,6 +8,7 @@ NPCManager::NPCManager()
 	this->NpcCount = 1;
 }
 
+
 NPCManager::~NPCManager()
 {
 	delete this->key;
@@ -16,7 +17,7 @@ NPCManager::~NPCManager()
 void NPCManager::registNPC(std::shared_ptr<NPC> n)
 {
 	LOCKING(this->key);
-	this->mappingNPC[this->NpcCount++] = n;
+	this->mappingNPC[this->NpcCount++] = b;
 	return;
 }
 
