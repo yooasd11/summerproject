@@ -8,6 +8,7 @@ NPCManager::NPCManager()
 	this->NpcCount = 1;
 }
 
+
 NPCManager::~NPCManager()
 {
 	delete this->key;
