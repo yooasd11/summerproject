@@ -33,7 +33,7 @@ void bullet::bulletMove()
 		//총알이 언제 안보여야 되는지 알아야함...640 X 320
 		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
 		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
-
+		printf("%f %f\n", dx, dy);
 		std::shared_ptr<bullet> bul = IocpConstructor::manageGame->retBullet(this->th);
 		//여기가 일단 충돌처리한느 부분임....
 		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
@@ -77,7 +77,7 @@ void bullet::bulletMove()
 		this->y = dy;
 		//PacketHandler::GetInstance()->C_SHOOT_Handler(IocpConstructor::manageGame->retBullet(this->th));
 		//PacketHandler::GetInstance()->C_SHOOT_Handler(bul);
-		bulletMoveJob.func = std::bind(&bullet::bulletMove, this);
+		bulletMoveJob.func = std::bind(&bullet::bulletMove, bul);
 		bulletMoveJob.exectime = GetTickCount() + 30;
 		IocpConstructor::jobs.push_back(bulletMoveJob);
 	}

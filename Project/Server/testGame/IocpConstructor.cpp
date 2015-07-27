@@ -98,8 +98,9 @@ void IocpConstructor::JobSchedule()
 
 	{
 		LOCKING(this->queueLock);
+		//printf("위는 락걸림\n");
 		if (this->jobs.empty()){
-			//	printf("queue가 비었습니다\n");
+				//printf("queue가 비었습니다\n");
 			return;
 		}
 
@@ -148,7 +149,7 @@ void IocpConstructor::JobSchedule()
 	}
 	//현재 시간보다 작으면 넣어줌!
 	else{
-	//	LOCKING(this->queueLock);
+		LOCKING(this->queueLock);
 		this->jobs.push_back(job);
 	}
 		

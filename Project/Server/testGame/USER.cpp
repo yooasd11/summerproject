@@ -131,7 +131,7 @@ void USER::UserMove(){
 			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->uid));
 
 			//움직일 작업에 대해서 처리..
-			userMoveJob.func = std::bind(&USER::UserMove, this);
+			userMoveJob.func = std::bind(&USER::UserMove, IocpConstructor::cm->retUser(this->uid));
 			userMoveJob.exectime = GetTickCount() + 30;
 			IocpConstructor::jobs.push_back(userMoveJob);
 		}
