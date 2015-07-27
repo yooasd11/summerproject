@@ -224,9 +224,8 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 	IocpConstructor::manageGame->registBullet(Bullet);
 
 	//총 움직임에 대한 'JOB'처리
-	
 	TimerJob job;
-	job.exectime = GetTickCount() + 100;
+	job.exectime = GetTickCount() + 30;
 	job.func = std::bind(&bullet::bulletMove, Bullet);  //만약에 안되면 여기 의심
 	IocpConstructor::jobs.push_back(job);
 
@@ -311,6 +310,7 @@ void PacketHandler::C_STOP_handler(std::shared_ptr<bullet> b)
 
 void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b)
 {
+	if (b == nullptr) return;
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size = 0, type = 0;

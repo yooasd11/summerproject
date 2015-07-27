@@ -119,8 +119,8 @@ void USER::UserMove(){
 	//LOCKING(this->key);
 	//시간초보다 작으면 수행되겠지..잡큐에서 알아서 수행해줌
 	if (this->isConnecting()){
-		float dx = this->x + (this->velocity * 0.1f * sin((this->direction+180.0f) * PI / 180));
-		float dy = this->y + (this->velocity * 0.1f * cos(this->direction * PI / 180));
+		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
+		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
 		if (this->state == MOVE){
 			if (!(dx > 640.0f || dx < 0.0f || dy > 320.0f || dy < 0.0f))
 			{

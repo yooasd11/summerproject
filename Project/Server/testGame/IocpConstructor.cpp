@@ -91,34 +91,39 @@ void IocpConstructor::AutoNPC(int count)
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
+	
 	//'lock'이 여기 있어야되는게 맞나....
-	LOCKING(this->queueLock);
-	if (this->jobs.empty()){
-		//printf("queue가 비었습니다\n");
-		return;
-	}
-
-	DWORD Minvalue = MAXGETTICK;
+	TimerJob job;
 	int index = -1;
-	//최소시간이 제일 작을 것을 찾음..
-	for (int i = 0; i < this->jobs.size(); i++)
+
 	{
-		if (this->jobs[i].exectime < Minvalue)
-		{
-			Minvalue = this->jobs[i].exectime;
-			index = i;
+		LOCKING(this->queueLock);
+		if (this->jobs.empty()){
+			//	printf("queue가 비었습니다\n");
+			return;
 		}
+
+		DWORD Minvalue = MAXGETTICK;
+		//최소시간이 제일 작을 것을 찾음..
+		for (int i = 0; i < this->jobs.size(); i++)
+		{
+			if (this->jobs[i].exectime < Minvalue)
+			{
+				Minvalue = this->jobs[i].exectime;
+				index = i;
+			}
+		}
+		if (index == -1) return;
+		job = this->jobs[index];
+		this->jobs.erase(this->jobs.begin() + index);
 	}
-	if (index == -1) return;
 
-	TimerJob job = this->jobs[index];
-	this->jobs.erase(this->jobs.begin() + index);
-
-	if (job.exectime < GetTickCount())
+	if (job.exectime < GetTickCount() && index != -1)
 	{
 		//함수를 처리해주고...
 		int th = job.th;
 		auto f = job.func;
+		if (f == NULL) return;
 		f();
 		//최초의 잡을 어디서 해주냐...생각해보자 
 		//if (job.current == TimerJob::state::UserMove)
@@ -142,7 +147,11 @@ void IocpConstructor::JobSchedule()
 		//}
 	}
 	//현재 시간보다 작으면 넣어줌!
-	else this->jobs.push_back(job);
+	else{
+	//	LOCKING(this->queueLock);
+		this->jobs.push_back(job);
+	}
+		
 	return;
 }
 
