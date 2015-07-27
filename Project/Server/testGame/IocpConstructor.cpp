@@ -81,21 +81,7 @@ HANDLE IocpConstructor::getPort()
 //npc를 얼마나 생성할 것인가...
 void IocpConstructor::AutoNPC(int count)
 {
-	LOCKING(this->queueLock);
-	for (int i = 0; i < count; i++)
-	{
-		//초기의 랜덤위치를 부여해주는 작업이 필요
-		NPC temp(i, i, i, i);
-		this->manageGame->manageNPC->npc.push_back(temp);
-	}
-	for (int i = 0; i < count; i++)
-	{
-		TimerJob temp;
-		temp.func = std::bind(&NPC::Move, &(this->manageGame->manageNPC->npc[i]));
-		temp.exectime = GetTickCount() + (1000 * i);
-		temp.th = i;
-		this->jobs.push_back(temp);
-	}
+	
 
 	return;
 }

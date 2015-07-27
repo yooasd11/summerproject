@@ -25,20 +25,26 @@ void MoveExecuter::tick(float fDeltaTime){
 		if (pOwner == nullptr) return;
 		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 		if (pCCOwner == nullptr) return;
+
 		float fDirection = this->getOwner()->getDirection();
 		float fVelolcity = this->getOwner()->getVelocity();
 		float fDistance = fVelolcity * fPassedTime;
+
 		cocos2d::CCPoint currPos = pCCOwner->getPosition();
+
 		float fDX = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
 		float fDY = fDistance *sin(MATH_DEG_TO_RAD(fDirection));
-		cocos2d::CCPoint nextPos = cocos2d::ccp(currPos.x + fDX, currPos.y + fDY);
-		this->setPlayerPosition(currPos, nextPos);
+		if (pOwner->getObjectType() == JYOBJECT_TYPE::JY_ARM)
+		CCLOG("dx : %.2f, dy : %.2f", fDX, fDY);	
+
+		cocos2d::CCPoint nextPos = cocos2d::ccp(fDX, fDY);
+		this->setPlayerPosition(nextPos);
 		fPassedTime = 0.0f;
 	}
 }
 
-void MoveExecuter::setPlayerPosition(cocos2d::CCPoint src, cocos2d::CCPoint dst){
-	cocos2d::CCActionInterval* moveAct = cocos2d::CCMoveTo::create(0.1f, dst);
+void MoveExecuter::setPlayerPosition(cocos2d::CCPoint dst){
+	cocos2d::CCActionInterval* moveAct = cocos2d::CCMoveBy::create(0.1f, dst);
 	this->getOwner()->getCCObject()->runAction(moveAct);
 }
 

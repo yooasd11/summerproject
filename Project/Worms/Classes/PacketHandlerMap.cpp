@@ -94,15 +94,25 @@ void SStopPacketHandler(Packet& p){
 	InGamePacket::S_Stop sStopPacket;
 	sStopPacket.ParseFromArray(PktBody, p.getLength());
 
+	UINT nType = sStopPacket.type();
 	UINT nUID = sStopPacket.uid();
 	float fX = sStopPacket.x();
 	float fY = sStopPacket.y();
 
-	CCLOG("Position from server : (%.2f, %.2f)", fX, fY);
+	CCLOG("S_Stop received : Type - %d, UID - %d, (%.2f, %.2f)", nType, nUID, fX, fY);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer == nullptr) return;
-	pJYPlayer->setVelocity(0.0f);
-	pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+
+	if (nType == JYOBJECT_TYPE::JY_PLAYER){
+		pJYPlayer->setVelocity(0.0f);
+		pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+	}
+
+	else if (nType == JYOBJECT_TYPE::JY_ARM){
+		UINT nTh = sStopPacket.th();
+		JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
+		pJYBullet->setVelocity(0.0f);
+	}
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_SHOOT, SShootPacketHandler);
@@ -112,6 +122,7 @@ void SShootPacketHandler(Packet& p){
 	sShootPacket.ParseFromArray(PktBody, p.getLength());
 
 	UINT nUID = sShootPacket.uid();
+	UINT nTh = sShootPacket.th();
 	float fX = sShootPacket.x();
 	float fY = sShootPacket.y();
 	float fDirection = sShootPacket.direction();
@@ -119,13 +130,20 @@ void SShootPacketHandler(Packet& p){
 	float fDamage = sShootPacket.damage();
 
 	CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
+	MyScene* pMyScene = GET_MYSCENE;
+	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;;
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer == nullptr) return;
-	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByName("JYBullet");
-	if (pJYBullet == nullptr) return;
 	cocos2d::CCNode* pCCPlayer = pJYPlayer->getCCObject();
 	if (pCCPlayer == nullptr) return;
-	pCCPlayer->setPosition(cocos2d::ccp(fX, fY));
+	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
+	if (pJYBullet == nullptr) {
+		pJYBullet = (JYArm*)pMyScene->createBullet(nUID, nTh, cocos2d::ccp(fX, fY));
+	}
+	CCSprite* pCCBullet = (CCSprite*)pJYBullet->getCCObject();
+	pCCBullet->setPosition(cocos2d::ccp(fX,fY));
+	pCCBullet->setRotation(fDirection);
+	pCCBullet->setFlippedY(true);
 	pJYBullet->setDirection(fDirection);
 	pJYBullet->setVelocity(fVelocity);
 	pJYBullet->setDamage(fDamage);

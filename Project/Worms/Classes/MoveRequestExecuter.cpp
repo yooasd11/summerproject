@@ -40,12 +40,18 @@ void MoveRequestExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode,
 	if (pCCOwner == nullptr) return;
 	float fX = pCCOwner->getPosition().x;
 	float fY = pCCOwner->getPosition().y;
+	UINT nType = pOwner->getObjectType();
 
 	char sendBuf[PKTBODYSIZE];
 	InGamePacket::C_Stop c_stop;
+	c_stop.set_type(nType);
 	c_stop.set_uid(this->getOwner()->getUID());
 	c_stop.set_x(fX);
 	c_stop.set_y(fY);
+
+	if (nType == JYOBJECT_TYPE::JY_ARM){
+		c_stop.set_th(pOwner->getTag());
+	}
 
 	c_stop.SerializeToArray(sendBuf, c_stop.ByteSize());
 
