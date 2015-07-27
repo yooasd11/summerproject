@@ -24,8 +24,7 @@ void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
 	if (pCCOwner == nullptr) return;
 	cocos2d::CCSprite* pFireAim = (cocos2d::CCSprite*)pCCOwner->getChildByName("Aim");
 	if (pFireAim == nullptr) return;
-	cocos2d::CCPoint aimPos = pFireAim->getParent()->convertToWorldSpace(pFireAim->getPosition());
-	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(aimPos, pEvent);
+	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(pFireAim, pEvent);
 
 	pFireAim->setRotation(degree);
 }
@@ -38,16 +37,14 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
-	cocos2d::CCPoint ownerWorldPos = pTmap->convertToWorldSpace(pCCOwner->getPosition());
-	cocos2d::CCPoint ownerTmapPos = pTmap->convertToNodeSpace(ownerWorldPos);
-	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(ownerWorldPos, pEvent);
-
+	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(pCCOwner, pEvent);
+	CCLOG("Fire direction : %.2f", fDirection);
 	char sendBuf[PKTLENGTH];
 	InGamePacket::C_Shoot c_shoot;
 	c_shoot.set_uid(this->getOwner()->getUID());
 	c_shoot.set_th(0);
-	c_shoot.set_x(ownerTmapPos.x);
-	c_shoot.set_y(ownerTmapPos.y);
+	c_shoot.set_x(pCCOwner->getPosition().x);
+	c_shoot.set_y(pCCOwner->getPosition().y);
 	c_shoot.set_damage(10.0f);
 	c_shoot.set_direction(fDirection);
 	c_shoot.set_velocity(30.0f);

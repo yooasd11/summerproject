@@ -16,15 +16,27 @@ JYObject::JYObject(cocos2d::CCNode* pCCObject) :
 }
 
 JYObject::~JYObject() {
-	for (int i = 0; i < __Executer::__Executer_END; ++i)
-	{
+	//delete executers
+	for (int i = 0; i < __Executer::__Executer_END; ++i){
 		if (m_Executers[i] != nullptr)
-			delete m_Executers[i];
+			ReleaseExecuter((__Executer)i);
 	}
+
+	//pop this from parent
 	if (this->getParent() != nullptr){
-		this->getParent()->removeChildByJYObject(this);
+		this->getParent()->popChildByJYObject(this);
 	}
-	JYObjectManager::getInstance()->popObject(this);
+
+	//delete CCObject 
+	if (this->getCCObject() != nullptr && this->getCCObject()->getParent() != nullptr){
+		this->getCCObject()->getParent()->removeChild(this->getCCObject());
+	}
+
+	//delete children
+	for (int i = 0; i < m_pJYChildrenVector.size(); ++i){
+		if (m_pJYChildrenVector[i] != nullptr)
+			JYObjectManager::getInstance()->popObject(m_pJYChildrenVector[i]);
+	}
 }
 
 void JYObject::setExecuter(BaseExecuter* param) {
@@ -42,7 +54,7 @@ void JYObject::addChild(JYObject* const pJYObject){
 	pJYObject->m_pJYObjectParent = this;
 }
 
-void JYObject::removeChildByJYObject(JYObject* pJYObject){
+void JYObject::popChildByJYObject(JYObject* const pJYObject){
 	auto iteratorTarget = this->getChildIteratorByObject(pJYObject);
 	if (iteratorTarget == m_pJYChildrenVector.end()) {
 		CCLOG("No Child");
@@ -50,10 +62,9 @@ void JYObject::removeChildByJYObject(JYObject* pJYObject){
 	}
 	(*iteratorTarget)->m_pJYObjectParent = nullptr;
 	this->m_pJYChildrenVector.erase(iteratorTarget);
-	this->getCCObject()->removeChild(pJYObject->getCCObject());
 }
 
-void JYObject::removeChildByName(const std::string& sName){
+void JYObject::popChildByName(const std::string& sName){
 	auto iteratorTarget = this->getChildIteratorByName(sName);
 	if (iteratorTarget == m_pJYChildrenVector.end()) {
 		CCLOG("No child named %s", sName.c_str());

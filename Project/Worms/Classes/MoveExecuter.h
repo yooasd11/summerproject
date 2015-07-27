@@ -9,7 +9,7 @@ public:
 	MoveExecuter(JYObject* pOwner) : BaseExecuter(pOwner, __MoveExecuter) {
 		regist();
 	}
-	virtual ~MoveExecuter() { BaseExecuter::~BaseExecuter(); }
+	virtual ~MoveExecuter() {}
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onMouseMove(cocos2d::Event* pEvent);

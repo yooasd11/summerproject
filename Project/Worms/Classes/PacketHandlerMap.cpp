@@ -81,7 +81,7 @@ void SMovePacketHandler(Packet& p){
 	float fY = sMovePacket.y();
 	float fDirection = sMovePacket.direction();
 	float fVelocity = sMovePacket.velocity();
-	CCLOG("S_Move from server : UID - %d, X - %.1f, Y - %.1f, V - %.1f", nUID, fX, fY, fVelocity);
+	//CCLOG("S_Move from server : UID - %d, X - %.1f, Y - %.1f, V - %.1f", nUID, fX, fY, fVelocity);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer == nullptr) return;
 	pJYPlayer->setVelocity(fVelocity);
@@ -99,7 +99,7 @@ void SStopPacketHandler(Packet& p){
 	float fX = sStopPacket.x();
 	float fY = sStopPacket.y();
 
-	CCLOG("S_Stop received : Type - %d, UID - %d, (%.2f, %.2f)", nType, nUID, fX, fY);
+	//CCLOG("S_Stop received : Type - %d, UID - %d, (%.2f, %.2f)", nType, nUID, fX, fY);
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer == nullptr) return;
 
@@ -129,7 +129,7 @@ void SShootPacketHandler(Packet& p){
 	float fVelocity = sShootPacket.velocity();
 	float fDamage = sShootPacket.damage();
 
-	CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
+	//CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;;
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
@@ -143,7 +143,6 @@ void SShootPacketHandler(Packet& p){
 	CCSprite* pCCBullet = (CCSprite*)pJYBullet->getCCObject();
 	pCCBullet->setPosition(cocos2d::ccp(fX,fY));
 	pCCBullet->setRotation(fDirection);
-	pCCBullet->setFlippedY(true);
 	pJYBullet->setDirection(fDirection);
 	pJYBullet->setVelocity(fVelocity);
 	pJYBullet->setDamage(fDamage);

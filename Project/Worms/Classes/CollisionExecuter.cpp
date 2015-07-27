@@ -76,14 +76,15 @@ void CollisionExecuter::tick(float fDeltaTime){
 			pCCOwner->setVisible(false);
 			c_stop.set_type(JYOBJECT_TYPE::JY_ARM);
 			c_stop.set_th(this->getOwner()->getTag());
+			c_stop.set_uid(this->getOwner()->getParent()->getUID());
 		}
 		else if (nJYObjectType == JYOBJECT_TYPE::JY_PLAYER){
 			this->getOwner()->setVelocity(0.0f);
 			pCCOwner->setPosition(currentPos);
-			c_stop.set_type(JYOBJECT_TYPE::JY_ARM);
+			c_stop.set_type(JYOBJECT_TYPE::JY_PLAYER);
+			c_stop.set_uid(this->getOwner()->getUID());
 		}
-
-		c_stop.set_uid(this->getOwner()->getUID());
+		
 		c_stop.set_x(currentPos.x);
 		c_stop.set_y(currentPos.y);
 		c_stop.SerializeToArray(sendBuf, c_stop.ByteSize());

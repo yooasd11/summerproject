@@ -40,6 +40,7 @@ void JYObjectManager::popObject(JYObject* const pObject){
 	std::vector<JYObject*>::iterator retIt = findIteratorByObject(pObject);
 	if (retIt != m_pJYObjectVector.end())
 		m_pJYObjectVector.erase(retIt);
+	delete pObject;
 }
 
 JYObject* JYObjectManager::findObjectByName(const std::string& sName){
@@ -54,18 +55,10 @@ JYObject* JYObjectManager::findObjectByUID(const UINT& nUID){
 	return *retIt;
 }
 
-void JYObjectManager::removeObject(JYObject* pJYObject, bool bCleanUp){
-	std::vector<JYObject*>::iterator retIt = findIteratorByObject(pJYObject);
-	if (retIt == m_pJYObjectVector.end()) return;
+void JYObjectManager::removeObject(JYObject* pJYObject){
+	if (pJYObject == nullptr) return;
 	this->popObject(pJYObject);
-	JYObject* pJYParent = pJYObject->getParent();
-	if (pJYParent != nullptr){
-		pJYParent->removeChildByJYObject(pJYObject);
-	}
 	delete pJYObject;
-	if (bCleanUp == true){
-		//자식들 싹다 지우자
-	}
 }
 
 void JYObjectManager::tick(float fDeltaTime){

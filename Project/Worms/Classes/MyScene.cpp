@@ -161,14 +161,12 @@ JYObject* MyScene::createBullet(const UINT& nUID, const UINT& nTh, const cocos2d
 void MyScene::deleteDragon(const UINT& nUID){
 	JYPlayer* pTarget = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pTarget != nullptr){
-		CCLOG("JYObjects count : %d", JYObjectManager::getInstance()->getSize());
-		this->getChildByName("Background")->getChildByName("Tmap")->removeChild(pTarget->getCCObject(), true);
+		//this->getChildByName("Background")->getChildByName("Tmap")->removeChild(pTarget->getCCObject(), true);
 		JYObjectManager::getInstance()->removeObject(pTarget);
-		CCLOG("JYObjects count : %d", JYObjectManager::getInstance()->getSize());
 	}
 }
 
-//Make pJYPlayer as a actual player of the scene
+//Make pJYPlayer as controllable player of the scene
 void MyScene::makePlayer(JYObject* const pJYPlayer){
 	CCNode* pNode = pJYPlayer->getCCObject();
 
@@ -178,7 +176,7 @@ void MyScene::makePlayer(JYObject* const pJYPlayer){
 	pFireAim->setName("Aim");
 	pFireAim->setScale(0.3f);
 	pFireAim->setAnchorPoint(ccp(-0.5f, 0.5f));
-	pFireAim->setFlippedY(true);
+	pFireAim->setFlippedY(false);
 	pNode->addChild(pFireAim);
 
 	pJYPlayerDragon = (JYPlayer*)pJYPlayer;

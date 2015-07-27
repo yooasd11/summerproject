@@ -26,6 +26,6 @@ public:
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onMouseMove(cocos2d::Event* pEvent);
-	void removeObject(JYObject* pJYObject, bool bCleanUp = true);
+	void removeObject(JYObject* pJYObject);
 	void tick(float fDeltaTime);
 };

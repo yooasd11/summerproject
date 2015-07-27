@@ -34,8 +34,7 @@ void MoveExecuter::tick(float fDeltaTime){
 
 		float fDX = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
 		float fDY = fDistance *sin(MATH_DEG_TO_RAD(fDirection));
-		if (pOwner->getObjectType() == JYOBJECT_TYPE::JY_ARM)
-		CCLOG("dx : %.2f, dy : %.2f", fDX, fDY);	
+		//CCLOG("dx : %.2f, dy : %.2f", fDX, fDY);	
 
 		cocos2d::CCPoint nextPos = cocos2d::ccp(fDX, fDY);
 		this->setPlayerPosition(nextPos);

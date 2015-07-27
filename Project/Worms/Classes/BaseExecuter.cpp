@@ -2,9 +2,7 @@
 #include "JYObject.h"
 
 BaseExecuter::~BaseExecuter(){
-	if (m_pOwner != nullptr)
-		m_pOwner->ReleaseExecuter(this->getEnum());
-
+	m_pOwner = nullptr;
 }
 
 void BaseExecuter::regist(){ 

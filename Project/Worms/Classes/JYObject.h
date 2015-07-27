@@ -47,8 +47,8 @@ public:
 	void addChild(JYObject* const pJYObject);
 	JYObject* getChildByName(const std::string& sName);
 	JYObject* getChildByTag(const UINT& nTag);
-	void removeChildByName(const std::string& sName);
-	void removeChildByJYObject(JYObject* const pJYObject);
+	void popChildByName(const std::string& sName);
+	void popChildByJYObject(JYObject* const pJYObject);
 	
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
