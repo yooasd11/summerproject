@@ -173,8 +173,7 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Shoot, _internal_metadata_),
       -1);
   C_Collision_descriptor_ = file->message_type(6);
-  static const int C_Collision_offsets_[7] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Collision, type_),
+  static const int C_Collision_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Collision, uid1_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Collision, th_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Collision, uid2_),
@@ -194,8 +193,7 @@ void protobuf_AssignDesc_InGamePacket_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(C_Collision, _internal_metadata_),
       -1);
   S_Collision_descriptor_ = file->message_type(7);
-  static const int S_Collision_offsets_[7] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Collision, type_),
+  static const int S_Collision_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Collision, uid1_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Collision, th_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(S_Collision, uid2_),
@@ -286,12 +284,11 @@ void protobuf_AddDesc_InGamePacket_2eproto() {
     "ction\030\007 \002(\002\"m\n\007S_Shoot\022\013\n\003uid\030\001 \002(\r\022\n\n\002t"
     "h\030\002 \002(\r\022\t\n\001x\030\003 \002(\002\022\t\n\001y\030\004 \002(\002\022\016\n\006damage\030"
     "\005 \002(\002\022\020\n\010velocity\030\006 \002(\002\022\021\n\tdirection\030\007 \002"
-    "(\002\"e\n\013C_Collision\022\014\n\004type\030\001 \002(\r\022\014\n\004uid1\030"
-    "\002 \002(\r\022\n\n\002th\030\003 \001(\r\022\014\n\004uid2\030\004 \001(\r\022\n\n\002hp\030\005 "
-    "\001(\r\022\t\n\001x\030\006 \002(\002\022\t\n\001y\030\007 \002(\002\"e\n\013S_Collision"
-    "\022\014\n\004type\030\001 \002(\r\022\014\n\004uid1\030\002 \002(\r\022\n\n\002th\030\003 \001(\r"
-    "\022\014\n\004uid2\030\004 \001(\r\022\n\n\002hp\030\005 \001(\r\022\t\n\001x\030\006 \002(\002\022\t\n"
-    "\001y\030\007 \002(\002", 768);
+    "(\002\"W\n\013C_Collision\022\014\n\004uid1\030\002 \002(\r\022\n\n\002th\030\003 "
+    "\001(\r\022\014\n\004uid2\030\004 \001(\r\022\n\n\002hp\030\005 \001(\r\022\t\n\001x\030\006 \002(\002"
+    "\022\t\n\001y\030\007 \002(\002\"W\n\013S_Collision\022\014\n\004uid1\030\002 \002(\r"
+    "\022\n\n\002th\030\003 \001(\r\022\014\n\004uid2\030\004 \001(\r\022\n\n\002hp\030\005 \001(\r\022\t"
+    "\n\001x\030\006 \002(\002\022\t\n\001y\030\007 \002(\002", 740);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "InGamePacket.proto", &protobuf_RegisterTypes);
   C_Move::default_instance_ = new C_Move();
@@ -3839,7 +3836,6 @@ void S_Shoot::clear_direction() {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int C_Collision::kTypeFieldNumber;
 const int C_Collision::kUid1FieldNumber;
 const int C_Collision::kThFieldNumber;
 const int C_Collision::kUid2FieldNumber;
@@ -3867,7 +3863,6 @@ C_Collision::C_Collision(const C_Collision& from)
 
 void C_Collision::SharedCtor() {
   _cached_size_ = 0;
-  type_ = 0u;
   uid1_ = 0u;
   th_ = 0u;
   uid2_ = 0u;
@@ -3921,8 +3916,8 @@ void C_Collision::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  if (_has_bits_[0 / 32] & 127u) {
-    ZR_(type_, y_);
+  if (_has_bits_[0 / 32] & 63u) {
+    ZR_(uid1_, y_);
   }
 
 #undef ZR_HELPER_
@@ -3944,24 +3939,9 @@ bool C_Collision::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required uint32 type = 1;
-      case 1: {
-        if (tag == 8) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &type_)));
-          set_has_type();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(16)) goto parse_uid1;
-        break;
-      }
-
       // required uint32 uid1 = 2;
       case 2: {
         if (tag == 16) {
-         parse_uid1:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &uid1_)));
@@ -4073,11 +4053,6 @@ failure:
 void C_Collision::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:InGamePacket.C_Collision)
-  // required uint32 type = 1;
-  if (has_type()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->type(), output);
-  }
-
   // required uint32 uid1 = 2;
   if (has_uid1()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->uid1(), output);
@@ -4118,11 +4093,6 @@ void C_Collision::SerializeWithCachedSizes(
 ::google::protobuf::uint8* C_Collision::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:InGamePacket.C_Collision)
-  // required uint32 type = 1;
-  if (has_type()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->type(), target);
-  }
-
   // required uint32 uid1 = 2;
   if (has_uid1()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->uid1(), target);
@@ -4164,13 +4134,6 @@ void C_Collision::SerializeWithCachedSizes(
 int C_Collision::RequiredFieldsByteSizeFallback() const {
   int total_size = 0;
 
-  if (has_type()) {
-    // required uint32 type = 1;
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->type());
-  }
-
   if (has_uid1()) {
     // required uint32 uid1 = 2;
     total_size += 1 +
@@ -4193,12 +4156,7 @@ int C_Collision::RequiredFieldsByteSizeFallback() const {
 int C_Collision::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000063) ^ 0x00000063) == 0) {  // All required fields are present.
-    // required uint32 type = 1;
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->type());
-
+  if (((_has_bits_[0] & 0x00000031) ^ 0x00000031) == 0) {  // All required fields are present.
     // required uint32 uid1 = 2;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
@@ -4213,7 +4171,7 @@ int C_Collision::ByteSize() const {
   } else {
     total_size += RequiredFieldsByteSizeFallback();
   }
-  if (_has_bits_[2 / 32] & 28) {
+  if (_has_bits_[1 / 32] & 14) {
     // optional uint32 th = 3;
     if (has_th()) {
       total_size += 1 +
@@ -4262,9 +4220,6 @@ void C_Collision::MergeFrom(const ::google::protobuf::Message& from) {
 void C_Collision::MergeFrom(const C_Collision& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_type()) {
-      set_type(from.type());
-    }
     if (from.has_uid1()) {
       set_uid1(from.uid1());
     }
@@ -4302,7 +4257,7 @@ void C_Collision::CopyFrom(const C_Collision& from) {
 }
 
 bool C_Collision::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000063) != 0x00000063) return false;
+  if ((_has_bits_[0] & 0x00000031) != 0x00000031) return false;
 
   return true;
 }
@@ -4312,7 +4267,6 @@ void C_Collision::Swap(C_Collision* other) {
   InternalSwap(other);
 }
 void C_Collision::InternalSwap(C_Collision* other) {
-  std::swap(type_, other->type_);
   std::swap(uid1_, other->uid1_);
   std::swap(th_, other->th_);
   std::swap(uid2_, other->uid2_);
@@ -4335,39 +4289,15 @@ void C_Collision::InternalSwap(C_Collision* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // C_Collision
 
-// required uint32 type = 1;
-bool C_Collision::has_type() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-void C_Collision::set_has_type() {
-  _has_bits_[0] |= 0x00000001u;
-}
-void C_Collision::clear_has_type() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-void C_Collision::clear_type() {
-  type_ = 0u;
-  clear_has_type();
-}
- ::google::protobuf::uint32 C_Collision::type() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.C_Collision.type)
-  return type_;
-}
- void C_Collision::set_type(::google::protobuf::uint32 value) {
-  set_has_type();
-  type_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.C_Collision.type)
-}
-
 // required uint32 uid1 = 2;
 bool C_Collision::has_uid1() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
 void C_Collision::set_has_uid1() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
 }
 void C_Collision::clear_has_uid1() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
 }
 void C_Collision::clear_uid1() {
   uid1_ = 0u;
@@ -4385,13 +4315,13 @@ void C_Collision::clear_uid1() {
 
 // optional uint32 th = 3;
 bool C_Collision::has_th() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 void C_Collision::set_has_th() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000002u;
 }
 void C_Collision::clear_has_th() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 void C_Collision::clear_th() {
   th_ = 0u;
@@ -4409,13 +4339,13 @@ void C_Collision::clear_th() {
 
 // optional uint32 uid2 = 4;
 bool C_Collision::has_uid2() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 void C_Collision::set_has_uid2() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000004u;
 }
 void C_Collision::clear_has_uid2() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 void C_Collision::clear_uid2() {
   uid2_ = 0u;
@@ -4433,13 +4363,13 @@ void C_Collision::clear_uid2() {
 
 // optional uint32 hp = 5;
 bool C_Collision::has_hp() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 void C_Collision::set_has_hp() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 void C_Collision::clear_has_hp() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 void C_Collision::clear_hp() {
   hp_ = 0u;
@@ -4457,13 +4387,13 @@ void C_Collision::clear_hp() {
 
 // required float x = 6;
 bool C_Collision::has_x() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 void C_Collision::set_has_x() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000010u;
 }
 void C_Collision::clear_has_x() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 void C_Collision::clear_x() {
   x_ = 0;
@@ -4481,13 +4411,13 @@ void C_Collision::clear_x() {
 
 // required float y = 7;
 bool C_Collision::has_y() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 void C_Collision::set_has_y() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000020u;
 }
 void C_Collision::clear_has_y() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 void C_Collision::clear_y() {
   y_ = 0;
@@ -4508,7 +4438,6 @@ void C_Collision::clear_y() {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int S_Collision::kTypeFieldNumber;
 const int S_Collision::kUid1FieldNumber;
 const int S_Collision::kThFieldNumber;
 const int S_Collision::kUid2FieldNumber;
@@ -4536,7 +4465,6 @@ S_Collision::S_Collision(const S_Collision& from)
 
 void S_Collision::SharedCtor() {
   _cached_size_ = 0;
-  type_ = 0u;
   uid1_ = 0u;
   th_ = 0u;
   uid2_ = 0u;
@@ -4590,8 +4518,8 @@ void S_Collision::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  if (_has_bits_[0 / 32] & 127u) {
-    ZR_(type_, y_);
+  if (_has_bits_[0 / 32] & 63u) {
+    ZR_(uid1_, y_);
   }
 
 #undef ZR_HELPER_
@@ -4613,24 +4541,9 @@ bool S_Collision::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required uint32 type = 1;
-      case 1: {
-        if (tag == 8) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &type_)));
-          set_has_type();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(16)) goto parse_uid1;
-        break;
-      }
-
       // required uint32 uid1 = 2;
       case 2: {
         if (tag == 16) {
-         parse_uid1:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &uid1_)));
@@ -4742,11 +4655,6 @@ failure:
 void S_Collision::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:InGamePacket.S_Collision)
-  // required uint32 type = 1;
-  if (has_type()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->type(), output);
-  }
-
   // required uint32 uid1 = 2;
   if (has_uid1()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->uid1(), output);
@@ -4787,11 +4695,6 @@ void S_Collision::SerializeWithCachedSizes(
 ::google::protobuf::uint8* S_Collision::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:InGamePacket.S_Collision)
-  // required uint32 type = 1;
-  if (has_type()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->type(), target);
-  }
-
   // required uint32 uid1 = 2;
   if (has_uid1()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->uid1(), target);
@@ -4833,13 +4736,6 @@ void S_Collision::SerializeWithCachedSizes(
 int S_Collision::RequiredFieldsByteSizeFallback() const {
   int total_size = 0;
 
-  if (has_type()) {
-    // required uint32 type = 1;
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->type());
-  }
-
   if (has_uid1()) {
     // required uint32 uid1 = 2;
     total_size += 1 +
@@ -4862,12 +4758,7 @@ int S_Collision::RequiredFieldsByteSizeFallback() const {
 int S_Collision::ByteSize() const {
   int total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000063) ^ 0x00000063) == 0) {  // All required fields are present.
-    // required uint32 type = 1;
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->type());
-
+  if (((_has_bits_[0] & 0x00000031) ^ 0x00000031) == 0) {  // All required fields are present.
     // required uint32 uid1 = 2;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
@@ -4882,7 +4773,7 @@ int S_Collision::ByteSize() const {
   } else {
     total_size += RequiredFieldsByteSizeFallback();
   }
-  if (_has_bits_[2 / 32] & 28) {
+  if (_has_bits_[1 / 32] & 14) {
     // optional uint32 th = 3;
     if (has_th()) {
       total_size += 1 +
@@ -4931,9 +4822,6 @@ void S_Collision::MergeFrom(const ::google::protobuf::Message& from) {
 void S_Collision::MergeFrom(const S_Collision& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_type()) {
-      set_type(from.type());
-    }
     if (from.has_uid1()) {
       set_uid1(from.uid1());
     }
@@ -4971,7 +4859,7 @@ void S_Collision::CopyFrom(const S_Collision& from) {
 }
 
 bool S_Collision::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000063) != 0x00000063) return false;
+  if ((_has_bits_[0] & 0x00000031) != 0x00000031) return false;
 
   return true;
 }
@@ -4981,7 +4869,6 @@ void S_Collision::Swap(S_Collision* other) {
   InternalSwap(other);
 }
 void S_Collision::InternalSwap(S_Collision* other) {
-  std::swap(type_, other->type_);
   std::swap(uid1_, other->uid1_);
   std::swap(th_, other->th_);
   std::swap(uid2_, other->uid2_);
@@ -5004,39 +4891,15 @@ void S_Collision::InternalSwap(S_Collision* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // S_Collision
 
-// required uint32 type = 1;
-bool S_Collision::has_type() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-void S_Collision::set_has_type() {
-  _has_bits_[0] |= 0x00000001u;
-}
-void S_Collision::clear_has_type() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-void S_Collision::clear_type() {
-  type_ = 0u;
-  clear_has_type();
-}
- ::google::protobuf::uint32 S_Collision::type() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.S_Collision.type)
-  return type_;
-}
- void S_Collision::set_type(::google::protobuf::uint32 value) {
-  set_has_type();
-  type_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.S_Collision.type)
-}
-
 // required uint32 uid1 = 2;
 bool S_Collision::has_uid1() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
 void S_Collision::set_has_uid1() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
 }
 void S_Collision::clear_has_uid1() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
 }
 void S_Collision::clear_uid1() {
   uid1_ = 0u;
@@ -5054,13 +4917,13 @@ void S_Collision::clear_uid1() {
 
 // optional uint32 th = 3;
 bool S_Collision::has_th() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 void S_Collision::set_has_th() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000002u;
 }
 void S_Collision::clear_has_th() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 void S_Collision::clear_th() {
   th_ = 0u;
@@ -5078,13 +4941,13 @@ void S_Collision::clear_th() {
 
 // optional uint32 uid2 = 4;
 bool S_Collision::has_uid2() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 void S_Collision::set_has_uid2() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000004u;
 }
 void S_Collision::clear_has_uid2() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 void S_Collision::clear_uid2() {
   uid2_ = 0u;
@@ -5102,13 +4965,13 @@ void S_Collision::clear_uid2() {
 
 // optional uint32 hp = 5;
 bool S_Collision::has_hp() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 void S_Collision::set_has_hp() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 void S_Collision::clear_has_hp() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 void S_Collision::clear_hp() {
   hp_ = 0u;
@@ -5126,13 +4989,13 @@ void S_Collision::clear_hp() {
 
 // required float x = 6;
 bool S_Collision::has_x() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 void S_Collision::set_has_x() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000010u;
 }
 void S_Collision::clear_has_x() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 void S_Collision::clear_x() {
   x_ = 0;
@@ -5150,13 +5013,13 @@ void S_Collision::clear_x() {
 
 // required float y = 7;
 bool S_Collision::has_y() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 void S_Collision::set_has_y() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000020u;
 }
 void S_Collision::clear_has_y() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 void S_Collision::clear_y() {
   y_ = 0;

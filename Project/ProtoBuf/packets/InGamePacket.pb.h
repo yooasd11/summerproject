@@ -943,13 +943,6 @@ class C_Collision : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required uint32 type = 1;
-  bool has_type() const;
-  void clear_type();
-  static const int kTypeFieldNumber = 1;
-  ::google::protobuf::uint32 type() const;
-  void set_type(::google::protobuf::uint32 value);
-
   // required uint32 uid1 = 2;
   bool has_uid1() const;
   void clear_uid1();
@@ -994,8 +987,6 @@ class C_Collision : public ::google::protobuf::Message {
 
   // @@protoc_insertion_point(class_scope:InGamePacket.C_Collision)
  private:
-  inline void set_has_type();
-  inline void clear_has_type();
   inline void set_has_uid1();
   inline void clear_has_uid1();
   inline void set_has_th();
@@ -1015,7 +1006,6 @@ class C_Collision : public ::google::protobuf::Message {
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::uint32 type_;
   ::google::protobuf::uint32 uid1_;
   ::google::protobuf::uint32 th_;
   ::google::protobuf::uint32 uid2_;
@@ -1095,13 +1085,6 @@ class S_Collision : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required uint32 type = 1;
-  bool has_type() const;
-  void clear_type();
-  static const int kTypeFieldNumber = 1;
-  ::google::protobuf::uint32 type() const;
-  void set_type(::google::protobuf::uint32 value);
-
   // required uint32 uid1 = 2;
   bool has_uid1() const;
   void clear_uid1();
@@ -1146,8 +1129,6 @@ class S_Collision : public ::google::protobuf::Message {
 
   // @@protoc_insertion_point(class_scope:InGamePacket.S_Collision)
  private:
-  inline void set_has_type();
-  inline void clear_has_type();
   inline void set_has_uid1();
   inline void clear_has_uid1();
   inline void set_has_th();
@@ -1167,7 +1148,6 @@ class S_Collision : public ::google::protobuf::Message {
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::uint32 type_;
   ::google::protobuf::uint32 uid1_;
   ::google::protobuf::uint32 th_;
   ::google::protobuf::uint32 uid2_;
@@ -2029,39 +2009,15 @@ inline void S_Shoot::set_direction(float value) {
 
 // C_Collision
 
-// required uint32 type = 1;
-inline bool C_Collision::has_type() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void C_Collision::set_has_type() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void C_Collision::clear_has_type() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void C_Collision::clear_type() {
-  type_ = 0u;
-  clear_has_type();
-}
-inline ::google::protobuf::uint32 C_Collision::type() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.C_Collision.type)
-  return type_;
-}
-inline void C_Collision::set_type(::google::protobuf::uint32 value) {
-  set_has_type();
-  type_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.C_Collision.type)
-}
-
 // required uint32 uid1 = 2;
 inline bool C_Collision::has_uid1() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
 inline void C_Collision::set_has_uid1() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
 }
 inline void C_Collision::clear_has_uid1() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
 }
 inline void C_Collision::clear_uid1() {
   uid1_ = 0u;
@@ -2079,13 +2035,13 @@ inline void C_Collision::set_uid1(::google::protobuf::uint32 value) {
 
 // optional uint32 th = 3;
 inline bool C_Collision::has_th() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 inline void C_Collision::set_has_th() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000002u;
 }
 inline void C_Collision::clear_has_th() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void C_Collision::clear_th() {
   th_ = 0u;
@@ -2103,13 +2059,13 @@ inline void C_Collision::set_th(::google::protobuf::uint32 value) {
 
 // optional uint32 uid2 = 4;
 inline bool C_Collision::has_uid2() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void C_Collision::set_has_uid2() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void C_Collision::clear_has_uid2() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void C_Collision::clear_uid2() {
   uid2_ = 0u;
@@ -2127,13 +2083,13 @@ inline void C_Collision::set_uid2(::google::protobuf::uint32 value) {
 
 // optional uint32 hp = 5;
 inline bool C_Collision::has_hp() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void C_Collision::set_has_hp() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void C_Collision::clear_has_hp() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void C_Collision::clear_hp() {
   hp_ = 0u;
@@ -2151,13 +2107,13 @@ inline void C_Collision::set_hp(::google::protobuf::uint32 value) {
 
 // required float x = 6;
 inline bool C_Collision::has_x() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void C_Collision::set_has_x() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void C_Collision::clear_has_x() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void C_Collision::clear_x() {
   x_ = 0;
@@ -2175,13 +2131,13 @@ inline void C_Collision::set_x(float value) {
 
 // required float y = 7;
 inline bool C_Collision::has_y() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void C_Collision::set_has_y() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void C_Collision::clear_has_y() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void C_Collision::clear_y() {
   y_ = 0;
@@ -2201,39 +2157,15 @@ inline void C_Collision::set_y(float value) {
 
 // S_Collision
 
-// required uint32 type = 1;
-inline bool S_Collision::has_type() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void S_Collision::set_has_type() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void S_Collision::clear_has_type() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void S_Collision::clear_type() {
-  type_ = 0u;
-  clear_has_type();
-}
-inline ::google::protobuf::uint32 S_Collision::type() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.S_Collision.type)
-  return type_;
-}
-inline void S_Collision::set_type(::google::protobuf::uint32 value) {
-  set_has_type();
-  type_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.S_Collision.type)
-}
-
 // required uint32 uid1 = 2;
 inline bool S_Collision::has_uid1() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
 inline void S_Collision::set_has_uid1() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
 }
 inline void S_Collision::clear_has_uid1() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
 }
 inline void S_Collision::clear_uid1() {
   uid1_ = 0u;
@@ -2251,13 +2183,13 @@ inline void S_Collision::set_uid1(::google::protobuf::uint32 value) {
 
 // optional uint32 th = 3;
 inline bool S_Collision::has_th() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 inline void S_Collision::set_has_th() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000002u;
 }
 inline void S_Collision::clear_has_th() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void S_Collision::clear_th() {
   th_ = 0u;
@@ -2275,13 +2207,13 @@ inline void S_Collision::set_th(::google::protobuf::uint32 value) {
 
 // optional uint32 uid2 = 4;
 inline bool S_Collision::has_uid2() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void S_Collision::set_has_uid2() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void S_Collision::clear_has_uid2() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void S_Collision::clear_uid2() {
   uid2_ = 0u;
@@ -2299,13 +2231,13 @@ inline void S_Collision::set_uid2(::google::protobuf::uint32 value) {
 
 // optional uint32 hp = 5;
 inline bool S_Collision::has_hp() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void S_Collision::set_has_hp() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void S_Collision::clear_has_hp() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void S_Collision::clear_hp() {
   hp_ = 0u;
@@ -2323,13 +2255,13 @@ inline void S_Collision::set_hp(::google::protobuf::uint32 value) {
 
 // required float x = 6;
 inline bool S_Collision::has_x() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void S_Collision::set_has_x() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void S_Collision::clear_has_x() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void S_Collision::clear_x() {
   x_ = 0;
@@ -2347,13 +2279,13 @@ inline void S_Collision::set_x(float value) {
 
 // required float y = 7;
 inline bool S_Collision::has_y() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void S_Collision::set_has_y() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void S_Collision::clear_has_y() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void S_Collision::clear_y() {
   y_ = 0;

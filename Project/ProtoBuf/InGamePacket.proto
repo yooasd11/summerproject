@@ -54,7 +54,6 @@ message S_Shoot{
 }
 
 message C_Collision{
-	required uint32 type=1;
 	required uint32 uid1=2;
 	optional uint32 th=3;
 	optional uint32 uid2=4;
@@ -64,7 +63,6 @@ message C_Collision{
 }
 
 message S_Collision{
-	required uint32 type=1;
 	required uint32 uid1=2;
 	optional uint32 th=3;
 	optional uint32 uid2=4;
