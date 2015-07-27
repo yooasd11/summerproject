@@ -119,15 +119,20 @@ void USER::UserMove(){
 	//LOCKING(this->key);
 	//시간초보다 작으면 수행되겠지..잡큐에서 알아서 수행해줌
 	if (this->isConnecting()){
+		float dx = this->x + (this->velocity * 0.1f * sin((this->direction+180.0f) * PI / 180));
+		float dy = this->y + (this->velocity * 0.1f * cos(this->direction * PI / 180));
 		if (this->state == MOVE){
+			if (!(dx > 640.0f || dx < 0.0f || dy > 320.0f || dy < 0.0f))
+			{
+				this->x = dx;
+				this->y = dy;
+			}
 			//현재위치 갱신과 위치를 위치를 브로드캐스팅
-			this->x += (this->velocity * 0.1f * cos(this->direction * PI / 180));
-			this->y += (this->velocity * 0.1f * sin(this->direction * PI / 180));
 			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->uid));
 
 			//움직일 작업에 대해서 처리..
 			userMoveJob.func = std::bind(&USER::UserMove, this);
-			userMoveJob.exectime = GetTickCount() + 100;
+			userMoveJob.exectime = GetTickCount() + 30;
 			IocpConstructor::jobs.push_back(userMoveJob);
 		}
 	}

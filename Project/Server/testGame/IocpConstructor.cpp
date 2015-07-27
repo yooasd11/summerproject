@@ -175,7 +175,6 @@ void IocpConstructor::ThreadFunction()
 				//접속종료에 대한 완료 통지
 				if (tempHandle.bytesTrans == 0)
 				{
-	
 					//유저정보의 삭제...
 					TimerJob disConnectJob;
 					disConnectJob.exectime = GetTickCount() + 500;

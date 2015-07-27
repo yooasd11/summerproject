@@ -309,6 +309,70 @@ void PacketHandler::C_STOP_handler(std::shared_ptr<bullet> b)
 	return;
 }
 
+void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type = 0;
+
+	InGamePacket::S_Collision BulletCollisionPacket;
+	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_th(b->th); BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
+
+	type = PKT_S_COLLISION;
+	size =BulletCollisionPacket.ByteSize();
+
+	memcpy(buffer, &size, sizeof(unsigned short));
+	memcpy(buffer + sizeof(unsigned short), &type, sizeof(unsigned short));
+	BulletCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	delete[] buffer;
+	return;
+}
+
+void PacketHandler::S_COLLISION_Handler(std::shared_ptr<USER> b)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type = 0;
+
+	InGamePacket::S_Collision BulletCollisionPacket;
+	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
+
+	type = PKT_S_COLLISION;
+	size = BulletCollisionPacket.ByteSize();
+
+	memcpy(buffer, &size, sizeof(unsigned short));
+	memcpy(buffer + sizeof(unsigned short), &type, sizeof(unsigned short));
+	BulletCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	delete[] buffer;
+	return;
+}
+
+void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b, int uid2, int _hp)
+{
+	char* buffer = new char[BUFSIZE];
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type = 0;
+
+	InGamePacket::S_Collision BulletCollisionPacket;
+	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_th(b->th); BulletCollisionPacket.set_uid2(uid2); BulletCollisionPacket.set_hp(_hp);
+	BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
+
+	type = PKT_S_COLLISION;
+	size = BulletCollisionPacket.ByteSize();
+
+	memcpy(buffer, &size, sizeof(unsigned short));
+	memcpy(buffer + sizeof(unsigned short), &type, sizeof(unsigned short));
+	BulletCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	delete[] buffer;
+	return;
+}
+
 void PacketHandler::BroadCast(char *buffer, int size)
 {
 
