@@ -32,13 +32,16 @@ void bullet::bulletMove()
 		//총알이 언제 안보여야 되는지 알아야함...640 X 320
 		float dx = this->x + (this->velocity * 0.1f * cos(this->direction * PI / 180));
 		float dy = this->y + (this->velocity * 0.1f * sin(this->direction * PI / 180));
+
+		//여기가 일단 충돌처리한느 부분임....
+		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
 		if (dx >= 640.0f || dx < 0 || dy >= 320.0f || dy < 0)
 		{
 			//총알을 지워줘야 함..
 			//stop 패킷을 보내야함
 			this->working = false;
 			PacketHandler::GetInstance()->C_STOP_handler(IocpConstructor::manageGame->retBullet(this->th));
-			IocpConstructor::manageGame->removeBullet(this->th);
+			IocpConstructor::manageGame->removeBullet(IocpConstructor::manageGame->retBullet(this->th)->th);
 			return;
 		}
 
@@ -46,8 +49,14 @@ void bullet::bulletMove()
 		std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
 		for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 		{
-			//맞았을 경우 어떻게 처리..
+			//유저가 맞았을 경우..
 			float userX = it->second->x; float userY = it->second->y;
+			if ( sqrt( (dx - userX)*(dx - userX) + (dy - userY)*(dy - userY) ) < 20 && it->second->uid != this->uid)
+			{
+				//유저의 데미지 감소..
+				printf("damage\n");
+				it->second->hp -= this->damage;
+			}
 		}
 
 		TimerJob bulletMoveJob;
@@ -56,7 +65,7 @@ void bullet::bulletMove()
 		PacketHandler::GetInstance()->C_SHOOT_Handler(IocpConstructor::manageGame->retBullet(this->th));
 
 		bulletMoveJob.func = std::bind(&bullet::bulletMove, this);
-		bulletMoveJob.exectime = GetTickCount() + 100;
+		bulletMoveJob.exectime = GetTickCount() + 30;
 		IocpConstructor::jobs.push_back(bulletMoveJob);
 	}
 	return;

@@ -169,6 +169,7 @@ void PacketHandler::C_MOVE_Handler(std::shared_ptr<USER> user)
 	return;
 }
 
+//유저로 부터 받는 'stop'로직 처리
 void PacketHandler::C_STOP_handler(Packet& p)
 {
 	char* buffer = new char[BUFSIZE];
@@ -184,7 +185,6 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	{
 		std::shared_ptr<USER> user = IocpConstructor::cm->retUser(StopPacket.uid());
 		user->state = WAIT;
-		
 		ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user->x); ServerStopPacket.set_y(user->y);
 		ServerStopPacket.set_type(PLAYER);
 		size = ServerStopPacket.ByteSize();
@@ -193,6 +193,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	{
 		//총알 멈추는 처리...
 		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(StopPacket.th());
+		shoot->working = false;
 		ServerStopPacket.set_uid(shoot->uid); ServerStopPacket.set_type(BULLET); ServerStopPacket.set_x(shoot->x); ServerStopPacket.set_y(shoot->y);
 		ServerStopPacket.set_th(shoot->th);
 		size = ServerStopPacket.ByteSize();
@@ -285,7 +286,7 @@ void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
 	return;
 }
 
-
+//서버가 유저에게 보내는 s
 void PacketHandler::C_STOP_handler(std::shared_ptr<bullet> b)
 {
 	char* buffer = new char[BUFSIZE];
@@ -327,12 +328,11 @@ void PacketHandler::BroadCast(char *buffer, int size)
 			
 		}
 	}
-	
+	//
+
+
 	return;
 }
-
-
-
 
 bool PacketHandler::HandlePacket(Packet& p){
 

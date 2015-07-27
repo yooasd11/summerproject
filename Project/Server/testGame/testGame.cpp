@@ -12,7 +12,7 @@ int _tmain()
 {
 	SocketListener serv;
 	IocpConstructor CompletionPort;
-
+	srand(time(NULL));
 	
 	serv.MakeListener(9200);
 	serv.listenClient(5);

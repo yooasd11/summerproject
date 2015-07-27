@@ -55,6 +55,8 @@ void ErrorHandling(char *msg);
 #include "NPC.h"
 #include "NPCManager.h"
 #include "GameManager.h"
+#include "CollisionObject.h"
+#include "ObjectManager.h"
 #include "ClientHandle.h"
 #include "ClientManager.h"
 #include "SocketListener.h"

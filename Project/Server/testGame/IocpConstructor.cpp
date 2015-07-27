@@ -47,6 +47,7 @@ void IocpConstructor::registerObject(ClientHandle& client)
 	return;
 }
 
+
 void IocpConstructor::RecvMessage(ClientHandle& client)
 {
 	WSARecv(client.handleinfo->ClntSock, &(client.ioinfo->wsaBuf), 1, &(this->recvBytes), &(this->flags), &(client.ioinfo->overlapped), NULL);
@@ -163,7 +164,7 @@ void IocpConstructor::ThreadFunction()
 	bool hasJob = false;
 
 	while (1){
-		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), 100);
+		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), 30);
 
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
@@ -174,7 +175,7 @@ void IocpConstructor::ThreadFunction()
 				//접속종료에 대한 완료 통지
 				if (tempHandle.bytesTrans == 0)
 				{
-					printf("유저나감\n");
+	
 					//유저정보의 삭제...
 					TimerJob disConnectJob;
 					disConnectJob.exectime = GetTickCount() + 500;
@@ -191,6 +192,9 @@ void IocpConstructor::ThreadFunction()
 
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
+				
+				////////////////////////삭제부분..
+				
 			}
 			//
 			else if (tempHandle.ioinfo->rwMode == WRITE)

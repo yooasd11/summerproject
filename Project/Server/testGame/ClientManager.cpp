@@ -33,6 +33,7 @@ void ClientManager::removesocket(SOCKET clnt)
 	LOCKING(this->key);
 	this->mappingClient.erase(clnt);
 	this->clntCount -= 1;
+	printf("유저나감12312312\n");
 	return;
 }
 
