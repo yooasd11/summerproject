@@ -20,7 +20,7 @@ void MoveExecuter::tick(float fDeltaTime){
 	cocos2d::EventKeyboard::KeyCode keyCode;
 	static float fPassedTime = 0;
 	fPassedTime += fDeltaTime;
-	if (fPassedTime >= 0.03f){
+	if (fPassedTime >= 0.1f){
 		JYObject* pOwner = this->getOwner();
 		if (pOwner == nullptr) return;
 		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();

@@ -1,5 +1,7 @@
 #include "CollisionExecuter.h"
 #include "JYObject.h"
+#include "JYPlayer.h"
+#include "JYArm.h"
 #include "MyScene.h"
 #include "ConnectionManager.h"
 #include "InGamePacket.pb.h"
@@ -62,27 +64,32 @@ void CollisionExecuter::tick(float fDeltaTime){
 	if (pOwner == nullptr) return;
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
+
 	UINT nJYObjectType = this->getOwner()->getObjectType();
 	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = (cocos2d::CCTMXTiledMap*)pMyScene->getChildByName("Background");
+	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
 	cocos2d::CCPoint currentWorldPos = pCCOwner->getParent()->convertToWorldSpace(pCCOwner->getPosition());
 	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(currentWorldPos);
 	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
-	/*if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
+	
+	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
 		char sendBuf[PKTBODYSIZE];
-		InGamePacket::C_Stop c_stop;
+		InGamePacket::C_Collision cCollisionPacket;
+
+		cCollisionPacket.set_x(currentPos.x);
+		cCollisionPacket.set_y(currentPos.y);
 
 		if (nJYObjectType == JYOBJECT_TYPE::JY_PLAYER){
-			this->getOwner()->setVelocity(0.0f);
-			pCCOwner->setPosition(currentPos);
-			c_stop.set_type(JYOBJECT_TYPE::JY_PLAYER);
-			c_stop.set_uid(this->getOwner()->getUID());
+			JYPlayer* pJYPlayer = (JYPlayer*)pOwner;
+			cCollisionPacket.set_uid1(pJYPlayer->getUID());
+			cCollisionPacket.set_hp(pJYPlayer->getHP());
 		}
-		
-		c_stop.set_x(currentPos.x);
-		c_stop.set_y(currentPos.y);
-		c_stop.SerializeToArray(sendBuf, c_stop.ByteSize());
+		else if (nJYObjectType == JYOBJECT_TYPE::JY_ARM){
+			if (pOwner->getParent() == nullptr) return;
+			cCollisionPacket.set_uid1(pOwner->getParent()->getUID());
+			cCollisionPacket.set_th(pOwner->getTag());
+		}
 
-		ConnectionManager::getInstance()->transmit(c_stop.ByteSize(), PACKET_TYPE::PKT_C_STOP, sendBuf);
-	}*/
+		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);
+	}
 }
