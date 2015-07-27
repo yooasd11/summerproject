@@ -89,6 +89,7 @@ void CollisionExecuter::tick(float fDeltaTime){
 			cCollisionPacket.set_uid1(pOwner->getParent()->getUID());
 			cCollisionPacket.set_th(pOwner->getTag());
 		}
+		cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
 
 		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);
 	}
