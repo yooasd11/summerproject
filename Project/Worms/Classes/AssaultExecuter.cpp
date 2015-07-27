@@ -24,7 +24,7 @@ void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
 	if (pCCOwner == nullptr) return;
 	cocos2d::CCSprite* pFireAim = (cocos2d::CCSprite*)pCCOwner->getChildByName("Aim");
 	if (pFireAim == nullptr) return;
-	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(pFireAim, pEvent);
+	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pFireAim, pEvent);
 
 	pFireAim->setRotation(degree);
 }
@@ -37,7 +37,7 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
-	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCPosAndMouse(pCCOwner, pEvent);
+	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pCCOwner, pEvent);
 	CCLOG("Fire direction : %.2f", fDirection);
 	char sendBuf[PKTLENGTH];
 	InGamePacket::C_Shoot c_shoot;

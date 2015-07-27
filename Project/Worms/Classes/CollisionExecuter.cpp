@@ -68,17 +68,11 @@ void CollisionExecuter::tick(float fDeltaTime){
 	cocos2d::CCPoint currentWorldPos = pCCOwner->getParent()->convertToWorldSpace(pCCOwner->getPosition());
 	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(currentWorldPos);
 	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
-	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
+	/*if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
 		char sendBuf[PKTBODYSIZE];
 		InGamePacket::C_Stop c_stop;
 
-		if (nJYObjectType == JYOBJECT_TYPE::JY_ARM){
-			pCCOwner->setVisible(false);
-			c_stop.set_type(JYOBJECT_TYPE::JY_ARM);
-			c_stop.set_th(this->getOwner()->getTag());
-			c_stop.set_uid(this->getOwner()->getParent()->getUID());
-		}
-		else if (nJYObjectType == JYOBJECT_TYPE::JY_PLAYER){
+		if (nJYObjectType == JYOBJECT_TYPE::JY_PLAYER){
 			this->getOwner()->setVelocity(0.0f);
 			pCCOwner->setPosition(currentPos);
 			c_stop.set_type(JYOBJECT_TYPE::JY_PLAYER);
@@ -90,5 +84,5 @@ void CollisionExecuter::tick(float fDeltaTime){
 		c_stop.SerializeToArray(sendBuf, c_stop.ByteSize());
 
 		ConnectionManager::getInstance()->transmit(c_stop.ByteSize(), PACKET_TYPE::PKT_C_STOP, sendBuf);
-	}
+	}*/
 }

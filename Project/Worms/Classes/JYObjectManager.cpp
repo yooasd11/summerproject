@@ -40,7 +40,6 @@ void JYObjectManager::popObject(JYObject* const pObject){
 	std::vector<JYObject*>::iterator retIt = findIteratorByObject(pObject);
 	if (retIt != m_pJYObjectVector.end())
 		m_pJYObjectVector.erase(retIt);
-	delete pObject;
 }
 
 JYObject* JYObjectManager::findObjectByName(const std::string& sName){

@@ -111,7 +111,7 @@ void SStopPacketHandler(Packet& p){
 	else if (nType == JYOBJECT_TYPE::JY_ARM){
 		UINT nTh = sStopPacket.th();
 		JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
-		pJYBullet->setVelocity(0.0f);
+		JYObjectManager::getInstance()->removeObject(pJYBullet);
 	}
 }
 
@@ -147,6 +147,7 @@ void SShootPacketHandler(Packet& p){
 	pJYBullet->setVelocity(fVelocity);
 	pJYBullet->setDamage(fDamage);
 }
+
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_DISCONNECT, SDisconnectHandler);
 void SDisconnectHandler(Packet& p){

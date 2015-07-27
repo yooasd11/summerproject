@@ -150,6 +150,8 @@ JYObject* MyScene::createBullet(const UINT& nUID, const UINT& nTh, const cocos2d
 	//Create JYArm with CCSprite bullet and add
 	JYArm* pJYArmBullet = new JYArm(bullet);
 	pJYPlayer->addChild(pJYArmBullet);
+	pJYArmBullet->setObjectType(JYOBJECT_TYPE::JY_ARM);
+	pJYArmBullet->setUID(nUID);
 	pJYArmBullet->setTag(nTh);
 	pTmap->addChild(bullet);
 	return pJYArmBullet;

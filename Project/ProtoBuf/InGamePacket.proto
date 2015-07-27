@@ -52,3 +52,23 @@ message S_Shoot{
 	required float velocity=6;
 	required float direction=7;
 }
+
+message C_Collision{
+	required uint32 type=1;
+	required uint32 uid1=2;
+	optional uint32 th=3;
+	optional uint32 uid2=4;
+	optional uint32 hp=5;
+	required float x=6;
+	required float y=7;
+}
+
+message S_Collision{
+	required uint32 type=1;
+	required uint32 uid1=2;
+	optional uint32 th=3;
+	optional uint32 uid2=4;
+	optional uint32 hp=5;
+	required float x=6;
+	required float y=7;
+}

@@ -19,7 +19,9 @@ enum PACKET_TYPE
 	PKT_C_SHOOT,		//8
 	PKT_S_SHOOT,		//9
 	PKT_S_DISCONNECT,	//10
-	PKT_END,			//11
+	PKT_C_COLLISION,	//11
+	PKT_S_COLLISION,	//12
+	PKT_END,			//13
 };
 
 class Packet{

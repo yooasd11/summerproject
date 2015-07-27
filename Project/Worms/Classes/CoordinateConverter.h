@@ -28,10 +28,10 @@ public:
 	}
 
 	//returns degree between VIEW CCPoint and mouse cursur location
-	float getDegreeBetweenCCPosAndMouse(cocos2d::CCNode* pCCNode, cocos2d::Event* pEvent){
+	float getDegreeBetweenCCNodeAndMouse(cocos2d::CCNode* pCCNode, cocos2d::Event* pEvent){
 		cocos2d::CCPoint nodeWinPos = pCCNode->getParent()->convertToWorldSpace(pCCNode->getPosition());
 		cocos2d::CCPoint mouseWinPos = getMouseGlobalPos(pEvent);
-		float ret = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - nodeWinPos.x, mouseWinPos.y - nodeWinPos.y)) - 90.0f;
+		float ret = MATH_RAD_TO_DEG(atan2(mouseWinPos.x - nodeWinPos.x, mouseWinPos.y - nodeWinPos.y))-90.0f;
 		ret *= -1.0f;
 		CCLOG("Node : (%.2f, %.2f) / Mouse : (%.2f, %.2f) / degree : %.2f", nodeWinPos.x, nodeWinPos.y, mouseWinPos.x, mouseWinPos.y, ret);
 		return ret;
