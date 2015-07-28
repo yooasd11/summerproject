@@ -90,6 +90,32 @@ void USER::clear()
 	memset(this->Buffer, 0, sizeof(this->Buffer));
 }
 
+void USER::UserpacketHandle(char *msg, int len, int _uid)
+{
+
+	Packet userPacket;
+	unsigned short current = 0;
+
+	LOCKING(this->key);
+	memcpy(this->Buffer, msg, len);
+	this->total = len;
+	this->uid = _uid;
+	if (this->isConnecting()){
+		while (current < this->getTotal()){
+			memcpy(&userPacket.Length, this->Buffer + current, sizeof(unsigned short));
+			current += sizeof(unsigned short);
+			memcpy(&userPacket.Type, this->Buffer + current, sizeof(unsigned short));
+			current += sizeof(unsigned short);
+			memcpy(userPacket.Msg, this->Buffer + current, userPacket.Length);
+			current += userPacket.Length;
+			PacketHandler::GetInstance()->HandlePacket(userPacket);
+		}
+	}
+	//'clear'의 위치를 잘 생각해주어함.....
+	this->clear();
+	return;
+}
+
 void USER::UserpacketHandle()
 {
 	Packet userPacket;
@@ -121,6 +147,7 @@ void USER::UserMove(){
 	if (this->isConnecting()){
 		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
 		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
+		printf("%f %f\n", dx, dy);
 		if (this->state == MOVE){
 			if (!(dx > 640.0f || dx < 0.0f || dy > 320.0f || dy < 0.0f))
 			{
@@ -129,7 +156,7 @@ void USER::UserMove(){
 			}
 			//현재위치 갱신과 위치를 위치를 브로드캐스팅
 			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->uid));
-
+			printf("%f %f\n", dx, dy);
 			//움직일 작업에 대해서 처리..
 			userMoveJob.func = std::bind(&USER::UserMove, IocpConstructor::cm->retUser(this->uid));
 			userMoveJob.exectime = GetTickCount() + 30;

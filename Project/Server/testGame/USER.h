@@ -30,6 +30,7 @@ public:
 	bool finished();
 	void clear();
 	void UserpacketHandle();
+	void UserpacketHandle(char*, int, int);
 	bool isConnecting();
 
 	//잡큐에 관한 작업정의...

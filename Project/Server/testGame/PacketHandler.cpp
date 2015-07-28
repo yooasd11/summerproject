@@ -218,11 +218,12 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 
 	InGamePacket::C_Collision ClientCollisionPacket;
 	ClientCollisionPacket.ParseFromArray(p.Msg, p.getLength());
-	
 
 	InGamePacket::S_Collision ServerCollisionPacket;
 
 	std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.th());
+	if (shoot == NULL) return;
+
 	IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.th());
 	shoot->working = false;
 	ServerCollisionPacket.set_uid1(shoot->uid); ServerCollisionPacket.set_th(shoot->th); ServerCollisionPacket.set_x(shoot->x);
@@ -441,6 +442,9 @@ bool PacketHandler::HandlePacket(Packet& p){
 	else if (p.getType() == PKT_C_SHOOT){
 		C_SHOOT_handler(p);
 
+	}
+	else if (p.getType() == PKT_C_COLLISION){
+		C_COLLISION_Handler(p);
 	}
 	else
 	{

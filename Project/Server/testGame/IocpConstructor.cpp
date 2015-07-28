@@ -194,10 +194,11 @@ void IocpConstructor::ThreadFunction()
 					continue;
 				}
 				//user에 관한 정보를 저장하고....
-				User->setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
-				User->setTotal(tempHandle.bytesTrans);
-				User->uid = sock;
-				User->UserpacketHandle();
+				//User->setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
+				//User->setTotal(tempHandle.bytesTrans);
+				//User->uid = sock;
+				//User->UserpacketHandle();
+				User->UserpacketHandle(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
