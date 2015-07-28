@@ -90,6 +90,7 @@ bool MyScene::init()
 }
 
 void MyScene::addBackground(){
+	//CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestMap.tmx");
 	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestDesert.tmx");
 	pTmap->setName("Tmap");
 	pBackgroundNode = CCParallaxNode::create();
@@ -126,7 +127,7 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	pDragon->setFlippedX(true);
 	pDragon->setScale(0.5);
 	pDragon->setName("Dragon");
-	CCTMXTiledMap* pTmap = (CCTMXTiledMap*)pBackgroundNode->getChildByName("Tmap");
+	CCTMXTiledMap* pTmap = GET_TMAP;
 	pTmap->addChild(pDragon, 3);
 
 	//Run action : flying animation
@@ -146,20 +147,20 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 }
 
 JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
-	UINT nUID = sShootPacket.uid();
-	UINT nTh = sShootPacket.th();
+	UINT nShooterUID = sShootPacket.uid();
+	UINT nBulletUID = sShootPacket.bullet_uid();
 	float fX = sShootPacket.x();
 	float fY = sShootPacket.y();
 	float fDirection = sShootPacket.direction();
 	float fVelocity = sShootPacket.velocity();
 	float fDamage = sShootPacket.damage();
 
-	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nShooterUID);
 	if (pJYPlayer == nullptr) return nullptr;
+	JYArm* pJYBullet = (JYArm*)JYObjectManager::getInstance()->findObjectByUID(nBulletUID);
+	if (pJYBullet != nullptr) return nullptr;				//bullet already created
 	CCSprite* pCCOwner = (cocos2d::CCSprite*)pJYPlayer->getCCObject();
 	if (pCCOwner == nullptr) return nullptr;
-	JYArm* pJYBullet = (JYArm*)pJYPlayer->getChildByTag(nTh);
-	if (pJYBullet != nullptr) return nullptr;			//already created
 	CCTMXTiledMap* pTmap = GET_TMAP;
 	if (pTmap == nullptr) return nullptr;
 
@@ -173,8 +174,7 @@ JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
 	JYArm* pJYArmBullet = new JYArm(bullet);
 	pJYPlayer->addChild(pJYArmBullet);
 	pJYArmBullet->setObjectType(JYOBJECT_TYPE::JY_ARM);
-	pJYArmBullet->setUID(nUID);
-	pJYArmBullet->setTag(nTh);
+	pJYArmBullet->setUID(nBulletUID);
 	pJYArmBullet->setVelocity(fVelocity);
 	pJYArmBullet->setDamage(fDamage);
 	pJYArmBullet->setDirection(fDirection);
