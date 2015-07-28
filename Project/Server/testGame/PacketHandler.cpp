@@ -292,10 +292,10 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 		IocpConstructor::manageGame->registBullet(Bullet);
 	}
 	//총 움직임에 대한 'JOB'처리
-	//TimerJob job;
-	//job.exectime = GetTickCount() + 30;
-	//job.func = std::bind(&bullet::bulletMove, Bullet);  //만약에 안되면 여기 의심
-	//IocpConstructor::jobs.push_back(job);
+	TimerJob job;
+	job.exectime = GetTickCount() + 30;
+	job.func = std::bind(&bullet::bulletMove, Bullet);  //만약에 안되면 여기 의심
+	IocpConstructor::jobs.push_back(job);
 
 	type = PKT_S_SHOOT;
 	InGamePacket::S_Shoot ServerShootPacket;

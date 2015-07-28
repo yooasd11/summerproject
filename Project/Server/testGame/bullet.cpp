@@ -42,8 +42,8 @@ void bullet::bulletMove()
 			//stop 패킷을 보내야함
 			this->working = false;
 			printf("벗어남\n");
-		//	PacketHandler::GetInstance()->S_COLLISION_Handler(bul);
-			//IocpConstructor::manageGame->removeBullet(bul->th);
+			PacketHandler::GetInstance()->S_COLLISION_Handler(bul);
+			IocpConstructor::manageGame->removeBullet(bul->th);
 
 			//PacketHandler::GetInstance()->S_COLLISION_Handler(IocpConstructor::manageGame->retBullet(this->th));
 			//IocpConstructor::manageGame->removeBullet(IocpConstructor::manageGame->retBullet(this->th)->th);
@@ -63,8 +63,8 @@ void bullet::bulletMove()
 				this->working = false;
 				it->second->hp -= this->damage;
 				//데미지를 입은부분 전달
-				//PacketHandler::GetInstance()->S_COLLISION_Handler(bul,it->second->uid, it->second->hp  );
-				//IocpConstructor::manageGame->removeBullet(bul->th);
+				PacketHandler::GetInstance()->S_COLLISION_Handler(bul,it->second->uid, it->second->hp  );
+				IocpConstructor::manageGame->removeBullet(bul->th);
 				//PacketHandler::GetInstance()->S_COLLISION_Handler(IocpConstructor::manageGame->retBullet(this->th), it->first, it->second->hp);
 				//IocpConstructor::manageGame->removeBullet(IocpConstructor::manageGame->retBullet(this->th)->th);
 				return;			
