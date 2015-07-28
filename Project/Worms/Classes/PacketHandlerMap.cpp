@@ -74,11 +74,13 @@ void SMovePacketHandler(Packet& p){
 	float fY = sMovePacket.y();
 	float fDirection = sMovePacket.direction();
 	float fVelocity = sMovePacket.velocity();
+
 	//CCLOG("S_Move from server : UID - %d, X - %.1f, Y - %.1f, V - %.1f", nUID, fX, fY, fVelocity);
-	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
-	if (pJYPlayer == nullptr) return;
-	pJYPlayer->setVelocity(fVelocity);
-	pJYPlayer->setDirection(fDirection);
+	JYPlayer* pJYObject = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pJYObject == nullptr) return;
+
+	pJYObject->setVelocity(fVelocity);
+	pJYObject->setDirection(fDirection);
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_STOP, SStopPacketHandler);
@@ -87,19 +89,16 @@ void SStopPacketHandler(Packet& p){
 	InGamePacket::S_Stop sStopPacket;
 	sStopPacket.ParseFromArray(PktBody, p.getLength());
 
-	UINT nType = sStopPacket.type();
 	UINT nUID = sStopPacket.uid();
 	float fX = sStopPacket.x();
 	float fY = sStopPacket.y();
 
 	//CCLOG("S_Stop received : Type - %d, UID - %d, (%.2f, %.2f)", nType, nUID, fX, fY);
-	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
-	if (pJYPlayer == nullptr) return;
+	JYObject* pJYObject = JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pJYObject == nullptr) return;
 
-	if (nType == JYOBJECT_TYPE::JY_PLAYER){
-		pJYPlayer->setVelocity(0.0f);
-		pJYPlayer->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
-	}
+	pJYObject->setVelocity(0.0f);
+	pJYObject->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_SHOOT, SShootPacketHandler);
@@ -120,33 +119,43 @@ void SCollisionHandler(Packet& p){
 	sCollision.ParseFromArray(PktBody, p.getLength());
 
 	UINT nUID1 = sCollision.uid1();
-	float fX = sCollision.x();
-	float fY = sCollision.y();
 
-	JYObject* pJYUID1 = JYObjectManager::getInstance()->findObjectByUID(nUID1);
-	if (pJYUID1 == nullptr) return;
+	JYObject* pJYObject1 = JYObjectManager::getInstance()->findObjectByUID(nUID1);
+	if (pJYObject1 == nullptr) return;
 
+	JYOBJECT_TYPE eType1 = pJYObject1->getObjectType();
+
+	//player collision
+	if (eType1 == JYOBJECT_TYPE::JY_PLAYER){
+		float fX = sCollision.x();
+		float fY = sCollision.y();
+		pJYObject1->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+	}
 	//bullet collision
-	if (sCollision.has_th() == true){
-		UINT nTh = sCollision.th();
-		JYObject* pJYBullet = pJYUID1->getChildByTag(nTh);
-		if (pJYBullet == nullptr) return;
-		//bullet - player
+	else if (eType1 == JYOBJECT_TYPE::JY_ARM){
+		//bullet - object
 		if (sCollision.has_uid2() == true){
 			UINT nUID2 = sCollision.uid2();
-			UINT nHP = sCollision.hp();
-			JYPlayer* pJYUID2 = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID2);
-			if (pJYUID2 == nullptr) return;
-			pJYUID2->setHP(nHP);
-			CCLOG("Victim - %d, HP - %d", pJYUID2->getUID(), pJYUID2->getHP());
-		}
-		JYObjectManager::getInstance()->removeObject(pJYBullet);
-	}
-	//player collision
-	else{
-		pJYUID1->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
-	}
+			JYObject* pJYObject2 = JYObjectManager::getInstance()->findObjectByUID(nUID2);
+			if (pJYObject2 == nullptr) return;
 
+			JYOBJECT_TYPE eType2 = pJYObject2->getObjectType();
+			
+			//bullet - player
+			if (eType2 == JYOBJECT_TYPE::JY_PLAYER){
+				UINT nHP = sCollision.hp();
+				((JYPlayer*)pJYObject2)->setHP(nHP);
+			}
+			//bullet - bullet
+			else{
+				JYObjectManager::getInstance()->removeObject(pJYObject2);
+			}
+		}
+		//bullet - bound
+		else{
+			JYObjectManager::getInstance()->removeObject(pJYObject1);
+		}
+	}
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_DISCONNECT, SDisconnectHandler);

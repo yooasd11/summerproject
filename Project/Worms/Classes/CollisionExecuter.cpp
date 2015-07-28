@@ -76,19 +76,8 @@ void CollisionExecuter::tick(float fDeltaTime){
 		char sendBuf[PKTBODYSIZE];
 		InGamePacket::C_Collision cCollisionPacket;
 
-		cCollisionPacket.set_x(currentPos.x);
-		cCollisionPacket.set_y(currentPos.y);
-
-		if (nJYObjectType == JYOBJECT_TYPE::JY_PLAYER){
-			JYPlayer* pJYPlayer = (JYPlayer*)pOwner;
-			cCollisionPacket.set_uid1(pJYPlayer->getUID());
-			cCollisionPacket.set_hp(pJYPlayer->getHP());
-		}
-		else if (nJYObjectType == JYOBJECT_TYPE::JY_ARM){
-			if (pOwner->getParent() == nullptr) return;
-			cCollisionPacket.set_uid1(pOwner->getParent()->getUID());
-			cCollisionPacket.set_th(pOwner->getTag());
-		}
+		cCollisionPacket.set_uid1(pOwner->getUID());
+		
 		cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
 
 		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);
