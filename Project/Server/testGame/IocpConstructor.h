@@ -15,6 +15,8 @@ public:
 	static GameManager *manageGame;
 	static ClientManager *cm;
 	static NPCManager *nm;
+	static int ObjectCount;
+	static Lock* ObjectKey;
 
 	static std::vector<TimerJob> jobs;
 	

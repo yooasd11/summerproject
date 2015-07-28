@@ -5,7 +5,6 @@
 GameManager::GameManager()
 {
 	this->key = new Lock();
-	this->bulletCount = 1;
 }
 
 GameManager::~GameManager()
@@ -15,18 +14,17 @@ GameManager::~GameManager()
 
 void GameManager::registBullet(std::shared_ptr<bullet> b)
 {
-	LOCKING(this->key);
-	this->mappingBullet[this->bulletCount++] = b;
+	this->mappingBullet[IocpConstructor::ObjectCount++] = b;
 	return;
 }
 
-std::shared_ptr<bullet> GameManager::retBullet(int _th){
-	return this->mappingBullet[_th];
+std::shared_ptr<bullet> GameManager::retBullet(int id){
+	return this->mappingBullet[id];
 }
 
-void GameManager::removeBullet(int th)
+void GameManager::removeBullet(int id)
 {
 	LOCKING(this->key);
-	this->mappingBullet.erase(th);
+	this->mappingBullet.erase(id);
 	return;
 }

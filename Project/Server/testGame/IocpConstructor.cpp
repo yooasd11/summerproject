@@ -13,8 +13,8 @@ GameManager* IocpConstructor::manageGame;
 ClientManager* IocpConstructor::cm;
 NPCManager* IocpConstructor::nm;
 std::vector<TimerJob> IocpConstructor::jobs;
-
-
+int IocpConstructor::ObjectCount;
+Lock* IocpConstructor::ObjectKey;
 
 IocpConstructor::IocpConstructor()
 {
@@ -23,9 +23,10 @@ IocpConstructor::IocpConstructor()
 	this->nm = new NPCManager;
 	this->queueLock = new Lock;
 	this->UserLock = new Lock;
+	this->ObjectKey = new Lock;
 	this->flags = 0;
 	this->ComPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-
+	this->ObjectCount = 1;
 	GetSystemInfo(&this->sysinfo);
 	for (int i = 0; i < this->sysinfo.dwNumberOfProcessors; i++)
 		_beginthreadex(NULL, 0, startThread, this, 0, NULL);
@@ -39,6 +40,7 @@ IocpConstructor::~IocpConstructor()
 	delete this->manageGame;
 	delete this->queueLock;
 	delete this->UserLock;
+	delete this->ObjectKey;
 }
 
 void IocpConstructor::registerObject(ClientHandle& client)
@@ -160,8 +162,9 @@ void IocpConstructor::JobSchedule()
 
 void IocpConstructor::closeSocket(SOCKET sock)
 {
-	PacketHandler::GetInstance()->C_DISCONNECT_Handler(sock);
-	this->cm->removesocket(sock);
+	int index = IocpConstructor::cm->retUser((SOCKET)sock);
+	PacketHandler::GetInstance()->C_DISCONNECT_Handler(index);
+	this->cm->removesocket(index);
 	return;
 }
 
@@ -178,8 +181,8 @@ void IocpConstructor::ThreadFunction()
 
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
-			std::shared_ptr<USER> User = this->cm->retUser(sock);
-
+			//소켓번호로 유저아이디를 알 수 있어야 함...
+			std::shared_ptr<USER> User = this->cm->retUser((int)this->cm->retUser((SOCKET)sock));
 			if (tempHandle.ioinfo->rwMode == READ)
 			{
 				//접속종료에 대한 완료 통지
@@ -209,6 +212,7 @@ void IocpConstructor::ThreadFunction()
 			//
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
+			
 				//send 부분을 바꾸자...
 			}
 		}

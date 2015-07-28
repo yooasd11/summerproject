@@ -57,18 +57,6 @@
     <ClInclude Include="TimerJob.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Packet</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketHandler.h">
-      <Filter>Packet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\protobuffer\AccountPacket.pb.h">
-      <Filter>protocolBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\protobuffer\InGamePacket.pb.h">
-      <Filter>protocolBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="NPCManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -92,6 +80,18 @@
     </ClInclude>
     <ClInclude Include="CollisionObject.h">
       <Filter>Managedata</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketHandler.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ProtoBuf\packets\AccountPacket.pb.h">
+      <Filter>protocolBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ProtoBuf\packets\InGamePacket.pb.h">
+      <Filter>protocolBuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,18 +122,6 @@
     <ClCompile Include="TimerJob.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Packet.cpp">
-      <Filter>Packet</Filter>
-    </ClCompile>
-    <ClCompile Include="PacketHandler.cpp">
-      <Filter>Packet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\protobuffer\AccountPacket.pb.cc">
-      <Filter>protocolBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\protobuffer\InGamePacket.pb.cc">
-      <Filter>protocolBuffer</Filter>
-    </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -157,6 +145,18 @@
     </ClCompile>
     <ClCompile Include="CollisionObject.cpp">
       <Filter>Managedata</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketHandler.cpp">
+      <Filter>Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ProtoBuf\packets\AccountPacket.pb.cc">
+      <Filter>protocolBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ProtoBuf\packets\InGamePacket.pb.cc">
+      <Filter>protocolBuffer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,7 +4,11 @@ class NPC
 private:
 	Lock* key;
 public:
-	int state; //죽었나 살았나 움직이나..
+	enum state{
+		alive = 1,
+		dead,
+	};
+	enum state current;
 	int nid;
 	int hp;
 	float x;
@@ -13,8 +17,9 @@ public:
 	float velocity;
 
 	NPC();
-	NPC(int, int, int, int);
+	NPC(int,int, float, float, float, float);
 	~NPC();
-	void NPCmove();
+	float getDegree(float, float, float, float);
+	void Action();
 };
 

@@ -15,7 +15,7 @@ public:
 	bool working;
 
 	bullet();
-	bullet(int, int, float, float, float, float,float);
+	bullet(int, float, float, float, float, float);
 	~bullet(); 
 	void bulletMove();
 };

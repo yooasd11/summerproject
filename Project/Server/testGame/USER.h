@@ -4,6 +4,7 @@ class USER
 public:
 	bool connect;
 	int uid; //소켓번호
+	int objectID;
 	int hp;
 	float x;
 	float y;
@@ -18,7 +19,7 @@ public:
 	Lock *key;
 
 	USER();
-	USER(int, int, float, float);
+	USER(int, SOCKET, int, float, float);
 	void setUSER(int, float, float);
 	~USER();
 	void setTotal(int);

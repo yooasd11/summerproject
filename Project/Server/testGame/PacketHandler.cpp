@@ -31,7 +31,7 @@ void PacketHandler::UnregistHandler(int type)
 
 
 //접속했을시 자식의 'uid'를 전달
-void PacketHandler::SendAccountPacket(SOCKET clnt)
+void PacketHandler::SendAccountPacket(SOCKET clnt, int index)
 {
 	ClientHandle tempHandle;
 	char* buffer = new char[BUFSIZE];
@@ -41,7 +41,7 @@ void PacketHandler::SendAccountPacket(SOCKET clnt)
 	type = PKT_ACCOUNT;
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
-	memcpy(buffer + sizeof(size)+sizeof(type), &clnt, sizeof(SOCKET));
+	memcpy(buffer + sizeof(size)+sizeof(type), &index, sizeof(int));
 
 	
 	//비동기식으로 데이터를 전송
@@ -69,14 +69,14 @@ void PacketHandler::BroadCastAccountPacket()
 	current = (sizeof(unsigned short)*2);
 
 	//std::map<SOCKET, USER>::iterator it;
-	std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
+	std::map<int, std::shared_ptr<USER>>::iterator it;
 
 	
 	//패킷을 만드는 과정...데이터를 읽고 있는데 변환되면 안된다. 'LOCK'이 필요한가
 	for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 	{
 		AccountPacket::S_Account_List::Account *tempAccount = tempList.add_account_member();
-		tempAccount->set_uid(it->second->uid); tempAccount->set_hp(it->second->hp); tempAccount->set_x(it->second->x); tempAccount->set_y(it->second->y);
+		tempAccount->set_uid(it->second->objectID); tempAccount->set_hp(it->second->hp); tempAccount->set_x(it->second->x); tempAccount->set_y(it->second->y);
 	}
 	size = tempList.ByteSize();
 
@@ -106,16 +106,15 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 	//패킷을 받아서 유저의 상태가 이동상태로 변한다...이정보를 모든 클라이언트에게 전달해야함..
 	InGamePacket::C_Move MovePacket;
 	MovePacket.ParseFromArray(p.Msg, p.getLength());
-	//USER* user = IocpConstructor::cm->retUser(MovePacket.uid());
 
 
 	//유저를 불러와서 만약 연결이 끊어진 상태라면 패킷을 전송하지 않고 종료
-	std::shared_ptr<USER> user = IocpConstructor::cm->retUser(MovePacket.uid());
+	std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)MovePacket.uid());
 	if (!user->connect) return;
 
 	//유저정보 수정...
 	user->state = MOVE;
-	user->velocity = MovePacket.velocity();
+	user->velocity = 20.0f;
 	user->direction = MovePacket.direction();
 	type = PKT_S_MOVE;
 
@@ -130,7 +129,7 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 
 	
 	InGamePacket::S_Move ServerMovePacket;
-	ServerMovePacket.set_uid(MovePacket.uid()); ServerMovePacket.set_velocity(MovePacket.velocity());
+	ServerMovePacket.set_uid(MovePacket.uid()); ServerMovePacket.set_velocity(user->velocity);
 	ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y); ServerMovePacket.set_direction(MovePacket.direction());
 	size = ServerMovePacket.ByteSize();	
 
@@ -143,7 +142,6 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 
 	
 	//잡큐에 넣어줘서 계속해서 이동체크를 해주어야 한다....이게 상태바꾸는거...
-
 	delete[] buffer;
 	return;
 }
@@ -155,7 +153,7 @@ void PacketHandler::C_MOVE_Handler(std::shared_ptr<USER> user)
 	unsigned short size = 0, type, current = 0;
 
 	InGamePacket::S_Move ServerMovePacket;
-	ServerMovePacket.set_uid(user->uid); ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y); ServerMovePacket.set_velocity(user->velocity);
+	ServerMovePacket.set_uid(user->objectID); ServerMovePacket.set_x(user->x); ServerMovePacket.set_y(user->y); ServerMovePacket.set_velocity(user->velocity);
 	ServerMovePacket.set_direction(user->direction);
 	size = ServerMovePacket.ByteSize();
 	type = PKT_S_MOVE;
@@ -179,24 +177,22 @@ void PacketHandler::C_STOP_handler(Packet& p)
 
 	InGamePacket::C_Stop StopPacket;
 	StopPacket.ParseFromArray(p.Msg, p.getLength());
-	receiveType = StopPacket.type();
 	InGamePacket::S_Stop ServerStopPacket;
-	if (receiveType == PLAYER)
+
+
+	if (IocpConstructor::cm->mappingClient.count(StopPacket.uid()) != 0)
 	{
-		std::shared_ptr<USER> user = IocpConstructor::cm->retUser(StopPacket.uid());
+		std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)StopPacket.uid());
 		user->state = WAIT;
 		ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user->x); ServerStopPacket.set_y(user->y);
-		ServerStopPacket.set_type(PLAYER);
 		size = ServerStopPacket.ByteSize();
 	}
-	else if (receiveType == BULLET)
+	else if (IocpConstructor::manageGame->mappingBullet.count(StopPacket.uid())!=0)
 	{
-		//총알 멈추는 처리...
-		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(StopPacket.th());
-		IocpConstructor::manageGame->removeBullet(StopPacket.th());
+		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(StopPacket.uid());
+		IocpConstructor::manageGame->removeBullet(StopPacket.uid());
 		shoot->working = false;
-		ServerStopPacket.set_uid(shoot->uid); ServerStopPacket.set_type(BULLET); ServerStopPacket.set_x(shoot->x); ServerStopPacket.set_y(shoot->y);
-		ServerStopPacket.set_th(shoot->th);
+		ServerStopPacket.set_uid(shoot->uid);  ServerStopPacket.set_x(shoot->x); ServerStopPacket.set_y(shoot->y);
 		size = ServerStopPacket.ByteSize();
 	}
 	type = PKT_S_STOP;
@@ -218,18 +214,55 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 
 	InGamePacket::C_Collision ClientCollisionPacket;
 	ClientCollisionPacket.ParseFromArray(p.Msg, p.getLength());
-
 	InGamePacket::S_Collision ServerCollisionPacket;
 
-	std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.th());
-	if (shoot == NULL) return;
+	//플레이어가 벽에 부딪친 경우
+	if (IocpConstructor::cm->mappingClient.count((int)ClientCollisionPacket.uid1())!=0)
+	{
+		std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)ClientCollisionPacket.uid1());
+		user->state = WAIT;
+		ServerCollisionPacket.set_uid1(ClientCollisionPacket.uid1()); ServerCollisionPacket.set_x(user->x); ServerCollisionPacket.set_y(user->y);
+		size = ServerCollisionPacket.ByteSize();
 
-	IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.th());
-	shoot->working = false;
-	ServerCollisionPacket.set_uid1(shoot->uid); ServerCollisionPacket.set_th(shoot->th); ServerCollisionPacket.set_x(shoot->x);
-	ServerCollisionPacket.set_y(shoot->y);
-	size = ServerCollisionPacket.ByteSize();
-	
+	}
+
+	//총알 - 유저, 총알 - 총알
+	else if (ClientCollisionPacket.has_uid2() == true)
+	{
+		//총알 - 유저
+		if (IocpConstructor::cm->mappingClient.count((int)ClientCollisionPacket.uid2()) != 0){
+			std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid1());
+			std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)ClientCollisionPacket.uid2());
+			user->hp -= shoot->damage;
+			ServerCollisionPacket.set_uid1(shoot->uid); ServerCollisionPacket.set_uid2(user->objectID); ServerCollisionPacket.set_hp(user->hp);
+			size = ServerCollisionPacket.ByteSize();
+
+		}
+		//총알 - 총알
+		else{
+			std::shared_ptr<bullet> shoot_1 = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid1());
+			IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.uid1());
+
+			std::shared_ptr<bullet> shoot_2 = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid2());
+			IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.uid2());
+
+			ServerCollisionPacket.set_uid1(ClientCollisionPacket.uid1()); ServerCollisionPacket.set_uid2(ClientCollisionPacket.uid2());
+			size = ServerCollisionPacket.ByteSize();
+			shoot_1->working = false;
+			shoot_2->working = false;
+		}
+	}
+	//총알 - 맵
+	else if (IocpConstructor::manageGame->mappingBullet.count((int)ClientCollisionPacket.uid1())!=0)
+	{
+		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid1());
+		IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.uid1());
+		shoot->working = false;
+		ServerCollisionPacket.set_uid1(shoot->uid);
+		size = ServerCollisionPacket.ByteSize();
+	}
+	else return;
+
 	type = PKT_S_COLLISION;
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
@@ -249,22 +282,25 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 
 	InGamePacket::C_Shoot ClientBullet;
 	ClientBullet.ParseFromArray(p.Msg, p.getLength());
-
-	std::shared_ptr<bullet> Bullet(new bullet(IocpConstructor::manageGame->bulletCount, ClientBullet.uid(), ClientBullet.x(), ClientBullet.y(),
-		ClientBullet.damage(), ClientBullet.velocity(), ClientBullet.direction()));
-
-	Bullet->working = true;
-	IocpConstructor::manageGame->registBullet(Bullet);
-
+	std::shared_ptr<bullet> Bullet;
+	{
+		LOCKING(IocpConstructor::ObjectKey);
+		std::shared_ptr<USER> tempUser = IocpConstructor::cm->retUser((int)ClientBullet.uid());
+		std::shared_ptr<bullet> tempBullet(new bullet(IocpConstructor::ObjectCount, tempUser->x, tempUser->y, 50.0f, 70.0f,ClientBullet.direction()));  
+		Bullet = tempBullet;
+		Bullet->working = true;
+		IocpConstructor::manageGame->registBullet(Bullet);
+	}
 	//총 움직임에 대한 'JOB'처리
-	TimerJob job;
-	job.exectime = GetTickCount() + 30;
-	job.func = std::bind(&bullet::bulletMove, Bullet);  //만약에 안되면 여기 의심
-	IocpConstructor::jobs.push_back(job);
+	//TimerJob job;
+	//job.exectime = GetTickCount() + 30;
+	//job.func = std::bind(&bullet::bulletMove, Bullet);  //만약에 안되면 여기 의심
+	//IocpConstructor::jobs.push_back(job);
 
 	type = PKT_S_SHOOT;
 	InGamePacket::S_Shoot ServerShootPacket;
-	ServerShootPacket.set_uid(Bullet->uid); ServerShootPacket.set_th(Bullet->th); ServerShootPacket.set_x(Bullet->x); ServerShootPacket.set_y(Bullet->y);
+	ServerShootPacket.set_bullet_uid(Bullet->uid);ServerShootPacket.set_x(Bullet->x); ServerShootPacket.set_y(Bullet->y);
+	ServerShootPacket.set_uid(ClientBullet.uid());
 	ServerShootPacket.set_damage(Bullet->damage); ServerShootPacket.set_direction(Bullet->direction); ServerShootPacket.set_velocity(Bullet->velocity);
 	size = ServerShootPacket.ByteSize();
 
@@ -284,7 +320,7 @@ void PacketHandler::C_SHOOT_Handler(std::shared_ptr<bullet> b)
 	unsigned short size = 0, type, current = 0;
 
 	InGamePacket::S_Shoot ServerShootPacket;
-	ServerShootPacket.set_uid(b->uid); ServerShootPacket.set_th(b->th); ServerShootPacket.set_x(b->x); ServerShootPacket.set_y(b->y);
+	ServerShootPacket.set_uid(b->uid); ServerShootPacket.set_x(b->x); ServerShootPacket.set_y(b->y);
 	ServerShootPacket.set_direction(b->direction); ServerShootPacket.set_velocity(b->velocity); ServerShootPacket.set_damage(b->damage);
 	size = ServerShootPacket.ByteSize();
 	type = PKT_S_SHOOT;
@@ -298,7 +334,7 @@ void PacketHandler::C_SHOOT_Handler(std::shared_ptr<bullet> b)
 	return;
 }
 
-void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
+void PacketHandler::C_DISCONNECT_Handler(int id)
 {
 	char* buffer = new char[BUFSIZE];
 	memset(buffer, 0, sizeof(buffer));
@@ -306,7 +342,7 @@ void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
 
 	AccountPacket::S_Account_List::Disconnect disconnect;
 	type = PKT_S_DISCONNECT;
-	disconnect.set_uid(sock);
+	disconnect.set_uid(id);
 	size = disconnect.ByteSize();
 
 	memcpy(buffer, &size, sizeof(unsigned short));
@@ -318,7 +354,7 @@ void PacketHandler::C_DISCONNECT_Handler(SOCKET sock)
 	return;
 }
 
-//서버가 유저에게 보내는 s
+//서버가 유저에게 보내는 총알 stop
 void PacketHandler::C_STOP_handler(std::shared_ptr<bullet> b)
 {
 	char* buffer = new char[BUFSIZE];
@@ -326,7 +362,7 @@ void PacketHandler::C_STOP_handler(std::shared_ptr<bullet> b)
 	unsigned short size = 0, type = 0;
 
 	InGamePacket::S_Stop BulletStopPacket;
-	BulletStopPacket.set_uid(b->uid); BulletStopPacket.set_th(b->th); BulletStopPacket.set_type(BULLET);
+	BulletStopPacket.set_uid(b->uid);
 	BulletStopPacket.set_x(b->x); BulletStopPacket.set_y(b->y);
 
 	type = PKT_S_STOP;
@@ -341,6 +377,7 @@ void PacketHandler::C_STOP_handler(std::shared_ptr<bullet> b)
 	return;
 }
 
+//총알 - 벽
 void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b)
 {
 	if (b == nullptr) return;
@@ -349,7 +386,7 @@ void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b)
 	unsigned short size = 0, type = 0;
 
 	InGamePacket::S_Collision BulletCollisionPacket;
-	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_th(b->th); BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
+	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
 
 	type = PKT_S_COLLISION;
 	size =BulletCollisionPacket.ByteSize();
@@ -363,6 +400,7 @@ void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b)
 	return;
 }
 
+//유저 - 벽
 void PacketHandler::S_COLLISION_Handler(std::shared_ptr<USER> b)
 {
 	char* buffer = new char[BUFSIZE];
@@ -384,6 +422,7 @@ void PacketHandler::S_COLLISION_Handler(std::shared_ptr<USER> b)
 	return;
 }
 
+//유저 - 총알
 void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b, int uid2, int _hp)
 {
 	char* buffer = new char[BUFSIZE];
@@ -391,7 +430,7 @@ void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b, int uid2, int
 	unsigned short size = 0, type = 0;
 
 	InGamePacket::S_Collision BulletCollisionPacket;
-	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_th(b->th); BulletCollisionPacket.set_uid2(uid2); BulletCollisionPacket.set_hp(_hp);
+	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_uid2(uid2); BulletCollisionPacket.set_hp(_hp);
 	BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
 
 	type = PKT_S_COLLISION;
@@ -408,10 +447,8 @@ void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b, int uid2, int
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
-
 	ClientHandle tempHandle;
-	//std::map<SOCKET, USER>::iterator it;
-	std::map<SOCKET, std::shared_ptr<USER>>::iterator it;
+	std::map<int, std::shared_ptr<USER>>::iterator it;
 
 	tempHandle.ioinfo = new IoData;
 	memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
@@ -422,12 +459,8 @@ void PacketHandler::BroadCast(char *buffer, int size)
 	{
 		if (it->second->connect){
 			WSASend(it->second->uid, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
-			
 		}
 	}
-	//
-
-
 	return;
 }
 
@@ -441,7 +474,6 @@ bool PacketHandler::HandlePacket(Packet& p){
 	}
 	else if (p.getType() == PKT_C_SHOOT){
 		C_SHOOT_handler(p);
-
 	}
 	else if (p.getType() == PKT_C_COLLISION){
 		C_COLLISION_Handler(p);

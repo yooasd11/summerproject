@@ -21,17 +21,19 @@ int _tmain()
 
 	while (1){
 		SOCKET sock;
+		int index;
 		ClientHandle handle;
 		if ((sock = serv.ConnectSocket(handle)) == INVALID_SOCKET) ErrorHandling("accept error");
 		handle.ClntSock = sock;
 		printf("%d 유저접속\n", sock);
 
 		CompletionPort.cm->mapping(sock);
+		index = CompletionPort.cm->retUser(sock);
 
 		handle.Copy();
 		CompletionPort.registerObject(handle);
 
-		PacketHandler::GetInstance()->SendAccountPacket(sock);
+		PacketHandler::GetInstance()->SendAccountPacket(sock,index);
 		PacketHandler::GetInstance()->BroadCastAccountPacket();
 
 		handle.ReadMode();	// 고민해볼것

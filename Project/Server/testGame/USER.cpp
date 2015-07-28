@@ -16,11 +16,12 @@ USER::USER()
 	this->key = new Lock();
 }
 
-USER::USER(int _id, int _hp, float _x, float _y)
+USER::USER(int object, SOCKET sock, int _hp, float _x, float _y)
 {
+	this->objectID = object;
 	this->direction = 0;
 	this->connect = true;
-	this->uid = _id;
+	this->uid = sock;
 	this->hp = _hp;
 	this->x = _x;
 	this->y = _y;
@@ -142,12 +143,11 @@ void USER::UserpacketHandle()
 void USER::UserMove(){
 
 	TimerJob userMoveJob;
-	//LOCKING(this->key);
+	LOCKING(this->key);
 	//시간초보다 작으면 수행되겠지..잡큐에서 알아서 수행해줌
 	if (this->isConnecting()){
 		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
 		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
-		printf("%f %f\n", dx, dy);
 		if (this->state == MOVE){
 			if (!(dx > 640.0f || dx < 0.0f || dy > 320.0f || dy < 0.0f))
 			{
@@ -155,10 +155,10 @@ void USER::UserMove(){
 				this->y = dy;
 			}
 			//현재위치 갱신과 위치를 위치를 브로드캐스팅
-			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->uid));
-			printf("%f %f\n", dx, dy);
+			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->objectID));
+			printf("유저 이동중 %f %f\n", dx, dy);
 			//움직일 작업에 대해서 처리..
-			userMoveJob.func = std::bind(&USER::UserMove, IocpConstructor::cm->retUser(this->uid));
+			userMoveJob.func = std::bind(&USER::UserMove, IocpConstructor::cm->retUser(this->objectID));
 			userMoveJob.exectime = GetTickCount() + 30;
 			IocpConstructor::jobs.push_back(userMoveJob);
 		}
