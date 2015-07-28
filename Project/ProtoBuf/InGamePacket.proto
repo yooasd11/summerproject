@@ -3,10 +3,7 @@ package InGamePacket;
 
 message C_Move{
 	required uint32 uid=1;
-	required float x=2;
-	required float y=3;
-	required float direction=4;
-	required float velocity=5;
+	required float direction=2;
 }
 
 message S_Move{
@@ -18,34 +15,25 @@ message S_Move{
 }
 
 message C_Stop{
-	required uint32 type=1;
-	required uint32 uid=2;
-	optional uint32 th=3;
-	required float x=4;
-	required float y=5;
+	required uint32 uid=1;
+	required float x=2;
+	required float y=3;
 }
 
 message S_Stop{
-	required uint32 type=1;
-	required uint32 uid=2;
-	optional uint32 th=3;
-	required float x=4;
-	required float y=5;
+	required uint32 uid=1;
+	required float x=2;
+	required float y=3;
 }
 
 message C_Shoot{
 	required uint32 uid=1;
-	required uint32 th=2;
-	required float x=3;
-	required float y=4;
-	required float damage=5;
-	required float velocity=6;
-	required float direction=7;
+	required float direction=2;
 }
 
 message S_Shoot{
 	required uint32 uid=1;
-	required uint32 th=2;
+	required uint32 bullet_uid=2;
 	required float x=3;
 	required float y=4;
 	required float damage=5;
@@ -54,19 +42,14 @@ message S_Shoot{
 }
 
 message C_Collision{
-	required uint32 uid1=2;
-	optional uint32 th=3;
-	optional uint32 uid2=4;
-	optional uint32 hp=5;
-	required float x=6;
-	required float y=7;
+	required uint32 uid1=1;
+	optional uint32 uid2=2;
 }
 
 message S_Collision{
-	required uint32 uid1=2;
-	optional uint32 th=3;
-	optional uint32 uid2=4;
-	optional uint32 hp=5;
-	required float x=6;
-	required float y=7;
+	required uint32 uid1=1;
+	optional uint32 uid2=2;
+	optional uint32 hp=3;
+	optional float x=4;
+	optional float y=5;
 }
