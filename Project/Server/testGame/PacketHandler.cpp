@@ -230,7 +230,7 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 	ServerCollisionPacket.set_y(shoot->y);
 	size = ServerCollisionPacket.ByteSize();
 	
-	type = PKT_S_STOP;
+	type = PKT_S_COLLISION;
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
