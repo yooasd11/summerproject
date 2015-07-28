@@ -286,7 +286,7 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 	{
 		LOCKING(IocpConstructor::ObjectKey);
 		std::shared_ptr<USER> tempUser = IocpConstructor::cm->retUser((int)ClientBullet.uid());
-		std::shared_ptr<bullet> tempBullet(new bullet(IocpConstructor::ObjectCount, tempUser->x, tempUser->y, 50.0f, 70.0f,ClientBullet.direction()));  
+		std::shared_ptr<bullet> tempBullet(new bullet(IocpConstructor::ObjectCount, ClientBullet.uid(), tempUser->x, tempUser->y, 50.0f, 70.0f,ClientBullet.direction()));  
 		Bullet = tempBullet;
 		Bullet->working = true;
 		IocpConstructor::manageGame->registBullet(Bullet);

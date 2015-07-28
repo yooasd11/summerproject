@@ -97,12 +97,11 @@ void IocpConstructor::JobSchedule()
 	//'lock'이 여기 있어야되는게 맞나....
 	TimerJob job;
 	int index = -1;
-
 	{
 		LOCKING(this->queueLock);
 		//printf("위는 락걸림\n");
 		if (this->jobs.empty()){
-				//printf("queue가 비었습니다\n");
+			//printf("queue가 비었습니다\n");
 			return;
 		}
 
@@ -127,6 +126,7 @@ void IocpConstructor::JobSchedule()
 		int th = job.th;
 		auto f = job.func;
 		if (f == NULL) return;
+		printf("작업처리\n");
 		f();
 		//최초의 잡을 어디서 해주냐...생각해보자 
 		//if (job.current == TimerJob::state::UserMove)

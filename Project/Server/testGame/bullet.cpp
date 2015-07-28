@@ -2,7 +2,7 @@
 #include "bullet.h"
 
 
-bullet::bullet(int _id, float _x, float _y, float _damage, float _v, float _direction)
+bullet::bullet(int _id, int _shooter,  float _x, float _y, float _damage, float _v, float _direction)
 {
 	this->key = new Lock();
 	this->uid = _id;
@@ -11,7 +11,7 @@ bullet::bullet(int _id, float _x, float _y, float _damage, float _v, float _dire
 	this->velocity = _v;
 	this->direction = _direction;
 	this->damage = _damage;
-
+	this->shooter = _shooter;
 }
 
 bullet::bullet()
@@ -33,7 +33,7 @@ void bullet::bulletMove()
 		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
 		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
 		printf("%f %f\n", dx, dy);
-		std::shared_ptr<bullet> bul = IocpConstructor::manageGame->retBullet(this->th);
+		std::shared_ptr<bullet> bul = IocpConstructor::manageGame->retBullet(this->uid);
 		//여기가 일단 충돌처리한느 부분임....
 		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
 		if (dx >= 640.0f || dx < 0 || dy >= 320.0f || dy < 0)
@@ -56,7 +56,7 @@ void bullet::bulletMove()
 		{
 			//유저가 맞았을 경우..
 			float userX = it->second->x; float userY = it->second->y;
-			if ( sqrt( (dx - userX)*(dx - userX) + (dy - userY)*(dy - userY) ) < 20 && it->second->uid != this->uid)
+			if ( sqrt( (dx - userX)*(dx - userX) + (dy - userY)*(dy - userY) ) < 20 && it->second->objectID != this->shooter)
 			{
 				//유저의 데미지 감소..
 				printf("damage\n");

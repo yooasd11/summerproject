@@ -4,7 +4,7 @@ class bullet
 private:
 	Lock* key;
 public:
-	int th;
+	int shooter;
 	int uid;
 	float x;
 	float y;
@@ -15,7 +15,7 @@ public:
 	bool working;
 
 	bullet();
-	bullet(int, float, float, float, float, float);
+	bullet(int, int, float, float, float, float, float);
 	~bullet(); 
 	void bulletMove();
 };
