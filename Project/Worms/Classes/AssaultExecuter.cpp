@@ -40,9 +40,9 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pCCOwner, pEvent);
 	CCLOG("Fire direction : %.2f", fDirection);
 	char sendBuf[PKTLENGTH];
-	InGamePacket::C_Shoot c_shoot;
+	InGamePacket::S_Shoot c_shoot;
 	c_shoot.set_uid(this->getOwner()->getUID());
-	c_shoot.set_th(0);
+	c_shoot.set_th(++m_nBulletCounter);
 	c_shoot.set_x(pCCOwner->getPosition().x);
 	c_shoot.set_y(pCCOwner->getPosition().y);
 	c_shoot.set_damage(10.0f);
@@ -51,5 +51,10 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 
 	c_shoot.SerializeToArray(sendBuf, c_shoot.ByteSize());
 	
+	cocos2d::CCNode* pAim = pCCOwner->getChildByName("Aim");
+	cocos2d::CCPoint aimWinPos = CoordinateConverter::getInstance()->convertToTmapPos(pAim);
+	CCLOG("Bullet pos : (%.2f, %.2f) / Aim pos : (%.2f, %.2f)", pCCOwner->getPosition().x, pCCOwner->getPosition().y, aimWinPos.x, aimWinPos.y);
+
 	ConnectionManager::getInstance()->transmit(c_shoot.ByteSize(), PACKET_TYPE::PKT_C_SHOOT, sendBuf);
+	WAITING_FOR(PACKET_TYPE::PKT_S_SHOOT);
 }

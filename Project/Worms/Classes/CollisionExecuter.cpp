@@ -31,7 +31,7 @@ bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height - 1;
 	//정상적인 좌표
 	if (pos.x > 1 && pos.x < tmapWidth &&
-		pos.y > 1 && pos.y < tmapHeight )
+		pos.y > 1 && pos.y < tmapHeight)
 		return false;
 	return true;
 }
@@ -71,7 +71,7 @@ void CollisionExecuter::tick(float fDeltaTime){
 	cocos2d::CCPoint currentWorldPos = pCCOwner->getParent()->convertToWorldSpace(pCCOwner->getPosition());
 	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(currentWorldPos);
 	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
-	
+
 	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
 		char sendBuf[PKTBODYSIZE];
 		InGamePacket::C_Collision cCollisionPacket;
@@ -92,5 +92,6 @@ void CollisionExecuter::tick(float fDeltaTime){
 		cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
 
 		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);
+		CCLOG("Collision packet sent");
 	}
 }

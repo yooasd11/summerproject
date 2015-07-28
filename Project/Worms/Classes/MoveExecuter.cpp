@@ -17,30 +17,22 @@ void MoveExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 }
 
 void MoveExecuter::tick(float fDeltaTime){
-	cocos2d::EventKeyboard::KeyCode keyCode;
-	static float fPassedTime = 0;
-	fPassedTime += fDeltaTime;
-	if (fPassedTime >= 0.1f){
-		JYObject* pOwner = this->getOwner();
-		if (pOwner == nullptr) return;
-		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
-		if (pCCOwner == nullptr) return;
+	JYObject* pOwner = this->getOwner();
+	if (pOwner == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	if (pCCOwner == nullptr) return;
 
-		JYOBJECT_TYPE eType = pOwner->getObjectType();
+	float fDirection = this->getOwner()->getDirection();
+	float fVelocity = this->getOwner()->getVelocity();
+	float fDistance = fVelocity * fDeltaTime;
 
-		float fDirection = this->getOwner()->getDirection();
-		float fVelolcity = this->getOwner()->getVelocity();
-		float fDistance = fVelolcity * fPassedTime;
+	cocos2d::CCPoint currPos = pCCOwner->getPosition();
 
-		cocos2d::CCPoint currPos = pCCOwner->getPosition();
+	float fDX = fDistance *sin(MATH_DEG_TO_RAD(fDirection));
+	float fDY = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
 
-		float fDX = fDistance *sin(MATH_DEG_TO_RAD(fDirection));
-		float fDY = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
-
-		cocos2d::CCPoint nextPos = cocos2d::ccp(fDX, fDY);
-		this->setPlayerPosition(nextPos);
-		fPassedTime = 0.0f;
-	}
+	cocos2d::CCPoint nextPos = cocos2d::ccp(fDX, fDY);
+	pCCOwner->setPosition(pCCOwner->getPosition() + nextPos);
 }
 
 void MoveExecuter::setPlayerPosition(cocos2d::CCPoint dst){

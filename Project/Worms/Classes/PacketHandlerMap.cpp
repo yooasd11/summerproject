@@ -156,9 +156,11 @@ void SDisconnectHandler(Packet& p){
 	sDisconnect.ParseFromArray(PktBody, p.getLength());
 	
 	UINT nUID = sDisconnect.uid();
-
-	MyScene* pMyScene = GET_MYSCENE;
-	pMyScene->deleteDragon(nUID);
+	
+	JYObject* pTarget = JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pTarget != nullptr){
+		JYObjectManager::getInstance()->removeObject(pTarget);
+	}
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_END, EndHandler);

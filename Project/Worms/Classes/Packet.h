@@ -57,3 +57,5 @@ public:
 	}
 };
 
+//어떤 패킷이 응답으로 올지 명시
+#define WAITING_FOR(PacketName)

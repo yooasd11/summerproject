@@ -32,6 +32,9 @@ void InputHandler::onMouseMove(cocos2d::Event* pEvent){
 	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
 	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onMouseMove(pEvent);
+
+	cocos2d::CCNode* pBackground = pMyScene->getChildByName("Background");
+
 }
 
 void InputHandler::onMouseDown(cocos2d::Event* pEvent){

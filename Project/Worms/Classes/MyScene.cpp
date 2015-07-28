@@ -13,6 +13,7 @@
 #include "InGamePacket.pb.h"
 #include "Packet.h"
 #include "JYObjectManager.h"
+#include "CoordinateConverter.h"
 USING_NS_CC;
 
 //#define SERVER_IP_ADDRESS "10.1.4.85"
@@ -181,29 +182,17 @@ JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
 	return pJYArmBullet;
 }
 
-//Manager에서 삭제
-//자식들 삭제
-//등등 많은 추가 소스 필요함
-void MyScene::deleteDragon(const UINT& nUID){
-	JYPlayer* pTarget = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
-	if (pTarget != nullptr){
-		//this->getChildByName("Background")->getChildByName("Tmap")->removeChild(pTarget->getCCObject(), true);
-		JYObjectManager::getInstance()->removeObject(pTarget);
-	}
-}
-
 //Make pJYPlayer as controllable player of the scene
 void MyScene::makePlayer(JYObject* const pJYPlayer){
-	CCNode* pNode = pJYPlayer->getCCObject();
+	CCNode* pCCNode = pJYPlayer->getCCObject();
 
 	//make aim
 	CCSprite* pFireAim = CCSprite::create("line.PNG");
-	pFireAim->setPosition(pNode->getContentSize().width / 2, pNode->getContentSize().height / 3);
+	pFireAim->setPosition(ccp(pCCNode->getContentSize().width/2, pCCNode->getContentSize().height/3)); //position value obtained through experiment
 	pFireAim->setName("Aim");
 	pFireAim->setScale(0.3f);
-	pFireAim->setAnchorPoint(ccp(0.0f, -0.5f));
-	pNode->addChild(pFireAim);
-
+	pFireAim->setAnchorPoint(ccp(0.5f, -0.2f));
+	pCCNode->addChild(pFireAim);
 	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
 }
 
