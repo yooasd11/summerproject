@@ -7,10 +7,20 @@
 #include "InGamePacket.pb.h"
 #include "Packet.h"
 #include "ConnectionManager.h"
+#include "JYRealTimer.h"
+
+void AssaultExecuter::createCoolTimer(){
+	this->m_pCCSpriteCoolTimer = cocos2d::CCSprite::create("TimerPics/3.png");
+	m_pCCSpriteCoolTimer->setVisible(false);
+	cocos2d::CCAnimation* pCCCoolTimeAnimation = cocos2d::CCAnimation::create();
+	pCCCoolTimeAnimation->setDelayPerUnit(1.0f);
+	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/2.png");
+	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/1.png");
+	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/0.png");
+	this->m_pCCAnimateCoolTimer = cocos2d::Animate::create(pCCCoolTimeAnimation);
+}
 
 void AssaultExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
-	if (cocos2d::EventKeyboard::KeyCode::KEY_1 <= keyCode && keyCode <= cocos2d::EventKeyboard::KeyCode::KEY_1){
-	}
 }
 
 void AssaultExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
@@ -30,6 +40,7 @@ void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
 }
 
 void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
+	if (this->m_bIsCooling == true) return;
 	JYObject* pOwner = this->getOwner();
 	if (pOwner == nullptr) return;
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
@@ -50,4 +61,18 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 
 	ConnectionManager::getInstance()->transmit(c_shoot.ByteSize(), PACKET_TYPE::PKT_C_SHOOT, sendBuf);
 	WAITING_FOR(PACKET_TYPE::PKT_S_SHOOT);
+	//this->executeCoolTimer();
+}
+
+
+void AssaultExecuter::executeCoolTimer(){
+	//lock
+	this->m_bIsCooling = true;
+	
+	cocos2d::CCNode* pCCOwner = this->getOwner()->getCCObject();
+	this->m_pCCSpriteCoolTimer->setVisible(true);
+	this->m_pCCSpriteCoolTimer->runAction(this->m_pCCAnimateCoolTimer);
+
+	//unlock
+	this->m_bIsCooling = false;
 }

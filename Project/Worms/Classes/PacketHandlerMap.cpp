@@ -151,10 +151,7 @@ void SCollisionHandler(Packet& p){
 				JYObjectManager::getInstance()->removeObject(pJYObject2);
 			}
 		}
-		//bullet - bound
-		else{
-			JYObjectManager::getInstance()->removeObject(pJYObject1);
-		}
+		JYObjectManager::getInstance()->removeObject(pJYObject1);
 	}
 }
 
