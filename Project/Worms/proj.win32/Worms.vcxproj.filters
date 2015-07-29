@@ -158,6 +158,9 @@
     <ClInclude Include="..\Classes\InGamePacket.pb.h">
       <Filter>src\Network\Packets</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\JYLocalTimer.h">
+      <Filter>src\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

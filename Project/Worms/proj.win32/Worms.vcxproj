@@ -171,6 +171,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\Inputhandler.h" />
     <ClInclude Include="..\Classes\JYArm.h" />
     <ClInclude Include="..\Classes\JYItem.h" />
+    <ClInclude Include="..\Classes\JYLocalTimer.h" />
     <ClInclude Include="..\Classes\JYObject.h" />
     <ClInclude Include="..\Classes\JYObjectList.h" />
     <ClInclude Include="..\Classes\JYObjectManager.h" />

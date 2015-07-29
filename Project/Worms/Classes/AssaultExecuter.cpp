@@ -7,17 +7,25 @@
 #include "InGamePacket.pb.h"
 #include "Packet.h"
 #include "ConnectionManager.h"
-#include "JYRealTimer.h"
+
+bool AssaultExecuter::coolTimeAlarmFunc(){
+	this->m_bIsCooling = false;
+	this->m_pCCSpriteCoolTimer->setVisible(false);
+	return true;
+}
+
 
 void AssaultExecuter::createCoolTimer(){
-	this->m_pCCSpriteCoolTimer = cocos2d::CCSprite::create("TimerPics/3.png");
-	m_pCCSpriteCoolTimer->setVisible(false);
-	cocos2d::CCAnimation* pCCCoolTimeAnimation = cocos2d::CCAnimation::create();
-	pCCCoolTimeAnimation->setDelayPerUnit(1.0f);
-	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/2.png");
-	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/1.png");
-	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/0.png");
-	this->m_pCCAnimateCoolTimer = cocos2d::Animate::create(pCCCoolTimeAnimation);
+	cocos2d::CCNode* pCCOwner = this->getOwner()->getCCObject();
+	this->m_pCCSpriteCoolTimer = cocos2d::CCSprite::create();
+	this->m_pCCSpriteCoolTimer->setScale(0.2f);
+	pCCOwner->addChild(this->m_pCCSpriteCoolTimer);
+	this->m_pCCSpriteCoolTimer->setPosition(cocos2d::ccp(pCCOwner->getContentSize().width/2, 0.0f));
+
+	std::function<bool()> coolTimeAlarm = std::bind(&AssaultExecuter::coolTimeAlarmFunc, this);
+	JYLocalTimer coolTimer(3.0f, coolTimeAlarm);
+	coolTimer.setAlarmFunc(coolTimeAlarm);
+	this->m_vecTimers.push_back(coolTimer);
 }
 
 void AssaultExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
@@ -61,7 +69,8 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 
 	ConnectionManager::getInstance()->transmit(c_shoot.ByteSize(), PACKET_TYPE::PKT_C_SHOOT, sendBuf);
 	WAITING_FOR(PACKET_TYPE::PKT_S_SHOOT);
-	//this->executeCoolTimer();
+
+	this->executeCoolTimer();
 }
 
 
@@ -71,8 +80,23 @@ void AssaultExecuter::executeCoolTimer(){
 	
 	cocos2d::CCNode* pCCOwner = this->getOwner()->getCCObject();
 	this->m_pCCSpriteCoolTimer->setVisible(true);
-	this->m_pCCSpriteCoolTimer->runAction(this->m_pCCAnimateCoolTimer);
+	cocos2d::CCAnimation* pCCCoolTimeAnimation = cocos2d::CCAnimation::create();
+	pCCCoolTimeAnimation->setDelayPerUnit(1.0f);
+	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/2.png");
+	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/1.png");
+	pCCCoolTimeAnimation->addSpriteFrameWithFileName("TimerPics/0.png");
+	cocos2d::CCAnimate* pCCAnimateCoolTimer = cocos2d::Animate::create(pCCCoolTimeAnimation);
+	this->m_pCCSpriteCoolTimer->runAction(pCCAnimateCoolTimer);
 
-	//unlock
-	this->m_bIsCooling = false;
+}
+
+void AssaultExecuter::tick(float fDeltaTime){
+	for (int i = 0; i < this->m_vecTimers.size(); ++i)
+	{
+		m_vecTimers[i].addTime(fDeltaTime);
+		if (m_vecTimers[i].isDeadlined() == true)
+		{
+			m_vecTimers[i].alarm();
+		}
+	}
 }
