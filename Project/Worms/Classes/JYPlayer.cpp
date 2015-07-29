@@ -26,8 +26,9 @@ void JYPlayer::setHP(const UINT& nHP){
 	}
 
 	if (nHP > 0) {
-		float fHPPercentage = m_nHP *100.0f / 100.0f;
-		pHPBar->setPercentage(fHPPercentage);
+		float fHPPercentage = nHP * 100.0f / 100.0f;
+		cocos2d::ProgressTo* pProgressTo = cocos2d::ProgressTo::create(1.0f, fHPPercentage);
+		pHPBar->runAction(pProgressTo);
 	}
 	else{
 		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)this->getCCObject();

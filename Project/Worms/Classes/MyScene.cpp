@@ -142,7 +142,9 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	CCSprite* pHPBar = CCSprite::create("HPBars/10.png");
 	CCProgressTimer* pProgressHPBar = CCProgressTimer::create(pHPBar);
 	pProgressHPBar->setType(CCProgressTimer::Type::BAR);
-	pProgressHPBar->setPercentage(50.0f);
+	pProgressHPBar->setPercentage(100.0f);
+	pProgressHPBar->setMidpoint(ccp(0.0f, 0.0f));
+	pProgressHPBar->setBarChangeRate(ccp(1, 0));
 	pProgressHPBar->setName("HPBar");
 	pProgressHPBar->setPosition(ccp(pDragon->getContentSize().width / 2, pDragon->getContentSize().height / 2));
 	pProgressHPBar->setScale(0.2f);
