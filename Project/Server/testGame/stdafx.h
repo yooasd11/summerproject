@@ -53,7 +53,7 @@ void ErrorHandling(char *msg);
 #include "bullet.h"
 #include "TimerJob.h"
 #include "AI.h"
-#include "NPCManager.h"
+#include "AIManager.h"
 #include "GameManager.h"
 #include "CollisionObject.h"
 #include "ObjectManager.h"

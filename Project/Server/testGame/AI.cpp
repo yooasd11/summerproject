@@ -26,7 +26,7 @@ AI::~AI()
 
 }
 
-float getDegree(float x1, float y1, float x2, float y2)
+float AI::getDegree(float x1, float y1, float x2, float y2)
 {
 	return atan2(y2-y1, x2-x1);
 }
@@ -48,9 +48,9 @@ void AI::Action()
 			//일정거리 이하일 때 공격을 한다...총알을 생성해서 보내야함 
 			if (sqrt((this->x - dx)*(this->x - dx) + (this->y - dy)*(this->y - dy)) < 50)
 			{
-		//		float degree = getDegree(this->x, this->y, dx, dy);
-		//		std::shared_ptr<bullet> Bullet(new bullet(IocpConstructor::manageGame->bulletCount, ClientBullet.uid(), ClientBullet.x(), ClientBullet.y(),
-		//			ClientBullet.damage(), ClientBullet.velocity(), ClientBullet.direction()));
+				float degree = getDegree(this->x, this->y, dx, dy);
+				//std::shared_ptr<bullet> Bullet(new bullet(IocpConstructor::manageGame->bulletCount, ClientBullet.uid(), ClientBullet.x(), ClientBullet.y(),
+				//	ClientBullet.damage(), ClientBullet.velocity(), ClientBullet.direction()));
 				//총알을 생성하고 발사..근데 방향을 어디로
 				//발사하고 1초후에 작업이 다시 진행되도록 설정...
 			}

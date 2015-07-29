@@ -92,7 +92,7 @@
     <ClInclude Include="IoData.h" />
     <ClInclude Include="Lock.h" />
     <ClInclude Include="AI.h" />
-    <ClInclude Include="NPCManager.h" />
+    <ClInclude Include="AIManager.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketHandler.h" />
@@ -119,7 +119,7 @@
     <ClCompile Include="IoData.cpp" />
     <ClCompile Include="Lock.cpp" />
     <ClCompile Include="AI.cpp" />
-    <ClCompile Include="NPCManager.cpp" />
+    <ClCompile Include="AIManager.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="SocketListener.cpp" />

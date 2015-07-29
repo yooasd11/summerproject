@@ -11,7 +11,7 @@
 //'static'으로 선언한 경우 'cpp'에 다시 정의 해주어야 한다.
 GameManager* IocpConstructor::manageGame;
 ClientManager* IocpConstructor::cm;
-NPCManager* IocpConstructor::nm;
+AIManager* IocpConstructor::nm;
 std::vector<TimerJob> IocpConstructor::jobs;
 int IocpConstructor::ObjectCount;
 Lock* IocpConstructor::ObjectKey;
@@ -20,7 +20,7 @@ IocpConstructor::IocpConstructor()
 {
 	this->manageGame = new GameManager;
 	this->cm = new ClientManager;
-	this->nm = new NPCManager;
+	this->nm = new AIManager;
 	this->queueLock = new Lock;
 	this->UserLock = new Lock;
 	this->ObjectKey = new Lock;
@@ -180,9 +180,6 @@ void IocpConstructor::ThreadFunction()
 
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
-			if (GetLastError() == WAIT_TIMEOUT){
-				printf("우저나감\n");
-			}
 			//소켓번호로 유저아이디를 알 수 있어야 함...
 			std::shared_ptr<USER> User = this->cm->retUser((int)this->cm->retUser((SOCKET)sock));
 			if (tempHandle.ioinfo->rwMode == READ)

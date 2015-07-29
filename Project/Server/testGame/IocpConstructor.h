@@ -14,7 +14,7 @@ private:
 public:
 	static GameManager *manageGame;
 	static ClientManager *cm;
-	static NPCManager *nm;
+	static AIManager *nm;
 	static int ObjectCount;
 	static Lock* ObjectKey;
 
