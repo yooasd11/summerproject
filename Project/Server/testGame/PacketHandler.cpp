@@ -110,6 +110,7 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 
 	//유저를 불러와서 만약 연결이 끊어진 상태라면 패킷을 전송하지 않고 종료
 	std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)MovePacket.uid());
+	if (user == NULL) return;
 	if (!user->connect) return;
 
 	//유저정보 수정...
@@ -183,6 +184,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	if (IocpConstructor::cm->mappingClient.count(StopPacket.uid()) != 0)
 	{
 		std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)StopPacket.uid());
+		if (user == NULL) return;
 		user->state = WAIT;
 		ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(user->x); ServerStopPacket.set_y(user->y);
 		size = ServerStopPacket.ByteSize();
@@ -190,6 +192,7 @@ void PacketHandler::C_STOP_handler(Packet& p)
 	else if (IocpConstructor::manageGame->mappingBullet.count(StopPacket.uid())!=0)
 	{
 		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(StopPacket.uid());
+		if (shoot == NULL) return;
 		IocpConstructor::manageGame->removeBullet(StopPacket.uid());
 		shoot->working = false;
 		ServerStopPacket.set_uid(shoot->uid);  ServerStopPacket.set_x(shoot->x); ServerStopPacket.set_y(shoot->y);
@@ -217,9 +220,10 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 	InGamePacket::S_Collision ServerCollisionPacket;
 
 	//플레이어가 벽에 부딪친 경우
-	if (IocpConstructor::cm->mappingClient.count((int)ClientCollisionPacket.uid1())!=0)
+	if (IocpConstructor::cm->mappingClient.count(ClientCollisionPacket.uid1())!=0)
 	{
 		std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)ClientCollisionPacket.uid1());
+		if (user == NULL) return;
 		user->state = WAIT;
 		ServerCollisionPacket.set_uid1(ClientCollisionPacket.uid1()); ServerCollisionPacket.set_x(user->x); ServerCollisionPacket.set_y(user->y);
 		size = ServerCollisionPacket.ByteSize();
@@ -230,9 +234,10 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 	else if (ClientCollisionPacket.has_uid2() == true)
 	{
 		//총알 - 유저
-		if (IocpConstructor::cm->mappingClient.count((int)ClientCollisionPacket.uid2()) != 0){
+		if (IocpConstructor::cm->mappingClient.count(ClientCollisionPacket.uid2()) != 0){
 			std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid1());
 			std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)ClientCollisionPacket.uid2());
+			if (shoot == NULL || user == NULL) return;
 			user->hp -= shoot->damage;
 			ServerCollisionPacket.set_uid1(shoot->uid); ServerCollisionPacket.set_uid2(user->objectID); ServerCollisionPacket.set_hp(user->hp);
 			size = ServerCollisionPacket.ByteSize();
@@ -245,6 +250,7 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 
 			std::shared_ptr<bullet> shoot_2 = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid2());
 			IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.uid2());
+			if (shoot_1 == NULL || shoot_2 == NULL) return;
 
 			ServerCollisionPacket.set_uid1(ClientCollisionPacket.uid1()); ServerCollisionPacket.set_uid2(ClientCollisionPacket.uid2());
 			size = ServerCollisionPacket.ByteSize();
@@ -253,9 +259,10 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 		}
 	}
 	//총알 - 맵
-	else if (IocpConstructor::manageGame->mappingBullet.count((int)ClientCollisionPacket.uid1())!=0)
+	else if (IocpConstructor::manageGame->mappingBullet.count(ClientCollisionPacket.uid1())!=0)
 	{
 		std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid1());
+		if (shoot == NULL) return;
 		IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.uid1());
 		shoot->working = false;
 		ServerCollisionPacket.set_uid1(shoot->uid);
@@ -386,7 +393,7 @@ void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b)
 	unsigned short size = 0, type = 0;
 
 	InGamePacket::S_Collision BulletCollisionPacket;
-	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
+	BulletCollisionPacket.set_uid1(b->uid);
 
 	type = PKT_S_COLLISION;
 	size =BulletCollisionPacket.ByteSize();
@@ -431,7 +438,7 @@ void PacketHandler::S_COLLISION_Handler(std::shared_ptr<bullet> b, int uid2, int
 
 	InGamePacket::S_Collision BulletCollisionPacket;
 	BulletCollisionPacket.set_uid1(b->uid); BulletCollisionPacket.set_uid2(uid2); BulletCollisionPacket.set_hp(_hp);
-	BulletCollisionPacket.set_x(b->x); BulletCollisionPacket.set_y(b->y);
+
 
 	type = PKT_S_COLLISION;
 	size = BulletCollisionPacket.ByteSize();

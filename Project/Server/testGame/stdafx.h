@@ -52,7 +52,7 @@ void ErrorHandling(char *msg);
 #include "USER.h"
 #include "bullet.h"
 #include "TimerJob.h"
-#include "NPC.h"
+#include "AI.h"
 #include "NPCManager.h"
 #include "GameManager.h"
 #include "CollisionObject.h"

@@ -72,9 +72,6 @@
     <ClInclude Include="USER.h">
       <Filter>Managedata</Filter>
     </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>Managedata</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -92,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="..\protobuffer\InGamePacket.pb.h">
       <Filter>protocolBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Managedata</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +137,6 @@
     <ClCompile Include="USER.cpp">
       <Filter>Managedata</Filter>
     </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>Managedata</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -157,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="..\protobuffer\InGamePacket.pb.cc">
       <Filter>protocolBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Managedata</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

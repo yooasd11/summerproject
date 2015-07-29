@@ -91,7 +91,7 @@
     <ClInclude Include="IocpConstructor.h" />
     <ClInclude Include="IoData.h" />
     <ClInclude Include="Lock.h" />
-    <ClInclude Include="NPC.h" />
+    <ClInclude Include="AI.h" />
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Packet.h" />
@@ -118,7 +118,7 @@
     <ClCompile Include="IocpConstructor.cpp" />
     <ClCompile Include="IoData.cpp" />
     <ClCompile Include="Lock.cpp" />
-    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="AI.cpp" />
     <ClCompile Include="NPCManager.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Packet.cpp" />

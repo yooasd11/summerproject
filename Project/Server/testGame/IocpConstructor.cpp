@@ -126,7 +126,6 @@ void IocpConstructor::JobSchedule()
 		int th = job.th;
 		auto f = job.func;
 		if (f == NULL) return;
-		printf("작업처리\n");
 		f();
 		//최초의 잡을 어디서 해주냐...생각해보자 
 		//if (job.current == TimerJob::state::UserMove)
@@ -181,6 +180,9 @@ void IocpConstructor::ThreadFunction()
 
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
+			if (GetLastError() == WAIT_TIMEOUT){
+				printf("우저나감\n");
+			}
 			//소켓번호로 유저아이디를 알 수 있어야 함...
 			std::shared_ptr<USER> User = this->cm->retUser((int)this->cm->retUser((SOCKET)sock));
 			if (tempHandle.ioinfo->rwMode == READ)
