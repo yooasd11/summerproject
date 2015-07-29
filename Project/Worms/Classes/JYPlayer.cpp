@@ -7,6 +7,7 @@
 #include "CoordinateConverter.h"
 #include "Packet.h"
 #include "Inputhandler.h"
+#include "JYObjectManager.h"
 
 JYPlayer::JYPlayer(cocos2d::CCNode* pCCObject) : JYObject(pCCObject){
 	new MoveRequestExecuter(this);
@@ -14,6 +15,28 @@ JYPlayer::JYPlayer(cocos2d::CCNode* pCCObject) : JYObject(pCCObject){
 	new CollisionExecuter(this);
 	new AssaultExecuter(this);
 	this->setObjectType(JYOBJECT_TYPE::JY_PLAYER);
+}
+
+void JYPlayer::setHP(const UINT& nHP){
+	this->m_nHP = nHP;
+	cocos2d::CCProgressTimer* pHPBar = (cocos2d::CCProgressTimer*)this->getCCObject()->getChildByName("HPBar");
+	if (pHPBar == nullptr){
+		CCLOG("No HP bar found");
+		return;
+	}
+
+	if (nHP > 0) {
+		float fHPPercentage = m_nHP *100.0f / 100.0f;
+		pHPBar->setPercentage(fHPPercentage);
+	}
+	else{
+		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)this->getCCObject();
+		pCCOwner->stopAllActions();
+		pCCOwner->removeAllChildren();
+		pCCOwner->setTexture("HPBars/0.jpg");
+		pCCOwner->setFlippedX(false);
+		this->releaseAllExecuters();
+	}
 }
 
 void JYPlayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){

@@ -19,7 +19,7 @@ JYObject::~JYObject() {
 	//delete executers
 	for (int i = 0; i < __Executer::__Executer_END; ++i){
 		if (m_Executers[i] != nullptr)
-			ReleaseExecuter((__Executer)i);
+			releaseExecuter((__Executer)i);
 	}
 
 	//pop this from parent
@@ -44,9 +44,16 @@ void JYObject::setExecuter(BaseExecuter* param) {
 	m_Executers[type] = param;
 }
 
-void JYObject::ReleaseExecuter(__Executer eType) {
+void JYObject::releaseExecuter(__Executer eType) {
 	delete m_Executers[eType];
 	m_Executers[eType] = nullptr;
+}
+
+void JYObject::releaseAllExecuters(){
+	for (int i = 0; i < __Executer::__Executer_END; ++i){
+		if (this->getExecuter((__Executer)i) != nullptr)
+			this->releaseExecuter((__Executer)i);
+	}
 }
 
 void JYObject::addChild(JYObject* const pJYObject){

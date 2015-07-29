@@ -33,10 +33,10 @@ public:
 	void setVelocity(const float& fVelocity) { m_fVelocity = fVelocity; }
 	float getDirection() { return m_fDirection; }
 	void setDirection(const float& fDirection) { m_fDirection = fDirection; }
-	BaseExecuter* getExecuter(int type) { return m_Executers[type]; }
+	BaseExecuter* getExecuter(__Executer type) { return m_Executers[type]; }
 	void setExecuter(BaseExecuter* param);
-	void ReleaseExecuter(__Executer _eType);
-
+	void releaseExecuter(__Executer _eType);
+	void releaseAllExecuters();
 	cocos2d::CCNode* getCCObject() { return m_pCCObject; }
 	void setCCObject(cocos2d::CCNode* ccOb) { m_pCCObject = ccOb; }
 

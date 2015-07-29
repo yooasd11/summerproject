@@ -126,7 +126,7 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	}
 
 	//Create CCSprite dragon, and add to Tiled map
-	CCSprite* pDragon = Sprite::createWithTexture(texture, Rect(0, 0, 130, 140));
+	CCSprite* pDragon = CCSprite::createWithTexture(texture, Rect(0, 0, 130, 140));
 	pDragon->setPosition(ccp(fX,fY));
 	pDragon->setFlippedX(true);
 	pDragon->setScale(0.5);
@@ -138,6 +138,15 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	Animate* animate = Animate::create(animation);
 	RepeatForever* rep = RepeatForever::create(animate);
 	pDragon->runAction(rep);
+
+	CCSprite* pHPBar = CCSprite::create("HPBars/10.png");
+	CCProgressTimer* pProgressHPBar = CCProgressTimer::create(pHPBar);
+	pProgressHPBar->setType(CCProgressTimer::Type::BAR);
+	pProgressHPBar->setPercentage(50.0f);
+	pProgressHPBar->setName("HPBar");
+	pProgressHPBar->setPosition(ccp(pDragon->getContentSize().width / 2, pDragon->getContentSize().height / 2));
+	pProgressHPBar->setScale(0.2f);
+	pDragon->addChild(pProgressHPBar);
 
 	//Create JYPlayer with CCSprite dragon
 	pJYPlayer = new JYPlayer(pDragon);

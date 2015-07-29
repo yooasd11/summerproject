@@ -7,11 +7,11 @@ class JYLocalTimer;
 class AssaultExecuter : public BaseExecuter{
 	GENERATE_FUNC(AssaultExecuter)
 private:
-	std::vector<JYLocalTimer> m_vecTimers;
-	cocos2d::CCSprite* m_pCCSpriteCoolTimer;
+	JYLocalTimer m_JYLocalTimer;
+	cocos2d::CCProgressTimer* m_pCCCoolTimer;
 	bool m_bIsCooling;
 	void createCoolTimer();
-	void executeCoolTimer();
+	void executeCoolTimer(float fSec);
 public:
 	AssaultExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject, __AssaultExecuter){
 		regist();
@@ -26,5 +26,6 @@ public:
 	virtual void onMouseMove(cocos2d::Event* pEvent);
 	virtual void onMouseDown(cocos2d::Event* pEvent);
 	virtual void tick(float fDeltaTime);
-	bool coolTimeAlarmFunc();
+	bool coolTimeCallBackFunc();
+	bool coolTimeDeltaFunc(const float& fDeltaTime);
 };
