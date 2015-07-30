@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="15" tileheight="15" nextobjectid="1">
- <tileset firstgid="1" name="withoutPit" tilewidth="15" tileheight="15" spacing="1" margin="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="70" tilewidth="10" tileheight="10" nextobjectid="1">
+ <tileset firstgid="1" name="withoutPit" tilewidth="10" tileheight="10" spacing="1" margin="1">
   <image source="withoutPit.jpg" width="2000" height="2000"/>
  </tileset>
- <layer name="Background" width="150" height="100">
+ <layer name="Tile Layer 1" width="150" height="70">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAMA6AqqZL511UbOyChl1RVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX10QHSWpqd
-  </data>
- </layer>
- <layer name="Ground" width="150" height="100">
-  <data encoding="base64" compression="zlib">
-   eJzt0gEJACAMRNEFsH/QJTCBgw0EkffgFzguAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALgl1zmYqn7la3R1//RrtpYkSZIkSZIkSZIk6b02+togGQ==
+   eJztwzEJAAAIADDTWcnTw+KWEHw2WHZEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq6vMpVVVV1ZsLiGlrVw==
   </data>
  </layer>
 </map>
