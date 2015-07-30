@@ -26,7 +26,7 @@
 /////////////////////게임내부
 #define DISTANCE 180
 #define DAMAGE_DISTANCE 50
-#define BULLET_VELOCITY 70
+#define BULLET_VELOCITY 100
 #define BULLET_DAMAGE_1 50
 #define AI_NEXT_TICK 3000
 #define BULLETNEXTTICK 30

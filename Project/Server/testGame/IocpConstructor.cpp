@@ -93,7 +93,7 @@ void IocpConstructor::generateAI(int count)
 		{
 			//LOCKING(IocpConstructor::ObjectKey)
 			//std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, rand()%600+20.0f, rand()%250+20.0f, 90.0f, 30.0f));
-			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f, 100.0f, 90.0f, 30.0f));
+			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f, 100.0f, 90.0f, 50.0f));
 			Instance = temp;
 			Instance->current = Instance->state::alive;
 			IocpConstructor::nm->registAI(Instance);
@@ -173,11 +173,7 @@ void IocpConstructor::ThreadFunction()
 					User->connect = false;
 					continue;
 				}
-				//user에 관한 정보를 저장하고....
-				//User->setBuffer(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans);
-				//User->setTotal(tempHandle.bytesTrans);
-				//User->uid = sock;
-				//User->UserpacketHandle();
+	
 				User->UserpacketHandle(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 
 				tempHandle.ReadMode();

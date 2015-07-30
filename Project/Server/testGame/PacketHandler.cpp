@@ -117,7 +117,7 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 
 	//user->crt = USER::state::MOVING;
 	user->ChangeState(USER::state::MOVING);
-	user->velocity = 20.0f;
+	user->velocity = 50.0f;
 	user->direction = MovePacket.direction();
 	type = PKT_S_MOVE;
 

@@ -77,7 +77,7 @@ void AI::Action()
 			if (sqrt((this->x - dx)*(this->x - dx) + (this->y - dy)*(this->y - dy)) < DISTANCE )
 			{
 
-				float degree = getDegree(this->x, this->y, dx, dy);
+				float degree = -(getDegree(this->x, this->y, dx, dy)- 90.0f);
 				this->current = state::Waiting;
 				{
 					LOCKING(IocpConstructor::ObjectKey);
