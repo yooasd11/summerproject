@@ -9,7 +9,7 @@ private:
 	SYSTEM_INFO sysinfo;
 	DWORD flags;
 	DWORD recvBytes;
-	Lock *queueLock;
+	
 	Lock *UserLock;
 public:
 	static GameManager *manageGame;
@@ -17,6 +17,7 @@ public:
 	static AIManager *nm;
 	static int ObjectCount;
 	static Lock* ObjectKey;
+	static Lock* queueLock;
 
 	static std::vector<TimerJob> jobs;
 	
@@ -36,7 +37,7 @@ public:
 	void closeSocket(SOCKET);
 
 	
-	void AutoNPC(int);
+	void generateAI(int);
 
 };
 

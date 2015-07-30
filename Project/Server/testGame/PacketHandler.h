@@ -28,7 +28,10 @@ public:
 	void S_COLLISION_Handler(std::shared_ptr<bullet>);  //총알 - 벽
 	void S_COLLISION_Handler(std::shared_ptr<bullet>,int,int); //유저 - 총알
 	void S_COLLISION_Handler(std::shared_ptr<USER>);  //유저 - 벽
+	void S_MOVE_Handler(std::shared_ptr<AI>);
+	void S_STOP_Handler(std::shared_ptr<AI>);
 	void C_MOVE_Handler(std::shared_ptr<USER>);
+	void S_SHOOT_Handler(std::shared_ptr<bullet>);
 	void C_SHOOT_Handler(std::shared_ptr<bullet>);
 };
 

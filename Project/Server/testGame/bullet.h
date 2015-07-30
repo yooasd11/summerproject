@@ -18,5 +18,6 @@ public:
 	bullet(int, int, float, float, float, float, float);
 	~bullet(); 
 	void bulletMove();
+	void ChangeState(bool);
 };
 

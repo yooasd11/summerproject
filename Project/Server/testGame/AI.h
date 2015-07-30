@@ -7,6 +7,8 @@ public:
 	enum state{
 		alive = 1,
 		dead,
+		Attack,
+		Waiting,
 	};
 	enum state current;
 	int nid;
@@ -21,5 +23,7 @@ public:
 	~AI();
 	float getDegree(float, float, float, float);
 	void Action();
+	void Wait();
+	void ChageState(AI::state);
 };
 

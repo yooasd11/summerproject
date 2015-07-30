@@ -15,6 +15,7 @@ AIManager* IocpConstructor::nm;
 std::vector<TimerJob> IocpConstructor::jobs;
 int IocpConstructor::ObjectCount;
 Lock* IocpConstructor::ObjectKey;
+Lock* IocpConstructor::queueLock;
 
 IocpConstructor::IocpConstructor()
 {
@@ -82,10 +83,26 @@ HANDLE IocpConstructor::getPort()
 }
 
 //npc를 얼마나 생성할 것인가...
-void IocpConstructor::AutoNPC(int count)
+void IocpConstructor::generateAI(int count)
 {
-
-
+	std::shared_ptr<AI> Instance;
+	LOCKING(this->queueLock);
+	for (int i = 0; i < count; i++)
+	{
+		//AI 생성과 등록 동작
+		{
+			//LOCKING(IocpConstructor::ObjectKey)
+			//std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, rand()%600+20.0f, rand()%250+20.0f, 90.0f, 30.0f));
+			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f, 100.0f, 90.0f, 30.0f));
+			Instance = temp;
+			Instance->current = Instance->state::alive;
+			IocpConstructor::nm->registAI(Instance);
+		}
+		TimerJob job;
+		job.exectime = GetTickCount() + NEXT_TICK;
+		job.func = std::bind(&AI::Action, Instance);
+		IocpConstructor::jobs.push_back(job);
+	}
 	return;
 }
 
@@ -93,20 +110,14 @@ void IocpConstructor::AutoNPC(int count)
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
-	
-	//'lock'이 여기 있어야되는게 맞나....
 	TimerJob job;
 	int index = -1;
 	{
 		LOCKING(this->queueLock);
-		//printf("위는 락걸림\n");
 		if (this->jobs.empty()){
-			//printf("queue가 비었습니다\n");
 			return;
 		}
-
 		DWORD Minvalue = MAXGETTICK;
-		//최소시간이 제일 작을 것을 찾음..
 		for (int i = 0; i < this->jobs.size(); i++)
 		{
 			if (this->jobs[i].exectime < Minvalue)
@@ -117,43 +128,12 @@ void IocpConstructor::JobSchedule()
 		}
 		if (index == -1) return;
 		job = this->jobs[index];
+		if (job.exectime > GetTickCount()) return;
 		this->jobs.erase(this->jobs.begin() + index);
 	}
-
-	if (job.exectime < GetTickCount() && index != -1)
-	{
-		//함수를 처리해주고...
-		int th = job.th;
-		auto f = job.func;
-		if (f == NULL) return;
-		f();
-		//최초의 잡을 어디서 해주냐...생각해보자 
-		//if (job.current == TimerJob::state::UserMove)
-
-
-		//새로운 작업을 등록해줘야함..
-		//이동이나 공격에 대한 동작??
-		//int action = rand() % 1;
-		//if (!action)
-		//{
-		//	//엔피시가 이동하면 이 정보를 모든 클라이언트한테 보내줘야한다..
-		//	//이 부분을 클래스 안으로 옮겨야함...클래스내 move로!!!
-		//	job.func = std::bind(&NPC::Move, &(this->manageGame->manageNPC->npc[th]));
-		//	job.exectime = GetTickCount() + (500 * th) + 1000;
-		//}
-		//else
-		//{
-		//	//'Attack'함수에 유저벡터를 넘겨줘야 어느 유저를 공격할지 결정할 수 있다...근처에 아무도없을 경우 공격안함..최근상태가 공격이었으면 다시 공격
-		//	job.func = std::bind(&NPC::Attack, &(this->manageGame->manageNPC->npc[th]), this->cm->mappingClient);
-		//	job.exectime = GetTickCount() + (500 * th) + 1000;
-		//}
-	}
-	//현재 시간보다 작으면 넣어줌!
-	else{
-		LOCKING(this->queueLock);
-		this->jobs.push_back(job);
-	}
-		
+	auto f = job.func;
+	if (f == NULL) return;
+	f();
 	return;
 }
 
@@ -180,14 +160,12 @@ void IocpConstructor::ThreadFunction()
 
 		if (hasJob){
 			sock = tempHandle.handleinfo->ClntSock;
-			//소켓번호로 유저아이디를 알 수 있어야 함...
 			std::shared_ptr<USER> User = this->cm->retUser((int)this->cm->retUser((SOCKET)sock));
 			if (tempHandle.ioinfo->rwMode == READ)
 			{
 				//접속종료에 대한 완료 통지
 				if (tempHandle.bytesTrans == 0)
 				{
-					//유저정보의 삭제...
 					TimerJob disConnectJob;
 					disConnectJob.exectime = GetTickCount() + 500;
 					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
@@ -203,12 +181,8 @@ void IocpConstructor::ThreadFunction()
 				User->UserpacketHandle(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 
 				tempHandle.ReadMode();
-				this->RecvMessage(tempHandle);
-				
-				////////////////////////삭제부분..
-				
+				this->RecvMessage(tempHandle);				
 			}
-			//
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
 			

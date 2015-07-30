@@ -10,7 +10,12 @@ public:
 	float y;
 	float direction;
 	float velocity;
-	int state; //WAITNG = 1, MOVE = 2, ATTACK = 3;
+	enum state{
+		WAITING = 1,
+		MOVING,
+		DEAD,
+	};
+	enum state crt; //WAITNG = 1, MOVE = 2, ATTACK = 3, DEAD = 4;
 	//받은 데이터와 현재까지 받은 데이터 크기...
 	
 	int total;
@@ -33,6 +38,7 @@ public:
 	void UserpacketHandle();
 	void UserpacketHandle(char*, int, int);
 	bool isConnecting();
+	void ChangeState(USER::state);
 
 	//잡큐에 관한 작업정의...
 	void UserMove();

@@ -5,7 +5,6 @@
 AIManager::AIManager()
 {
 	this->key = new Lock;
-	this->NpcCount = 1;
 }
 
 
@@ -16,9 +15,7 @@ AIManager::~AIManager()
 
 void AIManager::registAI(std::shared_ptr<AI> n)
 {
-	//생성되는 부분을 다시 처리해줘야함..
-	LOCKING(this->key);
-	this->mappingAI[this->NpcCount++] = n;
+	this->mappingAI[IocpConstructor::ObjectCount++] = n;
 	return;
 }
 

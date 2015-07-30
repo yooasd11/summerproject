@@ -23,6 +23,15 @@
 #define PLAYER 1
 #define BULLET 2
 
+/////////////////////게임내부
+#define DISTANCE 180
+#define DAMAGE_DISTANCE 50
+#define BULLET_VELOCITY 70
+#define BULLET_DAMAGE_1 50
+#define AI_NEXT_TICK 3000
+#define BULLETNEXTTICK 30
+#define NEXT_TICK 30
+
 #define LOCKING(key) LockHelper lockHelper (key);
 //#define LOCK(key) LockHelper lockHelper (key);
 
