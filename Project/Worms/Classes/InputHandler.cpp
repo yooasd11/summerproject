@@ -54,9 +54,3 @@ void InputHandler::onMouseScroll(cocos2d::Event* pEvent){
 	CCLOG("Current map scale : %.2f, next map scale : %.2f", fCurrentScale, fNextScale);
 	pBackground->setScale(fNextScale);
 }
-
-
-void InputHandler::tick(float fDeltaTime){
-	JYObjectManager::getInstance()->tick(fDeltaTime);
-}
-

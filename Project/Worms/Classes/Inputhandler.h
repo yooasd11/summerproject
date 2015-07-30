@@ -27,5 +27,4 @@ public:
 	void onMouseMove(cocos2d::Event* pEvent);
 	void onMouseDown(cocos2d::Event* pEvent);
 	void onMouseScroll(cocos2d::Event* pEvent);
-	void tick(float fDeltaTime);
 };

@@ -29,33 +29,32 @@ bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
 	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width - 1;
 	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height - 1;
-	//정상적인 좌표
+	//valid point
 	if (pos.x > 1 && pos.x < tmapWidth &&
-		pos.y > 1 && pos.y < tmapHeight)
+		pos.y > 80 && pos.y < tmapHeight)
 		return false;
 	return true;
 }
 
 bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
-	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
-	cocos2d::CCPoint tileCoord = this->tileCoordForPostion(pos);
-	cocos2d::CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
-	cocos2d::CCTMXLayer* items = pTmap->getLayer("Items");
+	//MyScene* pMyScene = GET_MYSCENE;
+	//cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
+	//cocos2d::CCPoint tileCoord = this->tileCoordForPostion(pos);
+	//cocos2d::CCTMXLayer* pLayerGround = pTmap->getLayer("Ground");
 
-	int tileGid = metaInfo->getTileGIDAt(tileCoord);		//해당 tile의 gid를 받아옴
+	//int groundTileGid = pLayerGround->getTileGIDAt(tileCoord);		//해당 tile의 gid를 받아옴
 
-	if (tileGid){
-		cocos2d::Value& properties = pTmap->getPropertiesForGID(tileGid);		//해당 gid의 속성을 받아옴
-		//속성에 따른 처리
-		if (!properties.isNull()){
-			std::string wall = properties.asValueMap()["Wall"].asString();
-			if (wall == "YES"){
-				CCLOG("Wall...");
-				return true;
-			}
-		}
-	}
+	//if (groundTileGid){
+	//	cocos2d::Value& properties = pTmap->getPropertiesForGID(groundTileGid);		//해당 gid의 속성을 받아옴
+	//	//속성에 따른 처리
+	//	if (!properties.isNull()){
+	//		std::string wall = properties.asValueMap()["Wall"].asString();
+	//		if (wall == "YES"){
+	//			CCLOG("Wall...");
+	//			return true;
+	//		}
+	//	}
+	//}
 	return false;
 }
 
@@ -65,7 +64,6 @@ void CollisionExecuter::tick(float fDeltaTime){
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
 
-	UINT nJYObjectType = this->getOwner()->getObjectType();
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
 	cocos2d::CCPoint currentWorldPos = pCCOwner->getParent()->convertToWorldSpace(pCCOwner->getPosition());
@@ -81,6 +79,5 @@ void CollisionExecuter::tick(float fDeltaTime){
 		cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
 
 		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);
-		CCLOG("Collision packet sent");
 	}
 }

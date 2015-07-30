@@ -91,13 +91,13 @@ bool MyScene::init()
 
 void MyScene::addBackground(){
 	//map currently working on
-	//CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestMap.tmx");
+	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestMap.tmx");
 
 	//former map
-	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestDesert.tmx");
+	/*CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestDesert.tmx");
 	CCTMXObjectGroup* objects = pTmap->objectGroupNamed("Objects");
 	CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
-	metaInfo->setVisible(false);
+	metaInfo->setVisible(false);*/
 
 	pTmap->setName("Tmap");
 	pBackgroundNode = CCParallaxNode::create();
@@ -217,15 +217,20 @@ bool MyScene::onTouchBegan(Touch* pTouch, Event* pEvent){
 }
 
 void MyScene::onTouchMoved(Touch* pTouch, Event* pEvent){
+	if (InputHandler::getInstance()->isKeyPressed(EventKeyboard::KeyCode::KEY_CTRL) == false) return;
 	MyScene* pMyScene = GET_MYSCENE;
 	CCTMXTiledMap* pTmap = GET_TMAP;
-	CCPoint diff = pTouch->getDelta();
-	CCPoint currentPos = pBackgroundNode->getPosition();
-	CCPoint newPos = currentPos + diff;
-	if (newPos.x < 0) newPos.x = 0;
-	if (newPos.x + pTmap->getContentSize().width >= winSize.width) newPos.x = winSize.width - pTmap->getContentSize().width;
-	if (newPos.y < 0) newPos.y = 0;
-	if (newPos.y + pTmap->getContentSize().height >= winSize.height) newPos.y = winSize.height - pTmap->getContentSize().height;
+
+	CCSize winViewSize = CCDirector::getInstance()->getOpenGLView()->getFrameSize();
+	CCSize tmapSize = pTmap->getContentSize();
+	CCPoint mouseDeltaPos = pTouch->getDelta();
+	CCPoint newPos = pBackgroundNode->getPosition() + pTouch->getDelta();
+	if (newPos.x > 0) newPos.x = 0;
+	if (winViewSize.width - tmapSize.width >= newPos.x)
+		newPos.x = winViewSize.width - tmapSize.width;
+	if (newPos.y > 0) newPos.y = 0;
+	if (winViewSize.height - tmapSize.height >= newPos.y)
+		newPos.y = winViewSize.height - tmapSize.height;
 	pBackgroundNode->setPosition(newPos);
 	CCLOG("changed pos : %f %f", pBackgroundNode->getPosition().x, pBackgroundNode->getPosition().y);
 }

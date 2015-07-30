@@ -8,5 +8,6 @@ enum __Executer
 	_ADD(MoveRequestExecuter),
 	_ADD(CollisionExecuter),
 	_ADD(AssaultExecuter),
+	_ADD(AccelerationExecuter),
 	__Executer_END
 };

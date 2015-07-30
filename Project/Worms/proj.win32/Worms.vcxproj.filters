@@ -84,6 +84,9 @@
     <ClCompile Include="..\Classes\InGamePacket.pb.cc">
       <Filter>src\Network\Packets</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\AccelerationExecuter.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\JYLocalTimer.h">
       <Filter>src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AccelerationExecuter.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

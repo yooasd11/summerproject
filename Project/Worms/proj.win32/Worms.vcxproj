@@ -145,6 +145,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClCompile Include="..\Classes\BaseExecuter.cpp" />
     <ClCompile Include="..\Classes\CollisionExecuter.cpp" />
     <ClCompile Include="..\Classes\ConnectionManager.cpp" />
+    <ClCompile Include="..\Classes\AccelerationExecuter.cpp" />
     <ClCompile Include="..\Classes\InGamePacket.pb.cc" />
     <ClCompile Include="..\Classes\InputHandler.cpp" />
     <ClCompile Include="..\Classes\JYArm.cpp" />
@@ -167,6 +168,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\ConnectionManager.h" />
     <ClInclude Include="..\Classes\CoordinateConverter.h" />
     <ClInclude Include="..\Classes\ExecuterList.h" />
+    <ClInclude Include="..\Classes\AccelerationExecuter.h" />
     <ClInclude Include="..\Classes\InGamePacket.pb.h" />
     <ClInclude Include="..\Classes\Inputhandler.h" />
     <ClInclude Include="..\Classes\JYArm.h" />

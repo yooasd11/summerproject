@@ -4,9 +4,8 @@
 class MoveExecuter : public BaseExecuter{
 	GENERATE_FUNC(MoveExecuter)
 private:
-	void setPlayerPosition(cocos2d::CCPoint dst);
 public:
-	MoveExecuter(JYObject* pOwner) : BaseExecuter(pOwner, __MoveExecuter) {
+	MoveExecuter(JYObject* pOwner) : BaseExecuter(pOwner, __Executer::__MoveExecuter) {
 		regist();
 	}
 	virtual ~MoveExecuter() {}

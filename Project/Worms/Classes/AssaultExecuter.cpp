@@ -7,7 +7,7 @@
 #include "InGamePacket.pb.h"
 #include "Packet.h"
 #include "ConnectionManager.h"
-
+#include "Inputhandler.h"
 
 void AssaultExecuter::createCoolTimer(){
 	cocos2d::CCNode* pCCOwner = this->getOwner()->getCCObject();
@@ -41,7 +41,9 @@ void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
 }
 
 void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
-	if (this->m_bIsCooling == true) return;
+	if (InputHandler::getInstance()->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_CTRL) == true || 
+		this->m_bIsCooling == true) 
+		return;
 
 	JYObject* pOwner = this->getOwner();
 	if (pOwner == nullptr) return;

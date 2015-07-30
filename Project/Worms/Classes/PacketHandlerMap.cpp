@@ -107,7 +107,7 @@ void SShootPacketHandler(Packet& p){
 	InGamePacket::S_Shoot sShootPacket;
 	sShootPacket.ParseFromArray(PktBody, p.getLength());
 
-	//CCLOG("Bullet shot : UID - %d, (%.2f, %.2f)", nUID, fX, fY);
+	CCLOG("Bullet shot");
 	MyScene* pMyScene = GET_MYSCENE;
 	pMyScene->createBullet(sShootPacket);
 }

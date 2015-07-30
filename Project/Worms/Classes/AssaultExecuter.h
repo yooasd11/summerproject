@@ -13,7 +13,7 @@ private:
 	void createCoolTimer();
 	void executeCoolTimer(float fSec);
 public:
-	AssaultExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject, __AssaultExecuter){
+	AssaultExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject, __Executer::__AssaultExecuter){
 		regist();
 		m_bIsCooling = false;
 

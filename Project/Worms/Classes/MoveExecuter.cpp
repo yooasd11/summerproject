@@ -22,24 +22,17 @@ void MoveExecuter::tick(float fDeltaTime){
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
 
-	float fDirection = this->getOwner()->getDirection();
 	float fVelocity = this->getOwner()->getVelocity();
 	float fDistance = fVelocity * fDeltaTime;
-
+	float fDegree = MATH_DEG_TO_RAD(this->getOwner()->getDirection());
 	cocos2d::CCPoint currPos = pCCOwner->getPosition();
 
-	float fDX = fDistance *sin(MATH_DEG_TO_RAD(fDirection));
-	float fDY = fDistance *cos(MATH_DEG_TO_RAD(fDirection));
+	float fDX = fDistance *sin(fDegree);
+	float fDY = fDistance *cos(fDegree);
 
-	cocos2d::CCPoint nextPos = cocos2d::ccp(fDX, fDY);
-	pCCOwner->setPosition(pCCOwner->getPosition() + nextPos);
+	cocos2d::CCPoint nextPos = pCCOwner->getPosition() + cocos2d::ccp(fDX, fDY);
+	pCCOwner->setPosition(nextPos);
 }
-
-void MoveExecuter::setPlayerPosition(cocos2d::CCPoint dst){
-	cocos2d::CCActionInterval* moveAct = cocos2d::CCMoveBy::create(0.1f, dst);
-	this->getOwner()->getCCObject()->runAction(moveAct);
-}
-
 
 void MoveExecuter::onMouseMove(cocos2d::Event* pEvent){
 

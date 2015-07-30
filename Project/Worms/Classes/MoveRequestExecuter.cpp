@@ -14,9 +14,11 @@ void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
 	float fDirection = 0.0f;
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A){
 		fDirection = -90.0f;
+		pCCOwner->setFlippedX(false);
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_D){
 		fDirection = 90.0f;
+		pCCOwner->setFlippedX(true);
 	}
 
 	char sendBuf[PKTBODYSIZE];
@@ -25,7 +27,8 @@ void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
 	c_move.set_direction(fDirection);
 	c_move.SerializeToArray(sendBuf, c_move.ByteSize());
 
-	ConnectionManager::getInstance()->transmit(c_move.ByteSize(), PACKET_TYPE::PKT_C_MOVE, sendBuf);
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_A || keyCode == cocos2d::EventKeyboard::KeyCode::KEY_D)
+		ConnectionManager::getInstance()->transmit(c_move.ByteSize(), PACKET_TYPE::PKT_C_MOVE, sendBuf);
 }
 
 void MoveRequestExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
