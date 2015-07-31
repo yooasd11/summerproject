@@ -45,7 +45,7 @@ void bullet::bulletMove()
 		std::shared_ptr<bullet> bul = IocpConstructor::manageGame->retBullet(this->uid);
 		//여기가 일단 충돌처리한느 부분임....
 		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
-		if (dx >= 640.0f || dx < 0 || dy >= 320.0f || dy < 0)
+		if (dx >= 1500.0f || dx < 0 || dy >= 700.0f || dy < 0)
 		{
 			//총알을 지워줘야 함..
 			//stop 패킷을 보내야함
@@ -58,13 +58,15 @@ void bullet::bulletMove()
 		for (auto user : IocpConstructor::cm->mappingClient)
 		{
 			float userX = user.second->x; float userY = user.second->y;
-			if (sqrt((dx - userX)*(dx - userX) + (dy - userY)*(dy - userY)) < DAMAGE_DISTANCE && user.second->objectID != this->shooter && user.second->current != USER::state::DEAD)
+			if (sqrt((dx - userX)*(dx - userX) + (dy - userY)*(dy - userY)) < DAMAGE_DISTANCE && user.second->objectID != this->shooter && (user.second->crt != USER::state::DEAD))
 			{
 				this->working = false;
 				user.second->hp -= this->damage;
 				if (user.second->hp <= 0)
 				{
+					printf("죽었음\n");
 					user.second->ChangeState(USER::state::DEAD);
+					printf("%d\n", user.second->crt);
 				}
 				//데미지를 입은부분 전달
 				PacketHandler::GetInstance()->S_COLLISION_Handler(bul, user.second->objectID, user.second->hp);
@@ -77,15 +79,13 @@ void bullet::bulletMove()
 		for (auto AI :IocpConstructor::nm->mappingAI )
 		{
 			float aiX = AI.second->x; float aiY = AI.second->y;
-			if (sqrt((dx - aiX)*(dx - aiX) + (dy - aiY)*(dy - aiY)) < DAMAGE_DISTANCE && AI.second->nid != this->shooter && AI.second->current != AI::state::dead)
+			if (sqrt((dx - aiX)*(dx - aiX) + (dy - aiY)*(dy - aiY)) < DAMAGE_DISTANCE && AI.second->nid != this->shooter && AI.second->current_state != AI.second->npc_dead)
 			{
 				this->working = false;
 				AI.second->hp -= this->damage;
 				if (AI.second->hp <= 0)
 				{
-					printf("죽음\n");
-					AI.second->ChageState(AI::state::dead);
-					printf("%d\n", AI.second->nid);
+					AI.second->ChangeState(NPC_STATUS_DEAD);
 				}
 				PacketHandler::GetInstance()->S_COLLISION_Handler(bul, AI.second->nid, AI.second->hp);
 				IocpConstructor::manageGame->removeBullet(bul->uid);

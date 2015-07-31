@@ -16,7 +16,7 @@ public:
 		DEAD,
 	};
 	enum state crt; //WAITNG = 1, MOVE = 2, ATTACK = 3, DEAD = 4;
-	//받은 데이터와 현재까지 받은 데이터 크기...
+	//받은 데이터와 현재까지 받은 데이터 크기
 	
 	int total;
 	int current;

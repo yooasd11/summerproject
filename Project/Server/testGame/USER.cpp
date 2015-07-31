@@ -28,7 +28,7 @@ USER::USER(int object, SOCKET sock, int _hp, float _x, float _y)
 	this->current = 0;
 	this->total = 0;
 	this->crt = state::WAITING;
-	this->velocity = 0.0f;
+	this->velocity = 70.0f;
 	this->key = new Lock();
 }
 
@@ -157,7 +157,7 @@ void USER::UserMove(){
 		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
 		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
 		if (this->crt == state::MOVING){
-			if (!(dx > 640.0f || dx < 0.0f || dy > 320.0f || dy < 0.0f))
+			if (!(dx > 1500.0f || dx < 0.0f || dy > 700.0f || dy < 0.0f))
 			{
 				this->x = dx;
 				this->y = dy;

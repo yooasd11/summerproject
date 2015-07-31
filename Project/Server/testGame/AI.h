@@ -1,22 +1,23 @@
 #pragma once
+
+class NPC_STATE;
+class NPC_DEAD;
+class NPC_ALIVE;
+
 class AI
 {
 private:
 	Lock* key;
 public:
-	enum state{
-		alive = 1,
-		dead,
-		Attack,
-		Waiting,
-	};
-	enum state current;
 	int nid;
 	int hp;
 	float x;
 	float y;
 	float direction;
 	float velocity;
+	NPC_STATE *current_state;
+	NPC_DEAD *npc_dead;
+	NPC_ALIVE *npc_alive;
 
 	AI();
 	AI(int,int, float, float, float, float);
@@ -24,6 +25,13 @@ public:
 	float getDegree(float, float, float, float);
 	void Action();
 	void Wait();
-	void ChageState(AI::state);
+
+	void ChangeState(int);
+	void ChangeDirection();
+
+	void init();
+	void decision();
 };
+
+
 

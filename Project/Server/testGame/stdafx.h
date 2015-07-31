@@ -26,11 +26,18 @@
 /////////////////////게임내부
 #define DISTANCE 180
 #define DAMAGE_DISTANCE 50
-#define BULLET_VELOCITY 100
+#define BULLET_VELOCITY 70
 #define BULLET_DAMAGE_1 50
 #define AI_NEXT_TICK 3000
 #define BULLETNEXTTICK 30
 #define NEXT_TICK 30
+
+////////////////////////
+#define AI_ATTACK_DELAY 3000
+#define AI_MOVE_DELAY 30
+#define AI_DEAD_DELAY 10000
+#define NPC_STATUS_ALIVE 1
+#define NPC_STATUS_DEAD 2
 
 #define LOCKING(key) LockHelper lockHelper (key);
 //#define LOCK(key) LockHelper lockHelper (key);
@@ -61,8 +68,11 @@ void ErrorHandling(char *msg);
 #include "USER.h"
 #include "bullet.h"
 #include "TimerJob.h"
+
 #include "AI.h"
 #include "AIManager.h"
+#include "NPC_STATE.h"
+
 #include "GameManager.h"
 #include "CollisionObject.h"
 #include "ObjectManager.h"
@@ -72,4 +82,5 @@ void ErrorHandling(char *msg);
 #include "Packet.h"
 #include "PacketHandler.h"
 #include "IocpConstructor.h"
+
 

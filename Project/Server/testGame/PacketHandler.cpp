@@ -117,7 +117,6 @@ void PacketHandler::C_MOVE_Handler(Packet& p)
 
 	//user->crt = USER::state::MOVING;
 	user->ChangeState(USER::state::MOVING);
-	user->velocity = 50.0f;
 	user->direction = MovePacket.direction();
 	type = PKT_S_MOVE;
 
@@ -190,7 +189,10 @@ void PacketHandler::C_STOP_handler(Packet& p)
 		std::shared_ptr<AI> ai = IocpConstructor::nm->retAI((int)StopPacket.uid());
 		if (ai == NULL) return;
 		//ai->current = AI::state::Waiting;
-		ai->ChageState(AI::state::Waiting);
+
+
+		//ai->ChageState(AI::state::Waiting);
+		ai->ChangeDirection();
 		ServerStopPacket.set_uid(StopPacket.uid()); ServerStopPacket.set_x(ai->x); ServerStopPacket.set_y(ai->y);
 		size = ServerStopPacket.ByteSize();
 	}
@@ -241,7 +243,8 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 		std::shared_ptr<AI> ai = IocpConstructor::nm->retAI((int)ClientCollisionPacket.uid1());
 		if (ai == NULL) return;
 		//ai->current = AI::state::Waiting;
-		ai->ChageState(AI::state::Waiting);
+		//ai->ChageState(AI::state::Waiting);
+		ai->ChangeDirection();
 		ServerCollisionPacket.set_uid1(ClientCollisionPacket.uid1()); ServerCollisionPacket.set_x(ai->x); ServerCollisionPacket.set_y(ai->y);
 		size = ServerCollisionPacket.ByteSize();
 	}
@@ -252,13 +255,13 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 		if (IocpConstructor::cm->mappingClient.count(ClientCollisionPacket.uid2()) != 0){
 			std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid1());
 			std::shared_ptr<USER> user = IocpConstructor::cm->retUser((int)ClientCollisionPacket.uid2());
-			if (shoot == NULL || user == NULL) return;
-			user->hp -= shoot->damage;
-			if (user->hp <= 0){
+			//if (shoot == NULL || user == NULL) return;
+			//user->hp -= shoot->damage;
+			//if (user->hp <= 0){
 				//user->crt = USER::state::DEAD;
-				user->ChangeState(USER::state::DEAD);
-			}
-			shoot->ChangeState(false);
+			//	user->ChangeState(USER::state::DEAD);
+			//}
+			//shoot->ChangeState(false);
 			ServerCollisionPacket.set_uid1(shoot->uid); ServerCollisionPacket.set_uid2(user->objectID); ServerCollisionPacket.set_hp(user->hp);
 			//IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.uid1());
 			size = ServerCollisionPacket.ByteSize();
@@ -269,12 +272,12 @@ void PacketHandler::C_COLLISION_Handler(Packet& p)
 			std::shared_ptr<bullet> shoot = IocpConstructor::manageGame->retBullet(ClientCollisionPacket.uid1());
 			std::shared_ptr<AI> ai = IocpConstructor::nm->retAI((int)ClientCollisionPacket.uid2());
 			if (shoot == NULL || ai == NULL) return;
-			ai->hp -= shoot->damage;
-			if (ai->hp <= 0){
+			//ai->hp -= shoot->damage;
+			//if (ai->hp <= 0){
 				//ai->current = AI::state::dead;
-				ai->ChageState(AI::state::dead);
-			}
-			shoot->ChangeState(false);
+			//	ai->ChangeState(NPC_STATUS_DEAD);
+		//	}
+			//shoot->ChangeState(false);
 			ServerCollisionPacket.set_uid1(shoot->uid); ServerCollisionPacket.set_uid2(ai->nid); ServerCollisionPacket.set_hp(ai->hp);
 			//IocpConstructor::manageGame->removeBullet(ClientCollisionPacket.uid1());
 			size = ServerCollisionPacket.ByteSize();

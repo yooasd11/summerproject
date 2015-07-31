@@ -89,18 +89,16 @@ void IocpConstructor::generateAI(int count)
 	LOCKING(this->queueLock);
 	for (int i = 0; i < count; i++)
 	{
-		//AI 생성과 등록 동작
 		{
 			//LOCKING(IocpConstructor::ObjectKey)
 			//std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, rand()%600+20.0f, rand()%250+20.0f, 90.0f, 30.0f));
-			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f, 100.0f, 90.0f, 50.0f));
+			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f*(i+1), 100.0f, 90.0f, 30.0f));
 			Instance = temp;
-			Instance->current = Instance->state::alive;
 			IocpConstructor::nm->registAI(Instance);
 		}
 		TimerJob job;
 		job.exectime = GetTickCount() + NEXT_TICK;
-		job.func = std::bind(&AI::Action, Instance);
+		job.func = std::bind(&AI::init, Instance);
 		IocpConstructor::jobs.push_back(job);
 	}
 	return;
@@ -173,7 +171,6 @@ void IocpConstructor::ThreadFunction()
 					User->connect = false;
 					continue;
 				}
-	
 				User->UserpacketHandle(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 
 				tempHandle.ReadMode();
@@ -182,10 +179,8 @@ void IocpConstructor::ThreadFunction()
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
 			
-				//send 부분을 바꾸자...
 			}
 		}
-		//잡큐 일처리 -> 락처리를 잘해줘야한다...
 		else
 		{
 			JobSchedule();
