@@ -8,11 +8,10 @@
 #include "Packet.h"
 
 cocos2d::CCPoint CollisionExecuter::getNextPos(cocos2d::CCPoint currentPos, float fDeltaTime){
-	float fVelocity = this->getOwner()->getVelocity();
-	float fDistance = fVelocity * fDeltaTime;
-	float fDirection = this->getOwner()->getDirection();
-	float x = currentPos.x + fDistance * cos(fDirection);
-	float y = currentPos.y + fDistance * tan(fDirection);
+	float fVx = this->getOwner()->getVelocityX();
+	float fVy = this->getOwner()->getVelocityY();
+	float x = currentPos.x + fVx * fDeltaTime;
+	float y = currentPos.y + fVy * fDeltaTime;
 	return cocos2d::ccp(x, y);
 }
 

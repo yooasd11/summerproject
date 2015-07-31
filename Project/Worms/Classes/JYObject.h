@@ -9,8 +9,8 @@ private:
 	JYOBJECT_TYPE m_nObjectType;
 	UINT m_nUID;
 	UINT m_nTag;
-	float m_fVelocity;
-	float m_fDirection;
+	float m_fVx;
+	float m_fVy;
 	cocos2d::CCNode* m_pCCObject;
 	JYObject* m_pJYObjectParent;
 	BaseExecuter* m_Executers[__Executer::__Executer_END];
@@ -29,10 +29,11 @@ public:
 	void setUID(const UINT& nUID) { m_nUID = nUID; }
 	UINT getTag() { return m_nTag; }
 	void setTag(const UINT& nTag) { m_nTag = nTag; }
-	float getVelocity() { return m_fVelocity; }
-	void setVelocity(const float& fVelocity) { m_fVelocity = fVelocity; }
-	float getDirection() { return m_fDirection; }
-	void setDirection(const float& fDirection) { m_fDirection = fDirection; }
+	float getVelocityX() { return m_fVx; }
+	void setVelocityX(const float& fVelocity) { m_fVx = fVelocity; }
+	float getVelocityY() { return m_fVy; }
+	void setVelocityY(const float& fVecocity){ m_fVy = fVecocity; }
+	void setVelocity(const float& fVx, const float& fVy){ m_fVx = fVx; m_fVy = fVy; }
 	BaseExecuter* getExecuter(__Executer type) { return m_Executers[type]; }
 	void setExecuter(BaseExecuter* param);
 	void releaseExecuter(__Executer _eType);

@@ -14,7 +14,7 @@
 #include "Packet.h"
 #include "JYObjectManager.h"
 #include "CoordinateConverter.h"
-USING_NS_CC;
+#include "AccelerationExecuter.h"
 
 //#define SERVER_IP_ADDRESS "10.1.4.85"
 #define SERVER_IP_ADDRESS "localhost"
@@ -93,12 +93,6 @@ void MyScene::addBackground(){
 	//map currently working on
 	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestMap.tmx");
 
-	//former map
-	/*CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestDesert.tmx");
-	CCTMXObjectGroup* objects = pTmap->objectGroupNamed("Objects");
-	CCTMXLayer* metaInfo = pTmap->getLayer("MetaInfo");
-	metaInfo->setVisible(false);*/
-
 	pTmap->setName("Tmap");
 	pBackgroundNode = CCParallaxNode::create();
 	pBackgroundNode->setName("Background");
@@ -139,7 +133,7 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	RepeatForever* rep = RepeatForever::create(animate);
 	pDragon->runAction(rep);
 
-	CCSprite* pHPBar = CCSprite::create("HPBars/10.png");
+	CCSprite* pHPBar = CCSprite::create("HPBar.png");
 	CCProgressTimer* pProgressHPBar = CCProgressTimer::create(pHPBar);
 	pProgressHPBar->setType(CCProgressTimer::Type::BAR);
 	pProgressHPBar->setPercentage(100.0f);
@@ -147,7 +141,7 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	pProgressHPBar->setBarChangeRate(ccp(1, 0));
 	pProgressHPBar->setName("HPBar");
 	pProgressHPBar->setPosition(ccp(pDragon->getContentSize().width / 2, pDragon->getContentSize().height / 2));
-	pProgressHPBar->setScale(0.2f);
+	pProgressHPBar->setScale(0.6f);
 	pDragon->addChild(pProgressHPBar);
 
 	//Create JYPlayer with CCSprite dragon
@@ -166,8 +160,8 @@ JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
 	UINT nBulletUID = sShootPacket.bullet_uid();
 	float fX = sShootPacket.x();
 	float fY = sShootPacket.y();
-	float fDirection = sShootPacket.direction();
-	float fVelocity = sShootPacket.velocity();
+	float fVx = sShootPacket.vx();
+	float fVy = sShootPacket.vy();
 	float fDamage = sShootPacket.damage();
 
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nShooterUID);
@@ -180,20 +174,36 @@ JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
 	if (pTmap == nullptr) return nullptr;
 
 	//Create CCSprite bullet
-	CCSprite* bullet = CCSprite::create("bullet.PNG");
-	bullet->setScale(0.3f);
+	CCSprite* bullet = CCSprite::create("bullet.png");
+	bullet->setScale(0.2f);
 	bullet->setPosition(ccp(fX,fY));
-	bullet->setRotation(fDirection);
 
 	//Create JYArm with CCSprite bullet and add
 	JYArm* pJYArmBullet = new JYArm(bullet);
 	pJYPlayer->addChild(pJYArmBullet);
 	pJYArmBullet->setObjectType(JYOBJECT_TYPE::JY_ARM);
 	pJYArmBullet->setUID(nBulletUID);
-	pJYArmBullet->setVelocity(fVelocity);
+	pJYArmBullet->setVelocity(fVx, fVy);
 	pJYArmBullet->setDamage(fDamage);
-	pJYArmBullet->setDirection(fDirection);
 	pTmap->addChild(bullet);
+
+	AccelerationExecuter* pAccExecuter = (AccelerationExecuter*)pJYArmBullet->getExecuter(__Executer::__AccelerationExecuter);
+	if (pAccExecuter == nullptr){
+		CCLOG("No acceleration executer");
+		return pJYArmBullet;
+	}
+
+	int nAccCounter = sShootPacket.acceleration_list_size();
+	for (int i = 0; i < nAccCounter; ++i){
+		InGamePacket::S_Acceleration sAcc;
+		sAcc = sShootPacket.acceleration_list(i);
+		
+		float fAccX = sAcc.ax();
+		float fAccY = sAcc.ay();
+
+		pAccExecuter->addAcceleration(fAccX, fAccY);
+	}
+
 	return pJYArmBullet;
 }
 
@@ -202,10 +212,9 @@ void MyScene::makePlayer(JYObject* const pJYPlayer){
 	CCNode* pCCNode = pJYPlayer->getCCObject();
 
 	//make aim
-	CCSprite* pFireAim = CCSprite::create("line.PNG");
+	CCSprite* pFireAim = CCSprite::create("line.png");
 	pFireAim->setPosition(ccp(pCCNode->getContentSize().width/2, pCCNode->getContentSize().height/3)); //position value obtained through experiment
 	pFireAim->setName("Aim");
-	pFireAim->setScale(0.3f);
 	pFireAim->setAnchorPoint(ccp(0.5f, -0.2f));
 	pCCNode->addChild(pFireAim);
 	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
