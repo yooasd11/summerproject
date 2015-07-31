@@ -34,7 +34,8 @@ void JYPlayer::setHP(const UINT& nHP){
 		cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)this->getCCObject();
 		pCCOwner->stopAllActions();
 		pCCOwner->removeAllChildren();
-		pCCOwner->setTexture("HPBars/0.jpg");
+		pCCOwner->setTexture("dead.jpg");
+		pCCOwner->setScale(0.2f);
 		pCCOwner->setFlippedX(false);
 		this->releaseAllExecuters();
 	}

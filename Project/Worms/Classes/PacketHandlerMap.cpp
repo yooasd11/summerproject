@@ -1,3 +1,4 @@
+#pragma once
 #include "PacketHandlerMap.h"
 #include "cocos2d.h"
 #include "AccountPacket.pb.h"
@@ -68,19 +69,27 @@ void SMovePacketHandler(Packet& p){
 	char* PktBody = p.getMsg();
 	InGamePacket::S_Move sMovePacket;
 	sMovePacket.ParseFromArray(PktBody, p.getLength());
-	
+
 	UINT nUID = sMovePacket.uid();
 	float fX = sMovePacket.x();
 	float fY = sMovePacket.y();
-	float fDirection = sMovePacket.direction();
-	float fVelocity = sMovePacket.velocity();
+	float fVx = sMovePacket.vx();
+	float fVy = sMovePacket.vy();
 
 	//CCLOG("S_Move from server : UID - %d, X - %.1f, Y - %.1f, V - %.1f", nUID, fX, fY, fVelocity);
-	JYPlayer* pJYObject = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
+	JYObject* pJYObject = JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYObject == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pJYObject->getCCObject();
+	if (pCCOwner == nullptr) return;
 
-	pJYObject->setVelocity(fVelocity);
-	pJYObject->setDirection(fDirection);
+	pJYObject->setVelocity(fVx, fVy);
+
+	if (fVx < 0){
+		pCCOwner->setFlippedX(false);
+	}
+	else{
+		pCCOwner->setFlippedX(true);
+	}
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_STOP, SStopPacketHandler);
@@ -97,7 +106,7 @@ void SStopPacketHandler(Packet& p){
 	JYObject* pJYObject = JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYObject == nullptr) return;
 
-	pJYObject->setVelocity(0.0f);
+	pJYObject->setVelocity(0.0f, 0.0f);
 	pJYObject->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
 }
 

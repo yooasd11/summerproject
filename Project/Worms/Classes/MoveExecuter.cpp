@@ -22,13 +22,10 @@ void MoveExecuter::tick(float fDeltaTime){
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
 
-	float fVelocity = this->getOwner()->getVelocity();
-	float fDistance = fVelocity * fDeltaTime;
-	float fDegree = MATH_DEG_TO_RAD(this->getOwner()->getDirection());
 	cocos2d::CCPoint currPos = pCCOwner->getPosition();
 
-	float fDX = fDistance *sin(fDegree);
-	float fDY = fDistance *cos(fDegree);
+	float fDX = pOwner->getVelocityX() * fDeltaTime;
+	float fDY = pOwner->getVelocityY() * fDeltaTime;
 
 	cocos2d::CCPoint nextPos = pCCOwner->getPosition() + cocos2d::ccp(fDX, fDY);
 	pCCOwner->setPosition(nextPos);

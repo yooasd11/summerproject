@@ -3,16 +3,16 @@ package AccountPacket;
 
 message S_Account_List{
 
-message Disconnect{
-	required uint32 uid=1;
-}
+	message Disconnect{
+		required uint32 uid=1;
+	}
 
-message Account{
-	required uint32 uid=1;
-	required uint32 hp=2;
-	required float x=3;
-	required float y=4;
-}
+	message Account{
+		required uint32 uid=1;
+		required uint32 hp=2;
+		required float x=3;
+		required float y=4;
+	}
 
 	repeated Account Account_Member=1;
 }

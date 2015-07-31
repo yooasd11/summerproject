@@ -1,49 +1,30 @@
 #include "AccelerationExecuter.h"
 #include "JYObject.h"
 
-void AccelerationExecuter::addGravity(){
-	this->addAccerlation(180.0f, 10.0f);
-}
-
-void AccelerationExecuter::addAccerlation(const float& fDirection, const float& fAcceleration){
-	Acceleration newAcc(fDirection, fAcceleration);
+void AccelerationExecuter::addAcceleration(const float& fAccX, const float& fAccY){
+	Acceleration newAcc(fAccX, fAccY);
 	this->m_vecAccList.push_back(newAcc);
 }
 
-void AccelerationExecuter::executeGravity(Acceleration& const acc, const float& fDeltaTime){
+void AccelerationExecuter::executeAcceleration(Acceleration& const acc, const float& fDeltaTime){
 	JYObject* pOwner = this->getOwner();
 	if (pOwner == nullptr) return;
 	cocos2d::CCNode* pCCOwner = pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
 
-	float fAcceleration = acc.getAcceleration();
-	float fAccDirection = acc.getDirection();
-	float fAccRadian = MATH_DEG_TO_RAD(180.0f);
+	float fAccX = acc.getAccelerationX();
+	float fAccY = acc.getAccelerationY();
 
-	float sinDegree = sin(fAccRadian);
+	float fNextVx = pOwner->getVelocityX() + fAccX *fDeltaTime;
+	float fNextVy = pOwner->getVelocityY() + fAccY *fDeltaTime;
 
-	float fAccX = fAcceleration * sin(fAccRadian);
-	float fAccY = fAcceleration * cos(fAccRadian);
-
-	float fVelocity = pOwner->getVelocity();
-	float fVelDirection = pOwner->getDirection();
-	float fVelRadian = MATH_DEG_TO_RAD(fVelDirection);
-
-	float fVX = fVelocity * sin(fVelRadian) + fAccX * fDeltaTime;
-	float fVY = fVelocity * cos(fVelRadian) + fAccY * fDeltaTime;
-
-	float fDX = fVX * fDeltaTime + 0.5f * fAccX * fDeltaTime * fDeltaTime;
-	float fDY = fVY * fDeltaTime + 0.5f * fAccY * fDeltaTime * fDeltaTime;
-
-	cocos2d::CCPoint newPos = pCCOwner->getPosition() + cocos2d::ccp(fDX, fDY);
-	pCCOwner->setPosition(newPos);
-
-	pOwner->setVelocity(fVX / sin(fVelRadian));
+	pOwner->setVelocity(fNextVx, fNextVy);
 }
 
 void AccelerationExecuter::tick(float fDeltaTime){
 	for (auto it = this->m_vecAccList.begin(); it != this->m_vecAccList.end();){
-		this->executeGravity(*it, fDeltaTime);
+		this->executeAcceleration(*it, fDeltaTime);
+		++it;
 	}
 }
 

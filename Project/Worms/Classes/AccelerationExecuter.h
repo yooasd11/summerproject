@@ -6,31 +6,30 @@ class AccelerationExecuter : public BaseExecuter{
 private:
 	class Acceleration{
 	private:
-		float m_fDirection;
-		float m_fAcceleration;
+		float m_fAx;
+		float m_fAy;
 	public:
 		Acceleration() {}
-		Acceleration(const float& fDirection, const float& fAcceleration){
-			setDirection(fDirection);
-			setAcceleration(fAcceleration);
+		Acceleration(const float& fAccX, const float& fAccY){
+			this->setAccelerationX(fAccX);
+			this->setAccelerationY(fAccY);
 		}
-		void setDirection(const float& fDirection) { m_fDirection = fDirection; }
-		void setAcceleration(const float& fAcceleration) { m_fAcceleration = fAcceleration; }
-		float getDirection() { return m_fDirection; }
-		float getAcceleration() { return m_fAcceleration; }
+
+		void setAccelerationX(const float& fAcceleration) { this->m_fAx = fAcceleration; }
+		void setAccelerationY(const float& fAcceleration) { this->m_fAy = fAcceleration; }
+		float getAccelerationX() { return this->m_fAx; }
+		float getAccelerationY() { return this->m_fAy; }
 	};
 
 	std::vector<Acceleration> m_vecAccList;
 public:
 	AccelerationExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject, __Executer::__AccelerationExecuter){
 		regist();
-		addGravity();
 	}
 
 	virtual ~AccelerationExecuter() {}
 
-	void addGravity();
-	void addAccerlation(const float& fDirection, const float& fAcceleration);
-	void executeGravity(Acceleration& const acc, const float& fDeltaTime);
+	void addAcceleration(const float& fAccX, const float& fAccY);
+	void executeAcceleration(Acceleration& const acc, const float& fDeltaTime);
 	virtual void tick(float fDeltaTime);
 };

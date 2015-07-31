@@ -11,12 +11,10 @@
 
 void AssaultExecuter::createCoolTimer(){
 	cocos2d::CCNode* pCCOwner = this->getOwner()->getCCObject();
-	cocos2d::CCSprite* pCCSpriteTimer = cocos2d::CCSprite::create("TimerPics/timer.png");
-	pCCSpriteTimer->setScale(0.1f);
+	cocos2d::CCSprite* pCCSpriteTimer = cocos2d::CCSprite::create("timer.png");
 	this->m_pCCCoolTimer = cocos2d::CCProgressTimer::create(pCCSpriteTimer);
 	this->m_pCCCoolTimer->setType(CCProgressTimer::Type::RADIAL);
 	this->m_pCCCoolTimer->setName("CoolTimer");
-	this->m_pCCCoolTimer->setScale(0.2f);
 	pCCOwner->addChild(this->m_pCCCoolTimer);
 	this->m_pCCCoolTimer->setPosition(cocos2d::ccp(pCCOwner->getContentSize().width / 2, 0.0f));
 }
@@ -58,8 +56,9 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	char sendBuf[PKTLENGTH];
 	InGamePacket::C_Shoot c_shoot;
 
-	c_shoot.set_uid(this->getOwner()->getUID());
-	c_shoot.set_direction(fDirection);
+	c_shoot.set_uid(pOwner->getUID());
+	c_shoot.set_unit_vx(sin(MATH_DEG_TO_RAD(fDirection)));
+	c_shoot.set_unit_vy(cos(MATH_DEG_TO_RAD(fDirection)));
 
 	c_shoot.SerializeToArray(sendBuf, c_shoot.ByteSize());
 

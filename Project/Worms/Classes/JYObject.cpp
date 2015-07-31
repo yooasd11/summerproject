@@ -9,7 +9,8 @@ JYObject::JYObject(cocos2d::CCNode* pCCObject) :
 	m_pJYObjectParent(nullptr),
 	m_nObjectType(JYOBJECT_TYPE::JY_OBJECT),
 	m_nUID(-1),
-	m_fVelocity(0.0f){
+	m_fVx(0.0f),
+	m_fVy(0.0f){
 	memset(m_Executers, 0, sizeof(m_Executers));
 	JYObjectManager::getInstance()->pushObject(this);
 }
