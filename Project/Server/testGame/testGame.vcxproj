@@ -93,6 +93,7 @@
     <ClInclude Include="Lock.h" />
     <ClInclude Include="AI.h" />
     <ClInclude Include="AIManager.h" />
+    <ClInclude Include="NPC_STATE.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketHandler.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="Lock.cpp" />
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="AIManager.cpp" />
+    <ClCompile Include="NPC_STATE.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="SocketListener.cpp" />

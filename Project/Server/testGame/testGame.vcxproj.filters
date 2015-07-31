@@ -25,6 +25,9 @@
     <Filter Include="Managedata">
       <UniqueIdentifier>{642e57bf-1799-4a88-9600-449c3ef1ccb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NPC_state">
+      <UniqueIdentifier>{df241ae9-b691-4298-afac-9bc0ba433ee2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -93,6 +96,9 @@
     <ClInclude Include="AIManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="NPC_STATE.h">
+      <Filter>NPC_state</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -157,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="AIManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC_STATE.cpp">
+      <Filter>NPC_state</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
