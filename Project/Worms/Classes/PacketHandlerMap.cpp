@@ -7,8 +7,7 @@
 #include "JYPlayer.h"
 #include "JYArm.h"
 #include "JYObjectManager.h"
-#include <vector>
-
+#include "AccelerationExecuter.h"
 
 void PacketHandlerMap::registHandler(PACKET_TYPE eType, PacketHandler func)
 {
@@ -82,13 +81,23 @@ void SMovePacketHandler(Packet& p){
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pJYObject->getCCObject();
 	if (pCCOwner == nullptr) return;
 
-	pJYObject->setVelocity(fVx, fVy);
+	pJYObject->setVelocity(sMovePacket.vx(), sMovePacket.vy());
 
 	if (fVx < 0){
 		pCCOwner->setFlippedX(false);
 	}
 	else{
 		pCCOwner->setFlippedX(true);
+	}
+
+	AccelerationExecuter* pAccExecuter = (AccelerationExecuter*)pJYObject->getExecuter(__Executer::__AccelerationExecuter);
+	if (pAccExecuter == nullptr) return;
+
+	int nAccCounter = sMovePacket.acceleration_list_size();
+	for (int i = 0; i < nAccCounter; ++i){
+		InGamePacket::S_Acceleration sAcc;
+		sAcc = sMovePacket.acceleration_list(i);
+		pAccExecuter->addAcceleration(sAcc.ax(), sAcc.ay());
 	}
 }
 

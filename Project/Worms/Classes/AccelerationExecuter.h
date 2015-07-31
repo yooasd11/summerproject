@@ -4,7 +4,9 @@
 class AccelerationExecuter : public BaseExecuter{
 	GENERATE_FUNC(AccelerationExecuter)
 private:
-	class Acceleration{
+	float m_fAccX;
+	float m_fAccY;
+	/*class Acceleration{
 	private:
 		float m_fAx;
 		float m_fAy;
@@ -21,7 +23,7 @@ private:
 		float getAccelerationY() { return this->m_fAy; }
 	};
 
-	std::vector<Acceleration> m_vecAccList;
+	std::vector<Acceleration> m_vecAccList;*/
 public:
 	AccelerationExecuter(JYObject* pJYObject) : BaseExecuter(pJYObject, __Executer::__AccelerationExecuter){
 		regist();
@@ -30,6 +32,6 @@ public:
 	virtual ~AccelerationExecuter() {}
 
 	void addAcceleration(const float& fAccX, const float& fAccY);
-	void executeAcceleration(Acceleration& const acc, const float& fDeltaTime);
+	void executeAcceleration(const float& fDeltaTime);
 	virtual void tick(float fDeltaTime);
 };
