@@ -11,6 +11,7 @@ ClientHandle::ClientHandle()
 
 ClientHandle::~ClientHandle()
 {
+
 }
 
 void ClientHandle::Copy()
