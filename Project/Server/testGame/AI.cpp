@@ -59,12 +59,15 @@ void AI::ChangeState(int s)
 
 void AI::init()
 {
-	TimerJob job;
+	TimerJob job, job2;
 	job.exectime = GetTickCount() + NEXT_TICK;
+	job2.exectime = GetTickCount() + AI_DIRECTION_DELAY;
 	job.func = std::bind(&AI::decision, IocpConstructor::nm->retAI(this->nid));
+	job2.func = std::bind(&AI::AI_Change_Direction, IocpConstructor::nm->retAI(this->nid));
 	{
 		LOCKING(IocpConstructor::queueLock)
-			IocpConstructor::jobs.push_back(job);
+		IocpConstructor::jobs.push_back(job);
+		IocpConstructor::jobs.push_back(job2);
 	}
 	return;
 }
@@ -76,7 +79,25 @@ void AI::decision()
 	return;
 }
 
+void AI::AI_Change_Direction()
+{
+	if (this->current_state == this->npc_dead) return;
+	this->ChangeDirection();
+	TimerJob job;
+	job.exectime = GetTickCount() + AI_DIRECTION_DELAY;
+	job.func = std::bind(&AI::AI_Change_Direction, IocpConstructor::nm->retAI(this->nid));
+	{
+		LOCKING(IocpConstructor::queueLock);
+		IocpConstructor::jobs.push_back(job);
+	}
+	return;
+}
 
+void AI::AI_set_hp(int _hp){
+	LOCKING(this->key);
+	this->hp = _hp;
+	return;
+}
 //void AI::Action()
 //{
 //	LOCKING(this->key);

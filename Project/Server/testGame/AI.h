@@ -31,6 +31,8 @@ public:
 
 	void init();
 	void decision();
+	void AI_Change_Direction();
+	void AI_set_hp(int);
 };
 
 

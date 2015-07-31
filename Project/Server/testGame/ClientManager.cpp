@@ -38,7 +38,7 @@ void ClientManager::removesocket(int uid)
 {
 	LOCKING(this->key);
 	this->mappingClient.erase(uid);
-	printf("%d 유저나감");
+	printf("%d user disconnected..!\n", uid);
 	return;
 }
 

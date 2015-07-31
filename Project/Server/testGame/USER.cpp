@@ -157,14 +157,14 @@ void USER::UserMove(){
 		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
 		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
 		if (this->crt == state::MOVING){
-			if (!(dx > 1500.0f || dx < 0.0f || dy > 700.0f || dy < 0.0f))
+			if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < 0.0f))
 			{
 				this->x = dx;
 				this->y = dy;
 			}
 			//현재위치 갱신과 위치를 브로드캐스팅
 			//printf("%f %f\n", dx, dy);
-			//PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->objectID));
+			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->objectID));
 			//움직일 작업에 대해서 처리..
 			userMoveJob.func = std::bind(&USER::UserMove, IocpConstructor::cm->retUser(this->objectID));
 			userMoveJob.exectime = GetTickCount() + 30;
@@ -180,4 +180,10 @@ void USER::UserMove(){
 
 bool USER::isConnecting(){
 	return this->connect;
+}
+
+void USER::Set_user_hp(int _hp){
+	LOCKING(this->key);
+	this->hp = _hp;
+	return;
 }

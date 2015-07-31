@@ -17,7 +17,7 @@ int _tmain()
 	serv.MakeListener(9200);
 	serv.listenClient(5);
 	CompletionPort.setServSock(serv.getSocket());
-	CompletionPort.generateAI(1);
+	//CompletionPort.generateAI(8);
 
 	while (1){
 		SOCKET sock;
@@ -25,10 +25,11 @@ int _tmain()
 		ClientHandle handle;
 		if ((sock = serv.ConnectSocket(handle)) == INVALID_SOCKET) ErrorHandling("accept error");
 		handle.ClntSock = sock;
-		printf("%d 유저접속\n", sock);
+		
 
 		CompletionPort.cm->mapping(sock);
 		index = CompletionPort.cm->retUser(sock);
+		printf("%d user connected!\n", index);
 
 		handle.Copy();
 		CompletionPort.registerObject(handle);

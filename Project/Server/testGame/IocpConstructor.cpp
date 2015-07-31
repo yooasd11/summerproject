@@ -92,7 +92,7 @@ void IocpConstructor::generateAI(int count)
 		{
 			//LOCKING(IocpConstructor::ObjectKey)
 			//std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, rand()%600+20.0f, rand()%250+20.0f, 90.0f, 30.0f));
-			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f*(i+1), 100.0f, 90.0f, 30.0f));
+			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f*(i+1), 100.0f, 90.0f, AI_VELOCITY));
 			Instance = temp;
 			IocpConstructor::nm->registAI(Instance);
 		}
@@ -108,7 +108,7 @@ void IocpConstructor::generateAI(int count)
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
-	TimerJob job;
+	/*TimerJob job;
 	int index = -1;
 	{
 		LOCKING(this->queueLock);
@@ -132,6 +132,10 @@ void IocpConstructor::JobSchedule()
 	auto f = job.func;
 	if (f == NULL) return;
 	f();
+	return;*/
+	LOCKING(this->queueLock);
+	if (this->jobs.empty()) return;
+	else jobs.clear();
 	return;
 }
 
@@ -165,20 +169,42 @@ void IocpConstructor::ThreadFunction()
 				if (tempHandle.bytesTrans == 0)
 				{
 					TimerJob disConnectJob;
-					disConnectJob.exectime = GetTickCount() + 500;
+					disConnectJob.exectime = GetTickCount();
 					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
-					this->jobs.push_back(disConnectJob);
+					LOCKING(this->queueLock)
+					{
+						this->jobs.push_back(disConnectJob);
+					}
+					User->ChangeState(USER::state::DEAD);
 					User->connect = false;
 					continue;
 				}
-				User->UserpacketHandle(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 
+			
+
+				User->UserpacketHandle(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);				
 			}
 			else if (tempHandle.ioinfo->rwMode == WRITE)
 			{
-			
+				if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
+				{
+					delete tempHandle.ioinfo;
+				}
+				else
+				{
+					sock = tempHandle.handleinfo->ClntSock;
+					std::shared_ptr<USER> User = this->cm->retUser((int)this->cm->retUser((SOCKET)sock));
+					TimerJob disConnectJob;
+					disConnectJob.exectime = GetTickCount();
+					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
+					LOCKING(this->queueLock)
+					{
+						this->jobs.push_back(disConnectJob);
+					}
+					User->ChangeState(USER::state::DEAD);
+				}
 			}
 		}
 		else

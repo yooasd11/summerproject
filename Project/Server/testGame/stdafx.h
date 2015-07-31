@@ -26,16 +26,23 @@
 /////////////////////∞‘¿”≥ª∫Œ
 #define DISTANCE 180
 #define DAMAGE_DISTANCE 50
-#define BULLET_VELOCITY 70
+#define BULLET_VELOCITY 90
 #define BULLET_DAMAGE_1 50
 #define AI_NEXT_TICK 3000
 #define BULLETNEXTTICK 30
 #define NEXT_TICK 30
 
+///////////////∏ 
+#define WIDTH 1500
+#define HEIGHT 700
+#define GRAVITY 30
+
 ////////////////////////
 #define AI_ATTACK_DELAY 3000
+#define AI_VELOCITY 50
 #define AI_MOVE_DELAY 30
 #define AI_DEAD_DELAY 10000
+#define AI_DIRECTION_DELAY 10000
 #define NPC_STATUS_ALIVE 1
 #define NPC_STATUS_DEAD 2
 

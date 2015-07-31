@@ -356,7 +356,7 @@ void PacketHandler::C_SHOOT_handler(Packet& p)
 	{
 		LOCKING(IocpConstructor::ObjectKey);
 		std::shared_ptr<USER> tempUser = IocpConstructor::cm->retUser((int)ClientBullet.uid());
-		std::shared_ptr<bullet> tempBullet(new bullet(IocpConstructor::ObjectCount, ClientBullet.uid(), tempUser->x, tempUser->y, 50.0f, 70.0f,ClientBullet.direction()));  
+		std::shared_ptr<bullet> tempBullet(new bullet(IocpConstructor::ObjectCount, ClientBullet.uid(), tempUser->x, tempUser->y, BULLET_DAMAGE_1, BULLET_VELOCITY,ClientBullet.direction()));  
 		Bullet = tempBullet;
 		IocpConstructor::manageGame->registBullet(Bullet);
 	}
@@ -562,20 +562,21 @@ void PacketHandler::S_STOP_Handler(std::shared_ptr<AI> ai)
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
-	ClientHandle tempHandle;
+	
 	std::map<int, std::shared_ptr<USER>>::iterator it;
-
-	tempHandle.ioinfo = new IoData;
-	memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
-	tempHandle.ioinfo->wsaBuf.len = size;
-	tempHandle.ioinfo->wsaBuf.buf = buffer;
-	tempHandle.ioinfo->rwMode = WRITE;
 	for (it = IocpConstructor::cm->mappingClient.begin(); it != IocpConstructor::cm->mappingClient.end(); it++)
 	{
+		ClientHandle tempHandle;
+		tempHandle.ioinfo = new IoData;
+		memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
+		tempHandle.ioinfo->wsaBuf.len = size;
+		tempHandle.ioinfo->wsaBuf.buf = buffer;
+		tempHandle.ioinfo->rwMode = WRITE;
 		if (it->second->connect){
 			WSASend(it->second->uid, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
 		}
 	}
+	
 	return;
 }
 

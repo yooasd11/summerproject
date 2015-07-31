@@ -40,6 +40,9 @@ public:
 	bool isConnecting();
 	void ChangeState(USER::state);
 
+	//상태에 관한 정의
+	void Set_user_hp(int);
+
 	//잡큐에 관한 작업정의...
 	void UserMove();
 };
