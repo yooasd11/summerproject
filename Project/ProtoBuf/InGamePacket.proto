@@ -1,18 +1,27 @@
 syntax="proto2";
 package InGamePacket;
 
+message S_Acceleration{
+	required float ax=1;
+	required float ay=2;
+}
+
+
 message C_Move{
 	required uint32 uid=1;
-	required float direction=2;
+	required float unit_vx=2;
+	required float unit_vy=3;
 }
 
 message S_Move{
 	required uint32 uid=1;
 	required float x=2;
 	required float y=3;
-	required float direction=4;
-	required float velocity=5;
+	required float vx=4;
+	required float vy=5;
+	repeated S_Acceleration acceleration_list=6;
 }
+
 
 message C_Stop{
 	required uint32 uid=1;
@@ -28,7 +37,8 @@ message S_Stop{
 
 message C_Shoot{
 	required uint32 uid=1;
-	required float direction=2;
+	required float unit_vx=2;
+	required float unit_vy=3;
 }
 
 message S_Shoot{
@@ -37,8 +47,9 @@ message S_Shoot{
 	required float x=3;
 	required float y=4;
 	required float damage=5;
-	required float velocity=6;
-	required float direction=7;
+	required float vx=6;
+	required float vy=7;
+	repeated S_Acceleration acceleration_list=8;
 }
 
 message C_Collision{
