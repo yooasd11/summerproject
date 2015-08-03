@@ -26,5 +26,6 @@ public:
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onMouseMove(cocos2d::Event* pEvent);
 	void onMouseDown(cocos2d::Event* pEvent);
+	void onMouseUp(cocos2d::Event* pEvent);
 	void onMouseScroll(cocos2d::Event* pEvent);
 };

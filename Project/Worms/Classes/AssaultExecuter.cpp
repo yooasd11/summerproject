@@ -33,9 +33,11 @@ void AssaultExecuter::onMouseMove(cocos2d::Event* pEvent){
 	if (pCCOwner == nullptr) return;
 	cocos2d::CCSprite* pFireAim = (cocos2d::CCSprite*)pCCOwner->getChildByName("Aim");
 	if (pFireAim == nullptr) return;
-	float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pFireAim, pEvent);
 
-	pFireAim->setRotation(degree);
+	if (this->m_bIsCharging == false){
+		float degree = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pFireAim, pEvent);
+		pFireAim->setRotation(degree);
+	}
 }
 
 void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
@@ -47,6 +49,22 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	if (pOwner == nullptr) return;
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
+	cocos2d::CCProgressTimer* pCharger = (cocos2d::CCProgressTimer*)this->getOwner()->getCCObject()->getChildByName("Charger");
+	if (pCharger == nullptr) return;
+
+	this->m_bIsCharging = true;
+	pCharger->setVisible(true);
+}
+
+void AssaultExecuter::onMouseUp(cocos2d::Event* pEvent){
+	if (this->m_bIsCharging == false) return;
+
+	JYObject* pOwner = this->getOwner();
+	if (pOwner == nullptr) return;
+	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	if (pCCOwner == nullptr) return;
+	cocos2d::CCProgressTimer* pCharger = (cocos2d::CCProgressTimer*)this->getOwner()->getCCObject()->getChildByName("Charger");
+	if (pCharger == nullptr) return;
 
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
@@ -66,6 +84,9 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	WAITING_FOR(PACKET_TYPE::PKT_S_SHOOT);
 
 	this->executeCoolTimer(3.0f);
+	this->m_bIsCharging = false;
+	pCharger->setVisible(false);
+	pCharger->setPercentage(0.0f);
 }
 
 
@@ -102,4 +123,11 @@ bool AssaultExecuter::coolTimeDeltaFunc(const float& fDeltaTime){
 
 void AssaultExecuter::tick(float fDeltaTime){
 	this->m_JYLocalTimer.tick(fDeltaTime);
+	if (this->m_bIsCharging == true){
+		cocos2d::CCProgressTimer* pCharger = (cocos2d::CCProgressTimer*)this->getOwner()->getCCObject()->getChildByName("Charger");
+		if (pCharger == nullptr) return;
+
+		float fCurrentPercentage = pCharger->getPercentage();
+		pCharger->setPercentage(fCurrentPercentage + (fDeltaTime * 50));
+	}
 }

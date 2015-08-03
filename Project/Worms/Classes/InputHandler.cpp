@@ -1,5 +1,5 @@
 #include "Inputhandler.h"
-#include "JYObject.h"
+#include "JYPlayer.h"
 #include "JYObjectManager.h"
 #include "MyScene.h"
 
@@ -14,7 +14,7 @@ void InputHandler::popObject(JYObject* pObject){
 void InputHandler::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 	bIsKeyPressed[(int)keyCode] = true;
 	MyScene* pMyScene = GET_MYSCENE;
-	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	JYPlayer* pJYPlayer = pMyScene->pJYPlayerDragon;
 	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onKeyPressed(keyCode, pEvent);
 }
@@ -22,14 +22,14 @@ void InputHandler::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
 void InputHandler::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
  	bIsKeyPressed[(int)keyCode] = false;
 	MyScene* pMyScene = GET_MYSCENE;
-	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	JYPlayer* pJYPlayer = pMyScene->pJYPlayerDragon;
 	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onKeyReleased(keyCode, pEvent);
 }
 
 void InputHandler::onMouseMove(cocos2d::Event* pEvent){
 	MyScene* pMyScene = GET_MYSCENE;
-	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	JYPlayer* pJYPlayer = pMyScene->pJYPlayerDragon;
 	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onMouseMove(pEvent);
 
@@ -39,9 +39,16 @@ void InputHandler::onMouseMove(cocos2d::Event* pEvent){
 
 void InputHandler::onMouseDown(cocos2d::Event* pEvent){
 	MyScene* pMyScene = GET_MYSCENE;
-	JYObject* pJYPlayer = JYObjectManager::getInstance()->findObjectByUID(pMyScene->nPlayerUID);
+	JYPlayer* pJYPlayer = pMyScene->pJYPlayerDragon;
 	if (pJYPlayer == nullptr) return;
 	pJYPlayer->onMouseDown(pEvent);
+}
+
+void InputHandler::onMouseUp(cocos2d::Event* pEvent){
+	MyScene* pMyScene = GET_MYSCENE;
+	JYPlayer* pJYPlayer = pMyScene->pJYPlayerDragon;
+	if (pJYPlayer == nullptr) return;
+	pJYPlayer->onMouseUp(pEvent);
 }
 
 void InputHandler::onMouseScroll(cocos2d::Event* pEvent){

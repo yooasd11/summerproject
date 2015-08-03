@@ -54,6 +54,7 @@ void MyScene::onEnter(){
 	EventListenerMouse* mouseListener = EventListenerMouse::create();
 	mouseListener->onMouseMove = CC_CALLBACK_1(InputHandler::onMouseMove, InputHandler::getInstance());
 	mouseListener->onMouseDown = CC_CALLBACK_1(InputHandler::onMouseDown, InputHandler::getInstance());
+	mouseListener->onMouseUp = CC_CALLBACK_1(InputHandler::onMouseUp, InputHandler::getInstance());
 	mouseListener->onMouseScroll = CC_CALLBACK_1(InputHandler::onMouseScroll, InputHandler::getInstance());
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
@@ -94,10 +95,11 @@ void MyScene::addBackground(){
 	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestMap.tmx");
 
 	pTmap->setName("Tmap");
-	pBackgroundNode = CCParallaxNode::create();
+	/*pBackgroundNode = CCParallaxNode::create();
 	pBackgroundNode->setName("Background");
 	pBackgroundNode->addChild(pTmap, 1, ccp(1.0f, 1.0f), ccp(0, 0));
-	this->addChild(pBackgroundNode, 0);
+	this->addChild(pBackgroundNode, 0);*/
+	this->addChild(pTmap);
 	CCLOG("TMAP size : (%.1f, %.1f)", pTmap->getContentSize().width, pTmap->getContentSize().height);
 }
 
@@ -149,7 +151,8 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	pJYPlayer->setUID(nUID);
 	pJYPlayer->setHP(nHP);
 
-	if (nUID == nPlayerUID){
+
+	if (nUID == this->nPlayerUID){
 		this->makePlayer(pJYPlayer);
 	}
 	return pJYPlayer;
@@ -211,12 +214,25 @@ JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
 void MyScene::makePlayer(JYObject* const pJYPlayer){
 	CCNode* pCCNode = pJYPlayer->getCCObject();
 
+	CCSprite* pCharger = CCSprite::create("charge.png");
+	CCProgressTimer* pProgressCharger = CCProgressTimer::create(pCharger);
+	pProgressCharger->setType(CCProgressTimer::Type::BAR);
+	pProgressCharger->setPercentage(0.0f);
+	pProgressCharger->setMidpoint(ccp(0.0f, 0.0f));
+	pProgressCharger->setBarChangeRate(ccp(1.0f, 0.0f));
+	pProgressCharger->setName("Charger");
+	pProgressCharger->setPosition(ccp(pCCNode->getContentSize().width / 2, 0));
+	pProgressCharger->setVisible(false);
+	pCCNode->addChild(pProgressCharger);
+
 	//make aim
 	CCSprite* pFireAim = CCSprite::create("line.png");
 	pFireAim->setPosition(ccp(pCCNode->getContentSize().width/2, pCCNode->getContentSize().height/3)); //position value obtained through experiment
 	pFireAim->setName("Aim");
 	pFireAim->setAnchorPoint(ccp(0.5f, -0.2f));
 	pCCNode->addChild(pFireAim);
+
+
 	pJYPlayerDragon = (JYPlayer*)pJYPlayer;
 }
 

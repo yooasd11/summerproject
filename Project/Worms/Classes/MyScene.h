@@ -8,7 +8,9 @@
 USING_NS_CC;
 
 #define GET_MYSCENE (MyScene*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene")
-#define GET_TMAP (cocos2d::CCTMXTiledMap*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene")->getChildByName("Background")->getChildByName("Tmap")
+//#define GET_TMAP (cocos2d::CCTMXTiledMap*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene")->getChildByName("Background")->getChildByName("Tmap")
+
+#define GET_TMAP (cocos2d::CCTMXTiledMap*)cocos2d::CCDirector::getInstance()->getRunningScene()->getChildByName("MyScene")->getChildByName("Tmap")
 
 class JYObject;
 class JYPlayer;

@@ -14,4 +14,5 @@ public:
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	virtual	void onMouseMove(cocos2d::Event* pEvent);
 	virtual void onMouseDown(cocos2d::Event* pEvent);
+	virtual void onMouseUp(cocos2d::Event* pEvent);
 };

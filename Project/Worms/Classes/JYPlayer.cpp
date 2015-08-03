@@ -72,6 +72,13 @@ void JYPlayer::onMouseMove(cocos2d::Event* pEvent){
 	}
 }
 
+void JYPlayer::onMouseUp(cocos2d::Event* pEvent){
+	AssaultExecuter* pAssaultExecuter = (AssaultExecuter*)this->getExecuter(__Executer::__AssaultExecuter);
+	if (pAssaultExecuter != nullptr){
+		pAssaultExecuter->onMouseUp(pEvent);
+	}
+}
+
 void JYPlayer::onMouseDown(cocos2d::Event* pEvent){
 	AssaultExecuter* pAssaultExecuter = (AssaultExecuter*)this->getExecuter(__Executer::__AssaultExecuter);
 	if (pAssaultExecuter != nullptr){
