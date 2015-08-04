@@ -117,6 +117,8 @@ void SStopPacketHandler(Packet& p){
 
 	pJYObject->setVelocity(0.0f, 0.0f);
 	pJYObject->getCCObject()->setPosition(cocos2d::ccp(fX, fY));
+
+	CCLOG("Stopped : (%.2f, %.2f)", pJYObject->getCCObject()->getPosition().x, pJYObject->getCCObject()->getPosition().y);
 }
 
 REGIST_HANDLER(PACKET_TYPE::PKT_S_SHOOT, SShootPacketHandler);

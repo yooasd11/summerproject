@@ -71,12 +71,14 @@ void AssaultExecuter::onMouseUp(cocos2d::Event* pEvent){
 	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pCCOwner, pEvent);
 	CCLOG("Fire direction : %.2f", fDirection);
 
+	float fCharged = pCharger->getPercentage() * 0.05f;
+
 	char sendBuf[PKTLENGTH];
 	InGamePacket::C_Shoot c_shoot;
 
 	c_shoot.set_uid(pOwner->getUID());
-	c_shoot.set_unit_vx(sin(MATH_DEG_TO_RAD(fDirection)));
-	c_shoot.set_unit_vy(cos(MATH_DEG_TO_RAD(fDirection)));
+	c_shoot.set_unit_vx(fCharged *sin(MATH_DEG_TO_RAD(fDirection)));
+	c_shoot.set_unit_vy(fCharged *cos(MATH_DEG_TO_RAD(fDirection)));
 
 	c_shoot.SerializeToArray(sendBuf, c_shoot.ByteSize());
 

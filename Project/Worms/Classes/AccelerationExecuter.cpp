@@ -19,6 +19,6 @@ void AccelerationExecuter::executeAcceleration(const float& fDeltaTime){
 }
 
 void AccelerationExecuter::tick(float fDeltaTime){
-	executeAcceleration(fDeltaTime);
+	this->executeAcceleration(fDeltaTime);
 }
 

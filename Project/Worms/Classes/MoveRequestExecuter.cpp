@@ -4,6 +4,7 @@
 #include "Packet.h"
 #include "InGamePacket.pb.h"
 #include "ConnectionManager.h"
+#include "Inputhandler.h"
 
 void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 	JYObject* pOwner = this->getOwner();
@@ -40,6 +41,10 @@ void MoveRequestExecuter::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode,
 	if (pOwner == nullptr) return;
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
+
+	if (InputHandler::getInstance()->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_A) == true ||
+		InputHandler::getInstance()->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_D) == true)
+		return;
 
 	float fX = pCCOwner->getPosition().x;
 	float fY = pCCOwner->getPosition().y;

@@ -7,9 +7,6 @@ enum __Executer;
 class JYObject;
 
 class BaseExecuter{
-//	public:
-//	virtual char* getName() = 0;
-//	virtual __Executer getEnum() = 0;
 private:
 	JYObject* m_pOwner;
 	__Executer m_eType;

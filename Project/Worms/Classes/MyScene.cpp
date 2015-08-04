@@ -249,15 +249,15 @@ void MyScene::onTouchMoved(Touch* pTouch, Event* pEvent){
 	CCSize winViewSize = CCDirector::getInstance()->getOpenGLView()->getFrameSize();
 	CCSize tmapSize = pTmap->getContentSize();
 	CCPoint mouseDeltaPos = pTouch->getDelta();
-	CCPoint newPos = pBackgroundNode->getPosition() + pTouch->getDelta();
+	CCPoint newPos = pTmap->getPosition() + pTouch->getDelta();
 	if (newPos.x > 0) newPos.x = 0;
 	if (winViewSize.width - tmapSize.width >= newPos.x)
 		newPos.x = winViewSize.width - tmapSize.width;
 	if (newPos.y > 0) newPos.y = 0;
 	if (winViewSize.height - tmapSize.height >= newPos.y)
 		newPos.y = winViewSize.height - tmapSize.height;
-	pBackgroundNode->setPosition(newPos);
-	CCLOG("changed pos : %f %f", pBackgroundNode->getPosition().x, pBackgroundNode->getPosition().y);
+	pTmap->setPosition(newPos);
+	CCLOG("changed pos : %f %f", pTmap->getPosition().x, pTmap->getPosition().y);
 }
 
 void MyScene::onTouchEnded(Touch* pTouch, Event* pEvent){
