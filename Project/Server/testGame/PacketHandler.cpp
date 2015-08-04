@@ -105,6 +105,7 @@ void PacketHandler::BroadCast(char *buffer, int size)
 	}
 	return;
 }
+
 void PacketHandler::S_DISCONNECT_HANDLER(int ObjectID)
 {
 	char buffer[BUFSIZE] = { 0, };
@@ -253,7 +254,6 @@ void PacketHandler::S_COLLISION_HANDLER(std::shared_ptr<OBJECT> ob_1, std::share
 	return;
 }
 
-
 void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 {
 	char buffer[BUFSIZE] = { 0, };
@@ -284,8 +284,8 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 	Bullet->vx = Bullet->vx + Bullet->ax * 0.03f;
 	Bullet->vy = Bullet->vy + Bullet->ay * 0.03f;
 
-	Bullet->x += ((Bullet->vx*0.03f) + (0.03f * 0.03f * Bullet->ax / 2));
-	Bullet->y += ((Bullet->vy*0.03f) + (0.03f * 0.03f * Bullet->ay / 2));
+	Bullet->x += (Bullet->vx*0.03f);
+	Bullet->y += (Bullet->vy*0.03f);
 	
 
 	//AccountPacket::S_Account_List::Account *tempAccount = tempList.add_account_member();
@@ -330,6 +330,10 @@ void PacketHandler::S_SHOOT_HANDLER(std::shared_ptr<OBJECT> ob)
 	ServerShootPacket.set_y(Bullet->y);
 	ServerShootPacket.set_vx(Bullet->vx);
 	ServerShootPacket.set_vy(Bullet->vy);
+
+	InGamePacket::S_Acceleration *temp = ServerShootPacket.add_acceleration_list();
+	temp->set_ax(Bullet->ax);
+	temp->set_ay(Bullet->ay);
 
 	size = ServerShootPacket.ByteSize();
 	memcpy(buffer, &size, sizeof(size));
@@ -425,6 +429,10 @@ void PacketHandler::S_MOVE_HANDLER(std::shared_ptr<OBJECT> ob)
 	ServerMovePacket.set_y(ob->y);
 	ServerMovePacket.set_vx(ob->vx);
 	ServerMovePacket.set_vy(ob->vy);
+
+	InGamePacket::S_Acceleration *temp = ServerMovePacket.add_acceleration_list();
+	temp->set_ax(0.0f);
+	temp->set_ay(0.0f);
 
 	size = ServerMovePacket.ByteSize();
 	type = PKT_S_MOVE;

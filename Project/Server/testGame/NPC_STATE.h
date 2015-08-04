@@ -13,7 +13,7 @@ class NPC_ALIVE : public NPC_STATE
 public:
 	NPC_ALIVE();
 	~NPC_ALIVE();
-	void NPC_Action(std::shared_ptr<NPC>);
+	virtual void NPC_Action(std::shared_ptr<NPC>);
 };
 
 
@@ -22,6 +22,6 @@ class NPC_DEAD : public NPC_STATE
 public:
 	NPC_DEAD();
 	~NPC_DEAD();
-	void NPC_Action(std::shared_ptr<NPC>);
+	virtual void NPC_Action(std::shared_ptr<NPC>);
 };
 

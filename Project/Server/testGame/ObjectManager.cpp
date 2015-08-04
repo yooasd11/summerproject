@@ -71,3 +71,11 @@ void ObjectManager::REGIST_BULLET(std::shared_ptr<BULLET> Bullet)
 	this->OBJECT_MAP[this->OBJECTCOUNT++] = Bullet;
 	return;
 }
+
+void ObjectManager::REGIST_NPC(std::shared_ptr<NPC> Npc)
+{
+	LOCKING(this->key);
+	Npc->ObjectId = OBJECTCOUNT;
+	this->OBJECT_MAP[this->OBJECTCOUNT++] = Npc;
+	return;
+}

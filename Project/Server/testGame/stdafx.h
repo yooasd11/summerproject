@@ -22,7 +22,7 @@
 #define Object_NPC 3
 
 /////////////////////게임내부
-#define DISTANCE 180
+#define DISTANCE 10
 #define DAMAGE_DISTANCE 50
 #define BULLET_VELOCITY 90
 #define BULLET_DAMAGE_1 50

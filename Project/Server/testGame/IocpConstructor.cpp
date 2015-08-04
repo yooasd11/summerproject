@@ -78,20 +78,20 @@ HANDLE IocpConstructor::getPort()
 }
 
 //npc를 얼마나 생성할 것인가...
-//void IocpConstructor::GENERATE_NPC(int count)
-//{
-//	LOCKING(this->queueLock);
-//	for (int i = 0; i < count; i++)
-//	{
-//		std::shared_ptr<NPC> tempNPC(new NPC(100.0f, 100.0f, 100.0f, 100.0f));  // x , y , vx, vy 
-//		IocpConstructor::Object_Manager->REGIST(Object_NPC, 0);
-//		TimerJob job;
-//		job.exectime = GetTickCount() + NEXT_TICK;
-//		job.func = std::bind(&NPC::NPC_INIT, tempNPC);
-//		IocpConstructor::jobs.push_back(job);
-//	}
-//	return;
-//}
+void IocpConstructor::GENERATE_NPC(int count)
+{
+	LOCKING(this->queueLock);
+	for (int i = 0; i < count; i++)
+	{
+		std::shared_ptr<NPC> tempNPC(new NPC(200.0f, 200.0f, 50.0f, 0.0f));  // x , y , vx, vy 
+		IocpConstructor::Object_Manager->REGIST_NPC(tempNPC);
+		TimerJob job;
+		job.exectime = GetTickCount() + NEXT_TICK;
+		job.func = std::bind(&NPC::NPC_INIT, tempNPC);
+		IocpConstructor::jobs.push_back(job);
+	}
+	return;
+}
 
 
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...

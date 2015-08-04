@@ -17,7 +17,7 @@ int _tmain()
 	serv.MakeListener(9200);
 	serv.listenClient(5);
 	CompletionPort.setServSock(serv.getSocket());
-	//CompletionPort.generateAI(8);
+	//CompletionPort.GENERATE_NPC(1);
 
 	while (1){
 		SOCKET sock;

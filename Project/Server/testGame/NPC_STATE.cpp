@@ -81,17 +81,19 @@ void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 				return;
 			}
 		}
-		//Npc->x = Npc->x + (Npc->velocity * 0.03f * sin(ai->direction * PI / 180));
-		//Npc->y = Npc->y + (ai->velocity * 0.03f * cos(ai->direction * PI / 180));
 	}
 	//엔피씨의 거리계산!!!
+	Npc->x += Npc->vx * 0.03f;
+	Npc->y += Npc->vy * 0.03f;
 	TimerJob job;
 	job.exectime = GetTickCount() + AI_MOVE_DELAY;
-	job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(Npc->ObjectId)));
+	//job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(Npc->ObjectId)));
+	job.func = std::bind(&NPC::NPC_DESICION, Npc);
 	{
 		LOCKING(IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
 	}
-	PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(Npc->ObjectId));
+	//PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(Npc->ObjectId));
+	PacketHandler::GetInstance()->S_MOVE_HANDLER(Npc);
 	return;
 }
