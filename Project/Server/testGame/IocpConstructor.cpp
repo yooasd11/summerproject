@@ -97,36 +97,36 @@ void IocpConstructor::GENERATE_NPC(int count)
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
-	TimerJob job;
-	int index = -1;
-	{
-		LOCKING(this->queueLock);
-		if (this->jobs.empty()){
-			return;
-		}
-		DWORD Minvalue = MAXGETTICK;
-		for (int i = 0; i < this->jobs.size(); i++)
-		{
-			if (this->jobs[i].exectime < Minvalue)
-			{
-				Minvalue = this->jobs[i].exectime;
-				index = i;
-			}
-		}
-		if (index == -1) return;
-		job = this->jobs[index];
-		if (job.exectime > GetTickCount()) return;
-		this->jobs.erase(this->jobs.begin() + index);
-	}
-	auto f = job.func;
-	if (f == NULL) return;
-	f();
-	return;
+	//TimerJob job;
+	//int index = -1;
+	//{
+	//	LOCKING(this->queueLock);
+	//	if (this->jobs.empty()){
+	//		return;
+	//	}
+	//	DWORD Minvalue = MAXGETTICK;
+	//	for (int i = 0; i < this->jobs.size(); i++)
+	//	{
+	//		if (this->jobs[i].exectime < Minvalue)
+	//		{
+	//			Minvalue = this->jobs[i].exectime;
+	//			index = i;
+	//		}
+	//	}
+	//	if (index == -1) return;
+	//	job = this->jobs[index];
+	//	if (job.exectime > GetTickCount()) return;
+	//	this->jobs.erase(this->jobs.begin() + index);
+	//}
+	//auto f = job.func;
+	//if (f == NULL) return;
+	//f();
+	//return;
 
-	/*LOCKING(this->queueLock);
+	LOCKING(this->queueLock);
 	if (this->jobs.empty()) return;
 	else jobs.clear();
-	return;*/
+	return;
 }
 
 
@@ -186,7 +186,7 @@ void IocpConstructor::ThreadFunction()
 			{
 				if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
 				{
-					printf("데이터 삭제 가능\n");
+					printf("정상삭제\n");
 					delete tempHandle.ioinfo;
 				}
 				else{

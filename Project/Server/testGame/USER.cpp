@@ -48,7 +48,7 @@ void USER::USER_MOVE()
 {
 	TimerJob User_Move_Job;
 	LOCKING(this->key);
-	if (this->CurrentState == USER::state::ALIVE)
+	/*if (this->CurrentState == USER::state::ALIVE)
 	{
 		float dx = this->x + (this->vx * 0.03f);
 		float dy = this->y + (this->vy * 0.03f);
@@ -64,7 +64,7 @@ void USER::USER_MOVE()
 			LOCKING(IocpConstructor::queueLock)
 			IocpConstructor::jobs.push_back(User_Move_Job);
 		}
-	}
+	}*/
 	return;
 }
 

@@ -86,7 +86,6 @@ void PacketHandler::BroadCastAccountPacket()
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
-	
 	for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
 	{
 		if (it.second->type == Object_USER)
@@ -464,18 +463,17 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	std::shared_ptr<USER> user = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(MovePacket.uid()));
 	if (user == NULL || user->CurrentState == USER::state::DEAD || user->CurrentState == USER::state::DISCONNECT) return;
 
-	
 	user->ChangeState(USER::state::ALIVE);
 	user->SetVelocity(MovePacket.unit_vx(),MovePacket.unit_vy());
 
-	TimerJob job;
-	job.current = job.state::UserMove;
-	job.exectime = GetTickCount() + 30;
-	job.func = std::bind(&USER::USER_MOVE, user);
-	{
-		LOCKING(IocpConstructor::queueLock);
-		IocpConstructor::jobs.push_back(job);
-	}
+	//TimerJob job;
+	//job.current = job.state::UserMove;
+	//job.exectime = GetTickCount() + 30;
+	//job.func = std::bind(&USER::USER_MOVE, user);
+	//{
+	//	LOCKING(IocpConstructor::queueLock);
+	//	IocpConstructor::jobs.push_back(job);
+	//}
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(user->ObjectId);
 	ServerMovePacket.set_vx(user->vx);
@@ -494,7 +492,6 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerMovePacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
 	BroadCast(buffer, size + sizeof(unsigned short)* 2);
-
 	return;
 }
 
