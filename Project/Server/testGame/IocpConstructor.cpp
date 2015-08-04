@@ -181,32 +181,34 @@ void IocpConstructor::ThreadFunction()
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
 			}
-		}
-		//	else if (tempHandle.ioinfo->rwMode == WRITE)
-		//	{
-		//		if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
-		//		{
-		//			delete tempHandle.ioinfo;
-		//		}
 
-		//		//비정상으로 인지하고 종료함..
-		//		else
-		//		{
-		//			sock = tempHandle.handleinfo->ClntSock;
-		//			index = IocpConstructor::Object_Manager->FIND_USER(sock);
-		//			//inf(index == -1) 예외처리하기
-		//			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(index));
-		//			TimerJob disConnectJob;
-		//			disConnectJob.exectime = GetTickCount();
-		//			disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
-		//			LOCKING(this->queueLock)
-		//			{
-		//				this->jobs.push_back(disConnectJob);
-		//			}
-		//			User->ChangeState(USER::state::DISCONNECT);
-		//		}
-		//	}
-		//}
+			else if (tempHandle.ioinfo->rwMode == WRITE)
+			{
+				if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
+				{
+					delete tempHandle.ioinfo;
+				}
+
+				//		//비정상으로 인지하고 종료함..
+				//		else
+				//		{
+				//			sock = tempHandle.handleinfo->ClntSock;
+				//			index = IocpConstructor::Object_Manager->FIND_USER(sock);
+				//			//inf(index == -1) 예외처리하기
+				//			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(index));
+				//			TimerJob disConnectJob;
+				//			disConnectJob.exectime = GetTickCount();
+				//			disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
+				//			LOCKING(this->queueLock)
+				//			{
+				//				this->jobs.push_back(disConnectJob);
+				//			}
+				//			User->ChangeState(USER::state::DISCONNECT);
+				//		}
+				//	}
+				//}
+			}
+		}
 		else
 		{
 			JobSchedule();

@@ -85,6 +85,7 @@ void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 	//엔피씨의 거리계산!!!
 	Npc->x += Npc->vx * 0.03f;
 	Npc->y += Npc->vy * 0.03f;
+
 	TimerJob job;
 	job.exectime = GetTickCount() + AI_MOVE_DELAY;
 	//job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(Npc->ObjectId)));

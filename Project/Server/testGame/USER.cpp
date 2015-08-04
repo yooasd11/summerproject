@@ -50,13 +50,13 @@ void USER::USER_MOVE()
 	LOCKING(this->key);
 	if (this->CurrentState == USER::state::ALIVE)
 	{
-		
 		float dx = this->x + (this->vx * 0.03f);
 		float dy = this->y + (this->vy * 0.03f);
 		if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < 0.0f))
 		{
 			this->x = dx;
 			this->y = dy;
+			printf("%f\n", this->x);
 		}
 		PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(this->ObjectId));
 		User_Move_Job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
@@ -65,7 +65,6 @@ void USER::USER_MOVE()
 			LOCKING(IocpConstructor::queueLock)
 			IocpConstructor::jobs.push_back(User_Move_Job);
 		}
-		
 	}
 	return;
 }

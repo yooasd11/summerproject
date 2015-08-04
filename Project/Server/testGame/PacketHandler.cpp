@@ -208,6 +208,7 @@ void PacketHandler::C_COLLISION_HANDLER(Packet& p)
 
 	size = ServerCollisionPacket.ByteSize();
 	type = PKT_S_COLLISION;
+
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
@@ -221,7 +222,7 @@ void PacketHandler::S_COLLISION_HANDLER(std::shared_ptr<OBJECT> ob_1, std::share
 	unsigned short size = 0, type = 0;
 
 	InGamePacket::S_Collision ServerCollisionPacket;
-	type = PKT_S_COLLISION;
+	
 
 	//ÃÑ¾Ë - ¸Ê, À¯Àú - ¸Ê, ¿£ÇÇ¾¾ - ¸Ê
 	if (ob_2 == NULL)
@@ -246,7 +247,9 @@ void PacketHandler::S_COLLISION_HANDLER(std::shared_ptr<OBJECT> ob_1, std::share
 		ServerCollisionPacket.set_uid2(ob_2->ObjectId);
 	}
 
+	type = PKT_S_COLLISION;
 	size = ServerCollisionPacket.ByteSize();
+
 	memcpy(buffer, &size, sizeof(unsigned short));
 	memcpy(buffer + sizeof(unsigned short), &type, sizeof(unsigned short));
 	ServerCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
@@ -291,7 +294,7 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 	//AccountPacket::S_Account_List::Account *tempAccount = tempList.add_account_member();
 
 
-	type = PKT_S_SHOOT;
+	
 	InGamePacket::S_Shoot ServerShootPacket;
 	ServerShootPacket.set_uid(index);
 	ServerShootPacket.set_damage(Bullet->damage);
@@ -305,7 +308,9 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 	temp->set_ax(Bullet->ax);
 	temp->set_ay(Bullet->ay);
 
+	type = PKT_S_SHOOT;
 	size = ServerShootPacket.ByteSize();
+
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerShootPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
@@ -321,7 +326,7 @@ void PacketHandler::S_SHOOT_HANDLER(std::shared_ptr<OBJECT> ob)
 	InGamePacket::S_Shoot ServerShootPacket;
 	std::shared_ptr<BULLET> Bullet = std::static_pointer_cast<BULLET>(ob);
 
-	type = PKT_S_SHOOT;
+
 
 	ServerShootPacket.set_uid(Bullet->shooter);
 	ServerShootPacket.set_damage(Bullet->damage);
@@ -335,7 +340,9 @@ void PacketHandler::S_SHOOT_HANDLER(std::shared_ptr<OBJECT> ob)
 	temp->set_ax(Bullet->ax);
 	temp->set_ay(Bullet->ay);
 
+	type = PKT_S_SHOOT;
 	size = ServerShootPacket.ByteSize();
+
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerShootPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
@@ -407,6 +414,7 @@ void PacketHandler::C_STOP_HANDLER(Packet& p)
 
 	size = ServerStopPacket.ByteSize();
 	type = PKT_S_STOP;
+
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerStopPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
@@ -461,7 +469,6 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	user->ChangeState(USER::state::ALIVE);
 	user->SetVelocity(user->vx + MovePacket.unit_vx()*USER_VELOCITY, user->vy + MovePacket.unit_vy()*USER_VELOCITY);
 
-	type = PKT_S_MOVE;
 
 	TimerJob job;
 	job.current = job.state::UserMove;
@@ -477,6 +484,9 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	ServerMovePacket.set_vy(user->vy);
 	ServerMovePacket.set_x(user->x);
 	ServerMovePacket.set_y(user->y);
+
+	type = PKT_S_MOVE;
+	size = ServerMovePacket.ByteSize();
 
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
