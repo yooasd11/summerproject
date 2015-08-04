@@ -134,7 +134,8 @@ void PacketHandler::S_DISCONNECT_HANDLER(int ObjectID)
 
 void PacketHandler::C_COLLISION_HANDLER(Packet& p)
 {
-	char* buffer = new char[BUFSIZE];
+
+	/*char buffer[BUFSIZE] = { 0, };
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size = 0, type = 0, current = 0;
 	int receiveType;
@@ -212,7 +213,8 @@ void PacketHandler::C_COLLISION_HANDLER(Packet& p)
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerCollisionPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
-	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);*/
+
 	return;
 }
 

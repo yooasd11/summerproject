@@ -44,7 +44,7 @@ void BULLET::BULLET_MOVE()
 	
 		//여기가 일단 충돌처리한느 부분임....
 		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
-		if (t_x >= WIDTH || t_x < 0 || t_y >= HEIGHT || t_y < 80.0f)
+		if (t_x >= WIDTH || t_x < 0 || t_y >= HEIGHT || t_y < LAND)
 		{
 			//총알을 지워줘야 함..
 			//stop 패킷을 보내야함
@@ -115,7 +115,6 @@ void BULLET::BULLET_MOVE()
 			LOCKING(IocpConstructor::queueLock)
 			IocpConstructor::jobs.push_back(bulletMoveJob);
 		}
-
 	}
 	return;
 }

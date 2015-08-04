@@ -86,11 +86,9 @@ void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 	Npc->x += Npc->vx * 0.03f;
 	Npc->y += Npc->vy * 0.03f;
 
-	printf("NPC %f\n", Npc->x);
 	TimerJob job;
 	job.exectime = GetTickCount() + AI_MOVE_DELAY;
 	job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(Npc->ObjectId)));
-	
 	{
 		LOCKING(IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);

@@ -24,7 +24,7 @@
 /////////////////////∞‘¿”≥ª∫Œ
 #define DISTANCE 10
 #define DAMAGE_DISTANCE 50
-#define BULLET_VELOCITY 90
+#define BULLET_VELOCITY 200
 #define BULLET_DAMAGE_1 50
 #define AI_NEXT_TICK 3000
 #define BULLETNEXTTICK 30
@@ -33,7 +33,8 @@
 ///////////////∏ 
 #define WIDTH 1500
 #define HEIGHT 700
-#define GRAVITY -30
+#define LAND 80
+#define GRAVITY -350
 
 ////////////////////////
 #define AI_ATTACK_DELAY 3000
@@ -43,7 +44,7 @@
 #define AI_DIRECTION_DELAY 10000
 #define NPC_STATUS_ALIVE 1
 #define NPC_STATUS_DEAD 2
-#define USER_VELOCITY 50.0f
+#define USER_VELOCITY 50
 #define LOCKING(key) LockHelper lockHelper (key);
 //#define LOCK(key) LockHelper lockHelper (key);
 

@@ -52,7 +52,7 @@ void USER::USER_MOVE()
 	{
 		float dx = this->x + (this->vx * 0.03f);
 		float dy = this->y + (this->vy * 0.03f);
-		if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < 0.0f))
+		if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND))
 		{
 			this->x = dx;
 			this->y = dy;

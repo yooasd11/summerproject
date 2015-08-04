@@ -51,12 +51,16 @@ void NPC::NPC_STATE_CHANGE(int _state)
 
 void NPC::NPC_INIT()
 {
-	TimerJob job;
+	TimerJob job, job2;
 	job.exectime = GetTickCount() + NEXT_TICK;
 	job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
+
+	job2.exectime = GetTickCount() + AI_DIRECTION_DELAY;
+	job2.func = std::bind(&NPC::NPC_DIRECTION_CHANGE, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
 	{
 		LOCKING(IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
+		IocpConstructor::jobs.push_back(job2);
 	}
 	return;
 }
@@ -72,5 +76,12 @@ void NPC::NPC_DIRECTION_CHANGE()
 {
 	LOCKING(this->key);
 	this->vx *= -1;
+	TimerJob job;
+	job.exectime = GetTickCount() + AI_DIRECTION_DELAY;
+	job.func = std::bind(&NPC::NPC_DIRECTION_CHANGE, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
+	{
+		LOCKING(IocpConstructor::queueLock);
+		IocpConstructor::jobs.push_back(job);
+	}
 	return;
 }

@@ -16,7 +16,6 @@ public:
 	virtual void NPC_Action(std::shared_ptr<NPC>);
 };
 
-
 class NPC_DEAD : public NPC_STATE
 {
 public:
