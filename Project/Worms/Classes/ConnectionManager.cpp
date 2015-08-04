@@ -49,7 +49,7 @@ int ConnectionManager::recvMsg(){
 	Packet packet;
 
 	int retRecv = recv(m_servSocket, HeaderBuf, PKTHEADERSIZE, 0);
-	if (retRecv < 4) return -1;	// 이상한 대가리
+	if (retRecv < 4) return -1;	// 이상한 헤더
 	USHORT PktLen, PktType;
 
 	memcpy(&PktLen, HeaderBuf, sizeof(USHORT));
