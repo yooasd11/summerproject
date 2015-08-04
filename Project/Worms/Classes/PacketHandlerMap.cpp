@@ -81,7 +81,7 @@ void SMovePacketHandler(Packet& p){
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pJYObject->getCCObject();
 	if (pCCOwner == nullptr) return;
 
-	pJYObject->setVelocity(sMovePacket.vx(), sMovePacket.vy());
+	pJYObject->setVelocity(fVx, fVy);
 
 	if (fVx < 0){
 		pCCOwner->setFlippedX(false);
