@@ -83,7 +83,7 @@ void IocpConstructor::GENERATE_NPC(int count)
 	LOCKING(this->queueLock);
 	for (int i = 0; i < count; i++)
 	{
-		std::shared_ptr<NPC> tempNPC(new NPC(200.0f, 200.0f, 50.0f, 0.0f));  // x , y , vx, vy 
+		std::shared_ptr<NPC> tempNPC(new NPC(130.0f, 100.0f, 50.0f, 0.0f));  // x , y , vx, vy 
 		IocpConstructor::Object_Manager->REGIST_NPC(tempNPC);
 		TimerJob job;
 		job.exectime = GetTickCount() + NEXT_TICK;

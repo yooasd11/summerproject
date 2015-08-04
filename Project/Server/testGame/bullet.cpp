@@ -33,19 +33,13 @@ void BULLET::BULLET_MOVE()
 	LOCKING(this->key);
 	if (this->CurrentState == BULLET::state::ABLE){
 		
-
-		/*Bullet->vx = Bullet->vx + Bullet->ax * 0.03f;
-		Bullet->vy = Bullet->vy + Bullet->ay * 0.03f;
-
-		Bullet->x += ((Bullet->vx*0.03f) + (0.03f * 0.03f * Bullet->ax / 2));
-		Bullet->y += ((Bullet->vy*0.03f) + (0.03f * 0.03f * Bullet->ay / 2));*/
-
 		float t_vx = this->vx + this->ax * 0.03f;
 		float t_vy = this->vy + this->ay * 0.03f;
 
 		float t_x = this->x + t_vx * 0.03f;
 		float t_y = this->y + t_vy * 0.03f;
 		
+		printf("%f %f\n", t_x, t_y);
 		std::shared_ptr<BULLET> Bullet = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(this->ObjectId));
 		//여기가 일단 충돌처리한느 부분임....
 		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
@@ -77,6 +71,7 @@ void BULLET::BULLET_MOVE()
 						}
 						PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, User);
 						IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
+						return;
 					}
 				}
 				else if (ob.second->type == Object_NPC)
@@ -89,8 +84,10 @@ void BULLET::BULLET_MOVE()
 						{
 							Npc->NPC_STATE_CHANGE(NPC_STATUS_DEAD);
 						}
+						
 						PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, Npc);
 						IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
+						return;
 					}
 
 				}
@@ -100,10 +97,13 @@ void BULLET::BULLET_MOVE()
 					PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, Bullet_2);
 					IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
 					IocpConstructor::Object_Manager->REMOVE(Bullet_2->ObjectId);
+					return;
 				}
 			}
 		}
 		TimerJob bulletMoveJob;
+		this->vx = t_vx;
+		this->vy = t_vy;
 		this->x = t_x;
 		this->y = t_y;
 		//현재브로드 캐스팅하는 부분을 지움..

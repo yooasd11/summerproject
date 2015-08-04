@@ -19,6 +19,8 @@ USER::USER(int TYPE, float x, float y, int _socket)
 	this->hp = 100;
 	this->CurrentState = USER::state::ALIVE;
 	this->socket = _socket;
+	this->vx = 0.0f;
+	this->vy = 0.0f;
 }
 
 USER::~USER()
@@ -29,8 +31,8 @@ USER::~USER()
 void USER::SetVelocity(float _vx, float _vy)
 {
 	LOCKING(this->key);
-	this->vx = _vx * USER_VELOCITY;
-	this->vy = _vy * USER_VELOCITY;
+	this->vx = _vx;
+	this->vy = _vy;
 }
 
 void USER::ChangeState(int _state)
@@ -49,8 +51,8 @@ void USER::USER_MOVE()
 	if (this->CurrentState == USER::state::ALIVE)
 	{
 		
-		float dx = this->x + (this->vx * 0.03);
-		float dy = this->y + (this->vy * 0.03);
+		float dx = this->x + (this->vx * 0.03f);
+		float dy = this->y + (this->vy * 0.03f);
 		if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < 0.0f))
 		{
 			this->x = dx;
@@ -63,6 +65,7 @@ void USER::USER_MOVE()
 			LOCKING(IocpConstructor::queueLock)
 			IocpConstructor::jobs.push_back(User_Move_Job);
 		}
+		
 	}
 	return;
 }

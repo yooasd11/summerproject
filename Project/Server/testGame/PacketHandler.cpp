@@ -300,7 +300,7 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 	ServerShootPacket.set_y(Bullet->y);
 	ServerShootPacket.set_vx(Bullet->vx);
 	ServerShootPacket.set_vy(Bullet->vy);
-
+	 
 	InGamePacket::S_Acceleration *temp = ServerShootPacket.add_acceleration_list();
 	temp->set_ax(Bullet->ax);
 	temp->set_ay(Bullet->ay);
@@ -459,7 +459,8 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 
 	
 	user->ChangeState(USER::state::ALIVE);
-	user->SetVelocity(MovePacket.unit_vx(), MovePacket.unit_vy());
+	user->SetVelocity(user->vx + MovePacket.unit_vx()*USER_VELOCITY, user->vy + MovePacket.unit_vy()*USER_VELOCITY);
+
 	type = PKT_S_MOVE;
 
 	TimerJob job;
