@@ -12,9 +12,8 @@ private:
 	
 	Lock *UserLock;
 public:
-	static GameManager *manageGame;
-	static ClientManager *cm;
-	static AIManager *nm;
+	static ObjectManager *Object_Manager;
+	
 	static int ObjectCount;
 	static Lock* ObjectKey;
 	static Lock* queueLock;
@@ -36,8 +35,7 @@ public:
 	HANDLE getPort();
 	void closeSocket(SOCKET);
 
-	
-	void generateAI(int);
+	void GENERATE_NPC(int);
 
 };
 

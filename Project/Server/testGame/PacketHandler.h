@@ -19,20 +19,17 @@ public:
 	void SendAccountPacket(SOCKET, int);
 	void BroadCastAccountPacket();
 	void BroadCast(char*, int);
-	void C_MOVE_Handler(Packet&);
-	void C_STOP_handler(Packet&);
-	void C_SHOOT_handler(Packet&);
-	void C_DISCONNECT_Handler(int);
-	void C_STOP_handler(std::shared_ptr<bullet>);
-	void C_COLLISION_Handler(Packet& p);
-	void S_COLLISION_Handler(std::shared_ptr<bullet>);  //ÃÑ¾Ë - º®
-	void S_COLLISION_Handler(std::shared_ptr<bullet>,int,int); //À¯Àú - ÃÑ¾Ë
-	void S_COLLISION_Handler(std::shared_ptr<USER>);  //À¯Àú - º®
-	void S_MOVE_Handler(std::shared_ptr<AI>);
-	void S_STOP_Handler(std::shared_ptr<AI>);
-	void C_MOVE_Handler(std::shared_ptr<USER>);
-	void S_SHOOT_Handler(std::shared_ptr<bullet>);
-	void C_SHOOT_Handler(std::shared_ptr<bullet>);
+	
+	void S_DISCONNECT_HANDLER(int);
+	void C_MOVE_HANDLER(Packet&);
+	void S_MOVE_HANDLER(std::shared_ptr<OBJECT>);
+	void S_STOP_HANDLER(std::shared_ptr<OBJECT>);
+	void C_STOP_HANDLER(Packet&);
+	void S_SHOOT_HANDLER(std::shared_ptr<OBJECT>);
+	void C_SHOOT_HANDLER(Packet&);
+	
+	void S_COLLISION_HANDLER(std::shared_ptr<OBJECT>, std::shared_ptr<OBJECT>);
+	void C_COLLISION_HANDLER(Packet&);
 };
 
 class HandlerRegistHelper

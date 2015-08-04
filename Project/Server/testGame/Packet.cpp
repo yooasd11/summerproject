@@ -1,14 +1,15 @@
 #include "stdafx.h"
 #include "Packet.h"
 
-
 Packet::Packet()
 {
+	this->key = new Lock();
 }
 
 
 Packet::~Packet()
 {
+	delete this->key;
 }
 
 void Packet::setLength(unsigned short length)
@@ -41,10 +42,14 @@ void Packet::setMsg(char *msg, int len)
 	memcpy(this->Msg, msg, len);
 }
 
-Packet* Packet::PacketSeperate(char* msg, int len)
+bool Packet::PacketSeperate(char* msg, int Len, int _socket)
 {
+	LOCKING(this->key);
+	this->socket = _socket;
 	memcpy(&this->Length, msg, sizeof(unsigned short));
 	memcpy(&this->Type, msg + sizeof(unsigned short), sizeof(unsigned short));
 	memcpy(this->Msg, msg + (sizeof(unsigned short)* 2), this->Length);
-	return this;
+	if (Len - PKTHEADER != this->Length) return false;
+	else PacketHandler::GetInstance()->HandlePacket(*this);
+	return true;
 }

@@ -82,18 +82,15 @@
   <ItemGroup>
     <ClInclude Include="..\protobuffer\AccountPacket.pb.h" />
     <ClInclude Include="..\protobuffer\InGamePacket.pb.h" />
-    <ClInclude Include="bullet.h" />
+    <ClInclude Include="BULLET.h" />
     <ClInclude Include="ClientHandle.h" />
-    <ClInclude Include="ClientManager.h" />
-    <ClInclude Include="CollisionObject.h" />
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="HandleData.h" />
     <ClInclude Include="IocpConstructor.h" />
     <ClInclude Include="IoData.h" />
     <ClInclude Include="Lock.h" />
-    <ClInclude Include="AI.h" />
-    <ClInclude Include="AIManager.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="NPC_STATE.h" />
+    <ClInclude Include="OBJECT.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketHandler.h" />
@@ -110,18 +107,15 @@
     <ClCompile Include="..\protobuffer\InGamePacket.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="ClientHandle.cpp" />
-    <ClCompile Include="ClientManager.cpp" />
-    <ClCompile Include="CollisionObject.cpp" />
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="HandleData.cpp" />
     <ClCompile Include="IocpConstructor.cpp" />
     <ClCompile Include="IoData.cpp" />
     <ClCompile Include="Lock.cpp" />
-    <ClCompile Include="AI.cpp" />
-    <ClCompile Include="AIManager.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="NPC_STATE.cpp" />
+    <ClCompile Include="OBJECT.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="SocketListener.cpp" />

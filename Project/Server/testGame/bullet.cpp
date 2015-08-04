@@ -1,97 +1,98 @@
 #include "stdafx.h"
-#include "bullet.h"
+#include "BULLET.h"
 
 
-bullet::bullet(int _id, int _shooter,  float _x, float _y, float _damage, float _v, float _direction)
+BULLET::BULLET()
 {
 	this->key = new Lock();
-	this->uid = _id;
-	this->x = _x;
-	this->y = _y;
-	this->velocity = _v;
-	this->direction = _direction;
-	this->damage = _damage;
-	this->shooter = _shooter;
-	this->working = true;
+	this->damage = BULLET_DAMAGE_1;
+	this->type = Object_BULLET;
+	this->ay = GRAVITY;
+	this->ax = 0;
 }
 
-bullet::bullet()
-{
-	this->key = new Lock();
-}
 
-bullet::~bullet()
+BULLET::~BULLET()
 {
 	delete this->key;
 }
 
-void bullet::ChangeState(bool s)
+
+BULLET::BULLET(float _x, float _y, float _vx, float _vy, int _shooter) : BULLET()
 {
-	LOCKING(this->key);
-	if (!this->working)
-		this->working = s;
-	return;
+	this->x = _x;
+	this->y = _y;
+	this->vx = _vx * BULLET_VELOCITY;
+	this->vy = _vy * BULLET_VELOCITY;
+	this->shooter = _shooter;
 }
 
-void bullet::bulletMove()
+void BULLET::BULLET_MOVE()
 {
-	//존재하는 총알에 대한 작업을 처리 
 	LOCKING(this->key);
-	if (this->working){
-		//총알이 언제 안보여야 되는지 알아야함...640 X 320
-		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
-		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
-		//printf("%f %f\n", dx, dy);
-		std::shared_ptr<bullet> bul = IocpConstructor::manageGame->retBullet(this->uid);
+	if (this->CurrentState == BULLET::state::ABLE){
+		
+		float tempVx = this->vx + (0.03f * 0.03f * this->ax / 2);
+		float tempVy = this->vy + (0.03f * 0.03f * this->ay / 2);
+		//이부분 수정해야함...
+		float dx = this->x + this->vx * 0.03f;
+		float dy = this->y + this->vy * 0.03f;
+
+		std::shared_ptr<BULLET> Bullet = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(this->ObjectId));
 		//여기가 일단 충돌처리한느 부분임....
 		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
 		if (dx >= WIDTH || dx < 0 || dy >= HEIGHT || dy < 0)
 		{
 			//총알을 지워줘야 함..
 			//stop 패킷을 보내야함
-			this->working = false;
-			PacketHandler::GetInstance()->S_COLLISION_Handler(bul);
-			IocpConstructor::manageGame->removeBullet(bul->uid);
+			this->CurrentState = BULLET::state::DISABLE;
+			////이부분도수정.~
+			PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet,nullptr);
+			IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
 			return;
 		}
 
-		for (auto user : IocpConstructor::cm->mappingClient)
+		for (auto ob : IocpConstructor::Object_Manager->OBJECT_MAP)
 		{
-			float userX = user.second->x; float userY = user.second->y;
-			if (sqrt((dx - userX)*(dx - userX) + (dy - userY)*(dy - userY)) < DAMAGE_DISTANCE && user.second->objectID != this->shooter && (user.second->crt != USER::state::DEAD))
+			float o_dx = ob.second->x; float o_dy = ob.second->y;
+			if (sqrt((dx - o_dx)*(dx - o_dx) + (dy - o_dy)*(dy - o_dy)) < DAMAGE_DISTANCE)
 			{
-				this->working = false;
-				user.second->Set_user_hp(user.second->hp -= this->damage);
-				printf("%d user damaged\n", user.second->objectID);
-				if (user.second->hp <= 0)
-				{
-					printf("%d user died\n", user.second->objectID);
-					user.second->ChangeState(USER::state::DEAD);
+				//대상이 유저일 경우
+				if (ob.second->type == Object_USER){
+					std::shared_ptr<USER> User = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(ob.second->ObjectId));
+					if ((this->shooter != ob.second->ObjectId) && ((User->CurrentState == USER::state::ALIVE) || User->CurrentState == USER::state::STOP))
+					{
+						User->USER_SET_HP(User->hp -= this->damage);
+						if (User->hp <= 0)
+						{
+							User->ChangeState(USER::state::DEAD);
+						}
+						PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, User);
+						IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
+					}
 				}
-				//데미지를 입은부분 전달
-				PacketHandler::GetInstance()->S_COLLISION_Handler(bul, user.second->objectID, user.second->hp);
-				IocpConstructor::manageGame->removeBullet(bul->uid);
-
-				return;
-			}
-		}
-
-		for (auto AI :IocpConstructor::nm->mappingAI )
-		{
-			float aiX = AI.second->x; float aiY = AI.second->y;
-			if (sqrt((dx - aiX)*(dx - aiX) + (dy - aiY)*(dy - aiY)) < DAMAGE_DISTANCE && AI.second->nid != this->shooter && AI.second->current_state != AI.second->npc_dead)
-			{
-				this->working = false;
-				AI.second->AI_set_hp(AI.second->hp -= this->damage);
-				printf("%d NPC damaged\n", AI.second->nid);
-				if (AI.second->hp <= 0)
+				else if (ob.second->type == Object_NPC)
 				{
-					printf("%d NPC died\n", AI.second->nid);
-					AI.second->ChangeState(NPC_STATUS_DEAD);
+					std::shared_ptr<NPC> Npc = std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(ob.second->ObjectId));
+					if ((this->shooter != ob.second->ObjectId) && (Npc->current_state == Npc->npc_alive))
+					{
+						Npc->NPC_SET_HP(Npc->hp -= this->damage);
+						if (Npc->hp <= 0)
+						{
+							Npc->NPC_STATE_CHANGE(NPC_STATUS_DEAD);
+						}
+						PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, Npc);
+						IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
+					}
+
 				}
-				PacketHandler::GetInstance()->S_COLLISION_Handler(bul, AI.second->nid, AI.second->hp);
-				IocpConstructor::manageGame->removeBullet(bul->uid);
-				return;
+				else if (ob.second->type == Object_BULLET)
+				{
+					std::shared_ptr<BULLET> Bullet_2 = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(ob.second->ObjectId));
+					PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, Bullet_2);
+					IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
+					IocpConstructor::Object_Manager->REMOVE(Bullet_2->ObjectId);
+				}
 			}
 		}
 		TimerJob bulletMoveJob;
@@ -99,13 +100,21 @@ void bullet::bulletMove()
 		this->y = dy;
 		//현재브로드 캐스팅하는 부분을 지움..
 		//PacketHandler::GetInstance()->C_SHOOT_Handler(bul);
-		bulletMoveJob.func = std::bind(&bullet::bulletMove, bul);
+		bulletMoveJob.func = std::bind(&BULLET::BULLET_MOVE, Bullet);
 		bulletMoveJob.exectime = GetTickCount() + 30;
 		{
 			LOCKING(IocpConstructor::queueLock)
 			IocpConstructor::jobs.push_back(bulletMoveJob);
 		}
-		
+
 	}
 	return;
+}
+
+void BULLET::CHANGE_STATE(int _state)
+{
+	LOCKING(this->key);
+	this->CurrentState = BULLET::state(_state);
+	return;
+
 }

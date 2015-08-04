@@ -27,14 +27,16 @@ class Packet
 {
 private:
 	
+	Lock* key;
 public:
+	
 	unsigned short Length;
 	unsigned short Type;
-	int uid;
 	char Msg[PKTBODY];
+	int socket;
 	Packet();
 	~Packet();
-	Packet* PacketSeperate(char*, int);
+	bool PacketSeperate(char*, int, int);
 	void setLength(unsigned short);
 	unsigned short getLength();
 	void setType(unsigned short);

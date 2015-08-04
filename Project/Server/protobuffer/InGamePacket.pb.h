@@ -36,6 +36,7 @@ void protobuf_AddDesc_InGamePacket_2eproto();
 void protobuf_AssignDesc_InGamePacket_2eproto();
 void protobuf_ShutdownFile_InGamePacket_2eproto();
 
+class S_Acceleration;
 class C_Move;
 class S_Move;
 class C_Stop;
@@ -46,6 +47,108 @@ class C_Collision;
 class S_Collision;
 
 // ===================================================================
+
+class S_Acceleration : public ::google::protobuf::Message {
+ public:
+  S_Acceleration();
+  virtual ~S_Acceleration();
+
+  S_Acceleration(const S_Acceleration& from);
+
+  inline S_Acceleration& operator=(const S_Acceleration& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const S_Acceleration& default_instance();
+
+  void Swap(S_Acceleration* other);
+
+  // implements Message ----------------------------------------------
+
+  inline S_Acceleration* New() const { return New(NULL); }
+
+  S_Acceleration* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const S_Acceleration& from);
+  void MergeFrom(const S_Acceleration& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(S_Acceleration* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required float ax = 1;
+  bool has_ax() const;
+  void clear_ax();
+  static const int kAxFieldNumber = 1;
+  float ax() const;
+  void set_ax(float value);
+
+  // required float ay = 2;
+  bool has_ay() const;
+  void clear_ay();
+  static const int kAyFieldNumber = 2;
+  float ay() const;
+  void set_ay(float value);
+
+  // @@protoc_insertion_point(class_scope:InGamePacket.S_Acceleration)
+ private:
+  inline void set_has_ax();
+  inline void clear_has_ax();
+  inline void set_has_ay();
+  inline void clear_has_ay();
+
+  // helper for ByteSize()
+  int RequiredFieldsByteSizeFallback() const;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  float ax_;
+  float ay_;
+  friend void  protobuf_AddDesc_InGamePacket_2eproto();
+  friend void protobuf_AssignDesc_InGamePacket_2eproto();
+  friend void protobuf_ShutdownFile_InGamePacket_2eproto();
+
+  void InitAsDefaultInstance();
+  static S_Acceleration* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class C_Move : public ::google::protobuf::Message {
  public:
@@ -118,19 +221,28 @@ class C_Move : public ::google::protobuf::Message {
   ::google::protobuf::uint32 uid() const;
   void set_uid(::google::protobuf::uint32 value);
 
-  // required float direction = 2;
-  bool has_direction() const;
-  void clear_direction();
-  static const int kDirectionFieldNumber = 2;
-  float direction() const;
-  void set_direction(float value);
+  // required float unit_vx = 2;
+  bool has_unit_vx() const;
+  void clear_unit_vx();
+  static const int kUnitVxFieldNumber = 2;
+  float unit_vx() const;
+  void set_unit_vx(float value);
+
+  // required float unit_vy = 3;
+  bool has_unit_vy() const;
+  void clear_unit_vy();
+  static const int kUnitVyFieldNumber = 3;
+  float unit_vy() const;
+  void set_unit_vy(float value);
 
   // @@protoc_insertion_point(class_scope:InGamePacket.C_Move)
  private:
   inline void set_has_uid();
   inline void clear_has_uid();
-  inline void set_has_direction();
-  inline void clear_has_direction();
+  inline void set_has_unit_vx();
+  inline void clear_has_unit_vx();
+  inline void set_has_unit_vy();
+  inline void clear_has_unit_vy();
 
   // helper for ByteSize()
   int RequiredFieldsByteSizeFallback() const;
@@ -139,7 +251,8 @@ class C_Move : public ::google::protobuf::Message {
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::uint32 uid_;
-  float direction_;
+  float unit_vx_;
+  float unit_vy_;
   friend void  protobuf_AddDesc_InGamePacket_2eproto();
   friend void protobuf_AssignDesc_InGamePacket_2eproto();
   friend void protobuf_ShutdownFile_InGamePacket_2eproto();
@@ -234,19 +347,31 @@ class S_Move : public ::google::protobuf::Message {
   float y() const;
   void set_y(float value);
 
-  // required float direction = 4;
-  bool has_direction() const;
-  void clear_direction();
-  static const int kDirectionFieldNumber = 4;
-  float direction() const;
-  void set_direction(float value);
+  // required float vx = 4;
+  bool has_vx() const;
+  void clear_vx();
+  static const int kVxFieldNumber = 4;
+  float vx() const;
+  void set_vx(float value);
 
-  // required float velocity = 5;
-  bool has_velocity() const;
-  void clear_velocity();
-  static const int kVelocityFieldNumber = 5;
-  float velocity() const;
-  void set_velocity(float value);
+  // required float vy = 5;
+  bool has_vy() const;
+  void clear_vy();
+  static const int kVyFieldNumber = 5;
+  float vy() const;
+  void set_vy(float value);
+
+  // repeated .InGamePacket.S_Acceleration acceleration_list = 6;
+  int acceleration_list_size() const;
+  void clear_acceleration_list();
+  static const int kAccelerationListFieldNumber = 6;
+  const ::InGamePacket::S_Acceleration& acceleration_list(int index) const;
+  ::InGamePacket::S_Acceleration* mutable_acceleration_list(int index);
+  ::InGamePacket::S_Acceleration* add_acceleration_list();
+  const ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >&
+      acceleration_list() const;
+  ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >*
+      mutable_acceleration_list();
 
   // @@protoc_insertion_point(class_scope:InGamePacket.S_Move)
  private:
@@ -256,10 +381,10 @@ class S_Move : public ::google::protobuf::Message {
   inline void clear_has_x();
   inline void set_has_y();
   inline void clear_has_y();
-  inline void set_has_direction();
-  inline void clear_has_direction();
-  inline void set_has_velocity();
-  inline void clear_has_velocity();
+  inline void set_has_vx();
+  inline void clear_has_vx();
+  inline void set_has_vy();
+  inline void clear_has_vy();
 
   // helper for ByteSize()
   int RequiredFieldsByteSizeFallback() const;
@@ -270,8 +395,9 @@ class S_Move : public ::google::protobuf::Message {
   ::google::protobuf::uint32 uid_;
   float x_;
   float y_;
-  float direction_;
-  float velocity_;
+  float vx_;
+  ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration > acceleration_list_;
+  float vy_;
   friend void  protobuf_AddDesc_InGamePacket_2eproto();
   friend void protobuf_AssignDesc_InGamePacket_2eproto();
   friend void protobuf_ShutdownFile_InGamePacket_2eproto();
@@ -576,19 +702,28 @@ class C_Shoot : public ::google::protobuf::Message {
   ::google::protobuf::uint32 uid() const;
   void set_uid(::google::protobuf::uint32 value);
 
-  // required float direction = 2;
-  bool has_direction() const;
-  void clear_direction();
-  static const int kDirectionFieldNumber = 2;
-  float direction() const;
-  void set_direction(float value);
+  // required float unit_vx = 2;
+  bool has_unit_vx() const;
+  void clear_unit_vx();
+  static const int kUnitVxFieldNumber = 2;
+  float unit_vx() const;
+  void set_unit_vx(float value);
+
+  // required float unit_vy = 3;
+  bool has_unit_vy() const;
+  void clear_unit_vy();
+  static const int kUnitVyFieldNumber = 3;
+  float unit_vy() const;
+  void set_unit_vy(float value);
 
   // @@protoc_insertion_point(class_scope:InGamePacket.C_Shoot)
  private:
   inline void set_has_uid();
   inline void clear_has_uid();
-  inline void set_has_direction();
-  inline void clear_has_direction();
+  inline void set_has_unit_vx();
+  inline void clear_has_unit_vx();
+  inline void set_has_unit_vy();
+  inline void clear_has_unit_vy();
 
   // helper for ByteSize()
   int RequiredFieldsByteSizeFallback() const;
@@ -597,7 +732,8 @@ class C_Shoot : public ::google::protobuf::Message {
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::uint32 uid_;
-  float direction_;
+  float unit_vx_;
+  float unit_vy_;
   friend void  protobuf_AddDesc_InGamePacket_2eproto();
   friend void protobuf_AssignDesc_InGamePacket_2eproto();
   friend void protobuf_ShutdownFile_InGamePacket_2eproto();
@@ -706,19 +842,31 @@ class S_Shoot : public ::google::protobuf::Message {
   float damage() const;
   void set_damage(float value);
 
-  // required float velocity = 6;
-  bool has_velocity() const;
-  void clear_velocity();
-  static const int kVelocityFieldNumber = 6;
-  float velocity() const;
-  void set_velocity(float value);
+  // required float vx = 6;
+  bool has_vx() const;
+  void clear_vx();
+  static const int kVxFieldNumber = 6;
+  float vx() const;
+  void set_vx(float value);
 
-  // required float direction = 7;
-  bool has_direction() const;
-  void clear_direction();
-  static const int kDirectionFieldNumber = 7;
-  float direction() const;
-  void set_direction(float value);
+  // required float vy = 7;
+  bool has_vy() const;
+  void clear_vy();
+  static const int kVyFieldNumber = 7;
+  float vy() const;
+  void set_vy(float value);
+
+  // repeated .InGamePacket.S_Acceleration acceleration_list = 8;
+  int acceleration_list_size() const;
+  void clear_acceleration_list();
+  static const int kAccelerationListFieldNumber = 8;
+  const ::InGamePacket::S_Acceleration& acceleration_list(int index) const;
+  ::InGamePacket::S_Acceleration* mutable_acceleration_list(int index);
+  ::InGamePacket::S_Acceleration* add_acceleration_list();
+  const ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >&
+      acceleration_list() const;
+  ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >*
+      mutable_acceleration_list();
 
   // @@protoc_insertion_point(class_scope:InGamePacket.S_Shoot)
  private:
@@ -732,10 +880,10 @@ class S_Shoot : public ::google::protobuf::Message {
   inline void clear_has_y();
   inline void set_has_damage();
   inline void clear_has_damage();
-  inline void set_has_velocity();
-  inline void clear_has_velocity();
-  inline void set_has_direction();
-  inline void clear_has_direction();
+  inline void set_has_vx();
+  inline void clear_has_vx();
+  inline void set_has_vy();
+  inline void clear_has_vy();
 
   // helper for ByteSize()
   int RequiredFieldsByteSizeFallback() const;
@@ -748,8 +896,9 @@ class S_Shoot : public ::google::protobuf::Message {
   float x_;
   float y_;
   float damage_;
-  float velocity_;
-  float direction_;
+  float vx_;
+  ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration > acceleration_list_;
+  float vy_;
   friend void  protobuf_AddDesc_InGamePacket_2eproto();
   friend void protobuf_AssignDesc_InGamePacket_2eproto();
   friend void protobuf_ShutdownFile_InGamePacket_2eproto();
@@ -991,6 +1140,58 @@ class S_Collision : public ::google::protobuf::Message {
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
+// S_Acceleration
+
+// required float ax = 1;
+inline bool S_Acceleration::has_ax() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void S_Acceleration::set_has_ax() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void S_Acceleration::clear_has_ax() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void S_Acceleration::clear_ax() {
+  ax_ = 0;
+  clear_has_ax();
+}
+inline float S_Acceleration::ax() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Acceleration.ax)
+  return ax_;
+}
+inline void S_Acceleration::set_ax(float value) {
+  set_has_ax();
+  ax_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Acceleration.ax)
+}
+
+// required float ay = 2;
+inline bool S_Acceleration::has_ay() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void S_Acceleration::set_has_ay() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void S_Acceleration::clear_has_ay() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void S_Acceleration::clear_ay() {
+  ay_ = 0;
+  clear_has_ay();
+}
+inline float S_Acceleration::ay() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Acceleration.ay)
+  return ay_;
+}
+inline void S_Acceleration::set_ay(float value) {
+  set_has_ay();
+  ay_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Acceleration.ay)
+}
+
+// -------------------------------------------------------------------
+
 // C_Move
 
 // required uint32 uid = 1;
@@ -1017,28 +1218,52 @@ inline void C_Move::set_uid(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Move.uid)
 }
 
-// required float direction = 2;
-inline bool C_Move::has_direction() const {
+// required float unit_vx = 2;
+inline bool C_Move::has_unit_vx() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void C_Move::set_has_direction() {
+inline void C_Move::set_has_unit_vx() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void C_Move::clear_has_direction() {
+inline void C_Move::clear_has_unit_vx() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void C_Move::clear_direction() {
-  direction_ = 0;
-  clear_has_direction();
+inline void C_Move::clear_unit_vx() {
+  unit_vx_ = 0;
+  clear_has_unit_vx();
 }
-inline float C_Move::direction() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.C_Move.direction)
-  return direction_;
+inline float C_Move::unit_vx() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Move.unit_vx)
+  return unit_vx_;
 }
-inline void C_Move::set_direction(float value) {
-  set_has_direction();
-  direction_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.C_Move.direction)
+inline void C_Move::set_unit_vx(float value) {
+  set_has_unit_vx();
+  unit_vx_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Move.unit_vx)
+}
+
+// required float unit_vy = 3;
+inline bool C_Move::has_unit_vy() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void C_Move::set_has_unit_vy() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void C_Move::clear_has_unit_vy() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void C_Move::clear_unit_vy() {
+  unit_vy_ = 0;
+  clear_has_unit_vy();
+}
+inline float C_Move::unit_vy() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Move.unit_vy)
+  return unit_vy_;
+}
+inline void C_Move::set_unit_vy(float value) {
+  set_has_unit_vy();
+  unit_vy_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Move.unit_vy)
 }
 
 // -------------------------------------------------------------------
@@ -1117,52 +1342,82 @@ inline void S_Move::set_y(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Move.y)
 }
 
-// required float direction = 4;
-inline bool S_Move::has_direction() const {
+// required float vx = 4;
+inline bool S_Move::has_vx() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void S_Move::set_has_direction() {
+inline void S_Move::set_has_vx() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void S_Move::clear_has_direction() {
+inline void S_Move::clear_has_vx() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void S_Move::clear_direction() {
-  direction_ = 0;
-  clear_has_direction();
+inline void S_Move::clear_vx() {
+  vx_ = 0;
+  clear_has_vx();
 }
-inline float S_Move::direction() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.S_Move.direction)
-  return direction_;
+inline float S_Move::vx() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Move.vx)
+  return vx_;
 }
-inline void S_Move::set_direction(float value) {
-  set_has_direction();
-  direction_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.S_Move.direction)
+inline void S_Move::set_vx(float value) {
+  set_has_vx();
+  vx_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Move.vx)
 }
 
-// required float velocity = 5;
-inline bool S_Move::has_velocity() const {
+// required float vy = 5;
+inline bool S_Move::has_vy() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void S_Move::set_has_velocity() {
+inline void S_Move::set_has_vy() {
   _has_bits_[0] |= 0x00000010u;
 }
-inline void S_Move::clear_has_velocity() {
+inline void S_Move::clear_has_vy() {
   _has_bits_[0] &= ~0x00000010u;
 }
-inline void S_Move::clear_velocity() {
-  velocity_ = 0;
-  clear_has_velocity();
+inline void S_Move::clear_vy() {
+  vy_ = 0;
+  clear_has_vy();
 }
-inline float S_Move::velocity() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.S_Move.velocity)
-  return velocity_;
+inline float S_Move::vy() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Move.vy)
+  return vy_;
 }
-inline void S_Move::set_velocity(float value) {
-  set_has_velocity();
-  velocity_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.S_Move.velocity)
+inline void S_Move::set_vy(float value) {
+  set_has_vy();
+  vy_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Move.vy)
+}
+
+// repeated .InGamePacket.S_Acceleration acceleration_list = 6;
+inline int S_Move::acceleration_list_size() const {
+  return acceleration_list_.size();
+}
+inline void S_Move::clear_acceleration_list() {
+  acceleration_list_.Clear();
+}
+inline const ::InGamePacket::S_Acceleration& S_Move::acceleration_list(int index) const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Move.acceleration_list)
+  return acceleration_list_.Get(index);
+}
+inline ::InGamePacket::S_Acceleration* S_Move::mutable_acceleration_list(int index) {
+  // @@protoc_insertion_point(field_mutable:InGamePacket.S_Move.acceleration_list)
+  return acceleration_list_.Mutable(index);
+}
+inline ::InGamePacket::S_Acceleration* S_Move::add_acceleration_list() {
+  // @@protoc_insertion_point(field_add:InGamePacket.S_Move.acceleration_list)
+  return acceleration_list_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >&
+S_Move::acceleration_list() const {
+  // @@protoc_insertion_point(field_list:InGamePacket.S_Move.acceleration_list)
+  return acceleration_list_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >*
+S_Move::mutable_acceleration_list() {
+  // @@protoc_insertion_point(field_mutable_list:InGamePacket.S_Move.acceleration_list)
+  return &acceleration_list_;
 }
 
 // -------------------------------------------------------------------
@@ -1345,28 +1600,52 @@ inline void C_Shoot::set_uid(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.uid)
 }
 
-// required float direction = 2;
-inline bool C_Shoot::has_direction() const {
+// required float unit_vx = 2;
+inline bool C_Shoot::has_unit_vx() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void C_Shoot::set_has_direction() {
+inline void C_Shoot::set_has_unit_vx() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void C_Shoot::clear_has_direction() {
+inline void C_Shoot::clear_has_unit_vx() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void C_Shoot::clear_direction() {
-  direction_ = 0;
-  clear_has_direction();
+inline void C_Shoot::clear_unit_vx() {
+  unit_vx_ = 0;
+  clear_has_unit_vx();
 }
-inline float C_Shoot::direction() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.direction)
-  return direction_;
+inline float C_Shoot::unit_vx() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.unit_vx)
+  return unit_vx_;
 }
-inline void C_Shoot::set_direction(float value) {
-  set_has_direction();
-  direction_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.direction)
+inline void C_Shoot::set_unit_vx(float value) {
+  set_has_unit_vx();
+  unit_vx_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.unit_vx)
+}
+
+// required float unit_vy = 3;
+inline bool C_Shoot::has_unit_vy() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void C_Shoot::set_has_unit_vy() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void C_Shoot::clear_has_unit_vy() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void C_Shoot::clear_unit_vy() {
+  unit_vy_ = 0;
+  clear_has_unit_vy();
+}
+inline float C_Shoot::unit_vy() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Shoot.unit_vy)
+  return unit_vy_;
+}
+inline void C_Shoot::set_unit_vy(float value) {
+  set_has_unit_vy();
+  unit_vy_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Shoot.unit_vy)
 }
 
 // -------------------------------------------------------------------
@@ -1493,52 +1772,82 @@ inline void S_Shoot::set_damage(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.damage)
 }
 
-// required float velocity = 6;
-inline bool S_Shoot::has_velocity() const {
+// required float vx = 6;
+inline bool S_Shoot::has_vx() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void S_Shoot::set_has_velocity() {
+inline void S_Shoot::set_has_vx() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void S_Shoot::clear_has_velocity() {
+inline void S_Shoot::clear_has_vx() {
   _has_bits_[0] &= ~0x00000020u;
 }
-inline void S_Shoot::clear_velocity() {
-  velocity_ = 0;
-  clear_has_velocity();
+inline void S_Shoot::clear_vx() {
+  vx_ = 0;
+  clear_has_vx();
 }
-inline float S_Shoot::velocity() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.velocity)
-  return velocity_;
+inline float S_Shoot::vx() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.vx)
+  return vx_;
 }
-inline void S_Shoot::set_velocity(float value) {
-  set_has_velocity();
-  velocity_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.velocity)
+inline void S_Shoot::set_vx(float value) {
+  set_has_vx();
+  vx_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.vx)
 }
 
-// required float direction = 7;
-inline bool S_Shoot::has_direction() const {
+// required float vy = 7;
+inline bool S_Shoot::has_vy() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void S_Shoot::set_has_direction() {
+inline void S_Shoot::set_has_vy() {
   _has_bits_[0] |= 0x00000040u;
 }
-inline void S_Shoot::clear_has_direction() {
+inline void S_Shoot::clear_has_vy() {
   _has_bits_[0] &= ~0x00000040u;
 }
-inline void S_Shoot::clear_direction() {
-  direction_ = 0;
-  clear_has_direction();
+inline void S_Shoot::clear_vy() {
+  vy_ = 0;
+  clear_has_vy();
 }
-inline float S_Shoot::direction() const {
-  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.direction)
-  return direction_;
+inline float S_Shoot::vy() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.vy)
+  return vy_;
 }
-inline void S_Shoot::set_direction(float value) {
-  set_has_direction();
-  direction_ = value;
-  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.direction)
+inline void S_Shoot::set_vy(float value) {
+  set_has_vy();
+  vy_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Shoot.vy)
+}
+
+// repeated .InGamePacket.S_Acceleration acceleration_list = 8;
+inline int S_Shoot::acceleration_list_size() const {
+  return acceleration_list_.size();
+}
+inline void S_Shoot::clear_acceleration_list() {
+  acceleration_list_.Clear();
+}
+inline const ::InGamePacket::S_Acceleration& S_Shoot::acceleration_list(int index) const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Shoot.acceleration_list)
+  return acceleration_list_.Get(index);
+}
+inline ::InGamePacket::S_Acceleration* S_Shoot::mutable_acceleration_list(int index) {
+  // @@protoc_insertion_point(field_mutable:InGamePacket.S_Shoot.acceleration_list)
+  return acceleration_list_.Mutable(index);
+}
+inline ::InGamePacket::S_Acceleration* S_Shoot::add_acceleration_list() {
+  // @@protoc_insertion_point(field_add:InGamePacket.S_Shoot.acceleration_list)
+  return acceleration_list_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >&
+S_Shoot::acceleration_list() const {
+  // @@protoc_insertion_point(field_list:InGamePacket.S_Shoot.acceleration_list)
+  return acceleration_list_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::InGamePacket::S_Acceleration >*
+S_Shoot::mutable_acceleration_list() {
+  // @@protoc_insertion_point(field_mutable_list:InGamePacket.S_Shoot.acceleration_list)
+  return &acceleration_list_;
 }
 
 // -------------------------------------------------------------------
@@ -1718,6 +2027,8 @@ inline void S_Collision::set_y(float value) {
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

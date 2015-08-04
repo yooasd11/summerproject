@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "ObjectManager.h"
 
+int ObjectManager::OBJECTCOUNT;
 
 ObjectManager::ObjectManager()
 {
-	this->key = new Lock;
-	this->ObjectCount = 1;
+	this->OBJECTCOUNT = 1;
+	this->key = new Lock();
 }
 
 
@@ -14,21 +15,58 @@ ObjectManager::~ObjectManager()
 	delete this->key;
 }
 
-void ObjectManager::registObject(std::shared_ptr<CollisionObject> ob)
+
+void ObjectManager::REGIST(int TYPE, int info)
 {
 	LOCKING(this->key);
-	this->mappingObject[this->ObjectCount++] = ob;
+	if (TYPE == Object_USER)
+	{
+		//user老版快 家南锅龋甫 info..
+		this->OBJECT_MAP[this->OBJECTCOUNT++] = std::shared_ptr<USER>(new USER(TYPE, 100.0f, 100.0f, info));
+	}
+	//else if (TYPE == Object_NPC)
+	//{
+	//	this->OBJECT_MAP[this->OBJECTCOUNT++] = std::shared_ptr<NPC>(new NPC(100.0f, 100.0f, 100.0f, 100.0f));
+	//}
+	else return;
+}
+
+std::shared_ptr<OBJECT> ObjectManager::FIND(int _id)
+{
+	if (this->OBJECT_MAP.count(_id) != 0)
+		return this->OBJECT_MAP[_id];
+	return NULL;
+}
+
+void ObjectManager::REMOVE(int _id)
+{
+	LOCKING(this->key);
+	if (this->OBJECT_MAP.count(_id) != 0){
+		if (this->OBJECT_MAP[_id]->type == Object_USER){
+			printf("%d user disconnected..\n", _id);
+		}
+		this->OBJECT_MAP.erase(_id);
+	}
 	return;
 }
 
-std::shared_ptr<CollisionObject>  ObjectManager::retObject(int ob)
+int ObjectManager::FIND_USER(int _socket)
 {
-	return this->mappingObject[ob];
+	for (auto user : this->OBJECT_MAP)
+	{
+		if (user.second->type == Object_USER)
+		{
+			std::shared_ptr<USER> tempUser = std::static_pointer_cast<USER>(user.second);
+			if (tempUser->socket == _socket) return tempUser->ObjectId;
+		}
+	}
+	return -1;
 }
 
-void ObjectManager::removeObject(int ob)
+void ObjectManager::REGIST_BULLET(std::shared_ptr<BULLET> Bullet)
 {
 	LOCKING(this->key);
-	this->mappingObject.erase(ob);
+	Bullet->ObjectId = OBJECTCOUNT;
+	this->OBJECT_MAP[this->OBJECTCOUNT++] = Bullet;
 	return;
 }

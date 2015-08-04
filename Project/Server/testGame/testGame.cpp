@@ -26,10 +26,12 @@ int _tmain()
 		if ((sock = serv.ConnectSocket(handle)) == INVALID_SOCKET) ErrorHandling("accept error");
 		handle.ClntSock = sock;
 		
+		CompletionPort.Object_Manager->REGIST(Object_USER, sock);
+		index = CompletionPort.Object_Manager->FIND_USER(sock);
 
-		CompletionPort.cm->mapping(sock);
-		index = CompletionPort.cm->retUser(sock);
-		printf("%d user connected!\n", index);
+		//CompletionPort.cm->mapping(sock);
+		//index = CompletionPort.cm->retUser(sock);
+		//printf("%d user connected!\n", index);
 
 		handle.Copy();
 		CompletionPort.registerObject(handle);

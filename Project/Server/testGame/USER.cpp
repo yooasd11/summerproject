@@ -2,188 +2,81 @@
 #include "USER.h"
 
 
+
 USER::USER()
 {
-	this->connect = true;
-	this->direction = 0;
-	this->x = 10.0f;
-	this->y = 10.0f;
+	this->key = new Lock;
 	this->hp = 100;
-	this->current = 0;
-	this->total = 0;
-	this->crt = state::WAITING;
-	this->velocity = 0.0f;
-	this->key = new Lock();
+	this->CurrentState = USER::state::ALIVE;
 }
-
-USER::USER(int object, SOCKET sock, int _hp, float _x, float _y)
+USER::USER(int TYPE, float x, float y, int _socket)
 {
-	this->objectID = object;
-	this->direction = 0;
-	this->connect = true;
-	this->uid = sock;
-	this->hp = _hp;
-	this->x = _x;
-	this->y = _y;
-	this->current = 0;
-	this->total = 0;
-	this->crt = state::WAITING;
-	this->velocity = 70.0f;
-	this->key = new Lock();
+	this->key = new Lock;
+	this->type = TYPE;
+	this->ObjectId = ObjectManager::OBJECTCOUNT;
+	this->x = x;
+	this->y = y;
+	this->hp = 100;
+	this->CurrentState = USER::state::ALIVE;
+	this->socket = _socket;
 }
 
 USER::~USER()
 {
+	delete this->key;
 }
 
-
-void USER::setUSER(int _hp, float _x, float _y)
+void USER::SetVelocity(float _vx, float _vy)
 {
-	this->hp = _hp;
-	this->x = _x;
-	this->y = _y;
-}
-
-void USER::setTotal(int len)
-{
-	this->total = len;
-	return;
-}
-
-void USER::setCurrent(int len)
-{
-	this->current = len;
-	return;
-}
-
-int USER::getTotal()
-{
-	return this->total;
-}
-
-int USER::getCurrent()
-{
-	return this->current;
-}
-
-void USER::setBuffer(char *msg, int len)
-{
-	memcpy(this->Buffer, msg, len);
-	return;
-}
-
-char* USER::getBuffer()
-{
-	return this->Buffer;
-}
-
-
-bool USER::finished()
-{
-	if (this->current == this->total && this->current != 0) return true;
-	return false;
-}
-
-void USER::clear()
-{
-	this->current = 0;
-	this->total = 0;
-	memset(this->Buffer, 0, sizeof(this->Buffer));
-}
-
-void USER::UserpacketHandle(char *msg, int len, int _uid)
-{
-
-	Packet userPacket;
-	unsigned short current = 0;
-
 	LOCKING(this->key);
-	memcpy(this->Buffer, msg, len);
-	this->total = len;
-	this->uid = _uid;
-	if (this->isConnecting()){
-		while (current < this->getTotal()){
-			memcpy(&userPacket.Length, this->Buffer + current, sizeof(unsigned short));
-			current += sizeof(unsigned short);
-			memcpy(&userPacket.Type, this->Buffer + current, sizeof(unsigned short));
-			current += sizeof(unsigned short);
-			memcpy(userPacket.Msg, this->Buffer + current, userPacket.Length);
-			current += userPacket.Length;
-			PacketHandler::GetInstance()->HandlePacket(userPacket);
-		}
+	this->vx = _vx * USER_VELOCITY;
+	this->vy = _vy * USER_VELOCITY;
+}
+
+void USER::ChangeState(int _state)
+{
+	LOCKING(this->key);
+	if (this->CurrentState != USER::state::DISCONNECT){
+		this->CurrentState = (USER::state)_state;
 	}
-	//'clear'의 위치를 잘 생각해주어함.....
-	this->clear();
 	return;
 }
 
-void USER::UserpacketHandle()
+void USER::USER_MOVE()
 {
-	Packet userPacket;
-	unsigned short current = 0;
-
-	//계속해서 유저를 처리할 수 있도록
+	TimerJob User_Move_Job;
 	LOCKING(this->key);
-	//연결성을 확인...연결이 안되어 있다면
-	if (this->isConnecting()){
-		while (current < this->getTotal()){
-			memcpy(&userPacket.Length, this->Buffer + current, sizeof(unsigned short));
-			current += sizeof(unsigned short);
-			memcpy(&userPacket.Type, this->Buffer + current, sizeof(unsigned short));
-			current += sizeof(unsigned short);
-			memcpy(userPacket.Msg, this->Buffer + current, userPacket.Length);
-			current += userPacket.Length;
-			PacketHandler::GetInstance()->HandlePacket(userPacket);
+	if (this->CurrentState == USER::state::ALIVE)
+	{
+		
+		float dx = this->x + (this->vx * 0.03);
+		float dy = this->y + (this->vy * 0.03);
+		if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < 0.0f))
+		{
+			this->x = dx;
+			this->y = dy;
 		}
-	}
-	//'clear'의 위치를 잘 생각해주어함.....
-	this->clear();
-}
-
-void::USER::ChangeState(USER::state s)
-{
-	LOCKING(this->key);
-	if (this->crt != USER::state::DEAD)
-		this->crt = s;
-	return;
-}
-
-void USER::UserMove(){
-
-	TimerJob userMoveJob;
-	LOCKING(this->key);
-	//시간초보다 작으면 수행되겠지..잡큐에서 알아서 수행해줌
-	if (this->isConnecting()){
-		float dx = this->x + (this->velocity * 0.03f * sin(this->direction * PI / 180));
-		float dy = this->y + (this->velocity * 0.03f * cos(this->direction * PI / 180));
-		if (this->crt == state::MOVING){
-			if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < 0.0f))
-			{
-				this->x = dx;
-				this->y = dy;
-			}
-			//현재위치 갱신과 위치를 브로드캐스팅
-			//printf("%f %f\n", dx, dy);
-			PacketHandler::GetInstance()->C_MOVE_Handler(IocpConstructor::cm->retUser(this->objectID));
-			//움직일 작업에 대해서 처리..
-			userMoveJob.func = std::bind(&USER::UserMove, IocpConstructor::cm->retUser(this->objectID));
-			userMoveJob.exectime = GetTickCount() + 30;
-
-			{
-				LOCKING(IocpConstructor::queueLock)
-				IocpConstructor::jobs.push_back(userMoveJob);
-			}
+		PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(this->ObjectId));
+		User_Move_Job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
+		User_Move_Job.exectime = GetTickCount() + 30;
+		{
+			LOCKING(IocpConstructor::queueLock)
+			IocpConstructor::jobs.push_back(User_Move_Job);
 		}
 	}
 	return;
 }
 
-bool USER::isConnecting(){
-	return this->connect;
-}
-
-void USER::Set_user_hp(int _hp){
+void USER::USER_SET_HP(int _hp)
+{
 	LOCKING(this->key);
 	this->hp = _hp;
+	return;
+}
+
+void USER::CALCULATE_DISTANCE()
+{
+	this->x = this->x + (this->vx * 0.03 );
+	this->y = this->y + (this->vy * 0.03 );
 	return;
 }

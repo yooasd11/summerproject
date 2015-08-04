@@ -20,7 +20,14 @@ NPC_STATE::~NPC_STATE()
 
 }
 
-NPC_ALIVE::NPC_ALIVE(){
+NPC_ALIVE::NPC_ALIVE()
+{
+
+
+}
+
+NPC_ALIVE::~NPC_ALIVE()
+{
 
 
 }
@@ -28,58 +35,63 @@ NPC_DEAD::NPC_DEAD(){
 
 }
 
-void NPC_STATE::NPC_Action(std::shared_ptr<AI> ai)
+NPC_DEAD::~NPC_DEAD(){
+
+}
+void NPC_STATE::NPC_Action(std::shared_ptr<NPC> Npc)
 {
 
 }
-void NPC_DEAD::NPC_Action(std::shared_ptr<AI> ai)
+void NPC_DEAD::NPC_Action(std::shared_ptr<NPC> Npc)
 {
 
 }
 
 
 
-void NPC_ALIVE::NPC_Action(std::shared_ptr<AI> ai)
+void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 {
 	//공격을 했음..
-	std::shared_ptr<bullet> Bullet;
-	for (auto it : IocpConstructor::cm->mappingClient)
+	std::shared_ptr<BULLET> Bullet;
+	for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
 	{
-		float dx = it.second->x; float dy = it.second->y;
-		if ((sqrt((ai->x - dx)*(ai->x - dx) + (ai->y - dy)*(ai->y - dy)) < DISTANCE) && (it.second->crt != USER::state::DEAD))
+		float dx = it.second->x;
+		float dy = it.second->y;
+		if (it.second->type == Object_USER)
 		{
-			float degree = getDegree(ai->x, ai->y, dx, dy);
+			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(it.second);
+			if ((sqrt((Npc->x - dx)*(Npc->x - dx) + (Npc->y - dy)*(Npc->y - dy)) < DISTANCE) && ((User->CurrentState == USER::state::ALIVE) || User->CurrentState == USER::state::STOP))
 			{
-				LOCKING(IocpConstructor::ObjectKey);
-				std::shared_ptr<bullet> tempBullet(new bullet(IocpConstructor::ObjectCount, ai->nid, ai->x, ai->y,
-					BULLET_DAMAGE_1, BULLET_VELOCITY, degree));
-				Bullet = tempBullet;
-				IocpConstructor::manageGame->registBullet(Bullet);
+				//총알을 어떻게 발사할건지 결정해줘야함...
+				std::shared_ptr<BULLET> Bullet(new BULLET(Npc->x, Npc->y, 10.0f, 10.0f, Npc->ObjectId));
+				IocpConstructor::Object_Manager->REGIST_BULLET(Bullet);
+
+				TimerJob job, job2;
+				job.exectime = GetTickCount() + AI_ATTACK_DELAY;
+				job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(Npc->ObjectId)));
+				job2.exectime = GetTickCount() + NEXT_TICK;
+				job2.func = std::bind(&BULLET::BULLET_MOVE, Bullet);
+				{
+					LOCKING(IocpConstructor::queueLock)
+					IocpConstructor::jobs.push_back(job);
+					IocpConstructor::jobs.push_back(job2);
+				}
+				PacketHandler::GetInstance()->S_STOP_HANDLER(IocpConstructor::Object_Manager->FIND(Npc->ObjectId));
+				PacketHandler::GetInstance()->S_SHOOT_HANDLER(Bullet);
+				return;
 			}
-			TimerJob job, job2;
-			job.exectime = GetTickCount() + AI_ATTACK_DELAY;
-			job.func = std::bind(&AI::decision, IocpConstructor::nm->retAI(ai->nid));
-			job2.exectime = GetTickCount() + NEXT_TICK;
-			job2.func = std::bind(&bullet::bulletMove, Bullet);
-			{
-				LOCKING(IocpConstructor::queueLock)
-				IocpConstructor::jobs.push_back(job);
-				IocpConstructor::jobs.push_back(job2);
-			}
-			PacketHandler::GetInstance()->S_STOP_Handler(IocpConstructor::nm->retAI(ai->nid));
-			PacketHandler::GetInstance()->S_SHOOT_Handler(Bullet);
-			return;
 		}
+		//Npc->x = Npc->x + (Npc->velocity * 0.03f * sin(ai->direction * PI / 180));
+		//Npc->y = Npc->y + (ai->velocity * 0.03f * cos(ai->direction * PI / 180));
 	}
-	ai->x = ai->x + (ai->velocity * 0.03f * sin(ai->direction * PI / 180));
-	ai->y = ai->y + (ai->velocity * 0.03f * cos(ai->direction * PI / 180));
+	//엔피씨의 거리계산!!!
 	TimerJob job;
 	job.exectime = GetTickCount() + AI_MOVE_DELAY;
-	job.func = std::bind(&AI::decision, IocpConstructor::nm->retAI(ai->nid));
+	job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(Npc->ObjectId)));
 	{
 		LOCKING(IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
 	}
-	PacketHandler::GetInstance()->S_MOVE_Handler(IocpConstructor::nm->retAI(ai->nid));
+	PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(Npc->ObjectId));
 	return;
 }

@@ -1,25 +1,24 @@
 #pragma once
-class NPC
+class NPC_STATE;
+class NPC_DEAD;
+class NPC_ALIVE;
+
+class NPC : public OBJECT
 {
 private:
 	Lock* key;
+	
 public:
-	enum state{
-		alive = 1,
-		dead,
-	};
-	enum state current;
-	int nid;
-	int hp;
-	float x;
-	float y;
-	float direction;
-	float velocity;
-
+	NPC_STATE *current_state;
+	NPC_DEAD *npc_dead;
+	NPC_ALIVE *npc_alive;
 	NPC();
-	NPC(int,int, float, float, float, float);
+	NPC(float, float, float, float);
 	~NPC();
-	float getDegree(float, float, float, float);
-	void Action();
+	void NPC_DIRECTION_CHANGE();
+	void NPC_SET_HP(int);
+	void NPC_STATE_CHANGE(int);
+	void NPC_INIT();
+	void NPC_DESICION();
 };
 

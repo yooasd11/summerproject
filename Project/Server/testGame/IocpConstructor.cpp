@@ -9,9 +9,7 @@
 
 
 //'static'으로 선언한 경우 'cpp'에 다시 정의 해주어야 한다.
-GameManager* IocpConstructor::manageGame;
-ClientManager* IocpConstructor::cm;
-AIManager* IocpConstructor::nm;
+ObjectManager* IocpConstructor::Object_Manager;
 std::vector<TimerJob> IocpConstructor::jobs;
 int IocpConstructor::ObjectCount;
 Lock* IocpConstructor::ObjectKey;
@@ -19,9 +17,7 @@ Lock* IocpConstructor::queueLock;
 
 IocpConstructor::IocpConstructor()
 {
-	this->manageGame = new GameManager;
-	this->cm = new ClientManager;
-	this->nm = new AIManager;
+	this->Object_Manager = new ObjectManager;
 	this->queueLock = new Lock;
 	this->UserLock = new Lock;
 	this->ObjectKey = new Lock;
@@ -37,8 +33,7 @@ IocpConstructor::IocpConstructor()
 
 IocpConstructor::~IocpConstructor()
 {
-	delete this->cm;
-	delete this->manageGame;
+	delete this->Object_Manager;
 	delete this->queueLock;
 	delete this->UserLock;
 	delete this->ObjectKey;
@@ -83,32 +78,26 @@ HANDLE IocpConstructor::getPort()
 }
 
 //npc를 얼마나 생성할 것인가...
-void IocpConstructor::generateAI(int count)
-{
-	std::shared_ptr<AI> Instance;
-	LOCKING(this->queueLock);
-	for (int i = 0; i < count; i++)
-	{
-		{
-			//LOCKING(IocpConstructor::ObjectKey)
-			//std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, rand()%600+20.0f, rand()%250+20.0f, 90.0f, 30.0f));
-			std::shared_ptr<AI> temp(new AI(IocpConstructor::ObjectCount, 100, 100.0f*(i+1), 100.0f, 90.0f, AI_VELOCITY));
-			Instance = temp;
-			IocpConstructor::nm->registAI(Instance);
-		}
-		TimerJob job;
-		job.exectime = GetTickCount() + NEXT_TICK;
-		job.func = std::bind(&AI::init, Instance);
-		IocpConstructor::jobs.push_back(job);
-	}
-	return;
-}
+//void IocpConstructor::GENERATE_NPC(int count)
+//{
+//	LOCKING(this->queueLock);
+//	for (int i = 0; i < count; i++)
+//	{
+//		std::shared_ptr<NPC> tempNPC(new NPC(100.0f, 100.0f, 100.0f, 100.0f));  // x , y , vx, vy 
+//		IocpConstructor::Object_Manager->REGIST(Object_NPC, 0);
+//		TimerJob job;
+//		job.exectime = GetTickCount() + NEXT_TICK;
+//		job.func = std::bind(&NPC::NPC_INIT, tempNPC);
+//		IocpConstructor::jobs.push_back(job);
+//	}
+//	return;
+//}
 
 
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
-	/*TimerJob job;
+	TimerJob job;
 	int index = -1;
 	{
 		LOCKING(this->queueLock);
@@ -132,20 +121,20 @@ void IocpConstructor::JobSchedule()
 	auto f = job.func;
 	if (f == NULL) return;
 	f();
-	return;*/
-	LOCKING(this->queueLock);
+	return;
+	/*LOCKING(this->queueLock);
 	if (this->jobs.empty()) return;
 	else jobs.clear();
-	return;
+	return;*/
 }
 
 
 
 void IocpConstructor::closeSocket(SOCKET sock)
 {
-	int index = IocpConstructor::cm->retUser((SOCKET)sock);
-	PacketHandler::GetInstance()->C_DISCONNECT_Handler(index);
-	this->cm->removesocket(index);
+	int index = IocpConstructor::Object_Manager->FIND_USER(sock);
+	PacketHandler::GetInstance()->S_DISCONNECT_HANDLER(index);
+	IocpConstructor::Object_Manager->REMOVE(index);
 	return;
 }
 
@@ -154,15 +143,22 @@ void IocpConstructor::ThreadFunction()
 	SOCKET sock;
 	HANDLE hComPort = this->ComPort;
 	ClientHandle tempHandle;
-	int Ty, DataSize;
+	Packet ReceivePacket;
+	int Ty, DataSize, index;
 	bool hasJob = false;
 
 	while (1){
 		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), 30);
 
 		if (hasJob){
+
 			sock = tempHandle.handleinfo->ClntSock;
-			std::shared_ptr<USER> User = this->cm->retUser((int)this->cm->retUser((SOCKET)sock));
+			index = IocpConstructor::Object_Manager->FIND_USER(sock);
+
+
+			//if (index == -1) 예외처리하기
+			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(index));
+
 			if (tempHandle.ioinfo->rwMode == READ)
 			{
 				//접속종료에 대한 완료 통지
@@ -175,38 +171,41 @@ void IocpConstructor::ThreadFunction()
 					{
 						this->jobs.push_back(disConnectJob);
 					}
-					User->ChangeState(USER::state::DEAD);
-					User->connect = false;
+					User->ChangeState(USER::state::DISCONNECT);
 					continue;
 				}
 
-			
+				ReceivePacket.PacketSeperate(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 
-				User->UserpacketHandle(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 				tempHandle.ReadMode();
-				this->RecvMessage(tempHandle);				
-			}
-			else if (tempHandle.ioinfo->rwMode == WRITE)
-			{
-				if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
-				{
-					delete tempHandle.ioinfo;
-				}
-				else
-				{
-					sock = tempHandle.handleinfo->ClntSock;
-					std::shared_ptr<USER> User = this->cm->retUser((int)this->cm->retUser((SOCKET)sock));
-					TimerJob disConnectJob;
-					disConnectJob.exectime = GetTickCount();
-					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
-					LOCKING(this->queueLock)
-					{
-						this->jobs.push_back(disConnectJob);
-					}
-					User->ChangeState(USER::state::DEAD);
-				}
+				this->RecvMessage(tempHandle);
 			}
 		}
+		//	else if (tempHandle.ioinfo->rwMode == WRITE)
+		//	{
+		//		if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
+		//		{
+		//			delete tempHandle.ioinfo;
+		//		}
+
+		//		//비정상으로 인지하고 종료함..
+		//		else
+		//		{
+		//			sock = tempHandle.handleinfo->ClntSock;
+		//			index = IocpConstructor::Object_Manager->FIND_USER(sock);
+		//			//inf(index == -1) 예외처리하기
+		//			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(index));
+		//			TimerJob disConnectJob;
+		//			disConnectJob.exectime = GetTickCount();
+		//			disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
+		//			LOCKING(this->queueLock)
+		//			{
+		//				this->jobs.push_back(disConnectJob);
+		//			}
+		//			User->ChangeState(USER::state::DISCONNECT);
+		//		}
+		//	}
+		//}
 		else
 		{
 			JobSchedule();

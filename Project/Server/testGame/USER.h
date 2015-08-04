@@ -1,49 +1,25 @@
 #pragma once
-class USER
+class USER : public OBJECT
 {
-public:
-	bool connect;
-	int uid; //소켓번호
-	int objectID;
-	int hp;
-	float x;
-	float y;
-	float direction;
-	float velocity;
-	enum state{
-		WAITING = 1,
-		MOVING,
-		DEAD,
-	};
-	enum state crt; //WAITNG = 1, MOVE = 2, ATTACK = 3, DEAD = 4;
-	//받은 데이터와 현재까지 받은 데이터 크기
+private:
+	Lock* key;
 	
-	int total;
-	int current;
-	char Buffer[BUFSIZE];
-	Lock *key;
-
+public:
+	int socket;
+	enum state{
+		ALIVE = 1,
+		DEAD,
+		DISCONNECT,
+		STOP,
+	};
+	enum state CurrentState;
 	USER();
-	USER(int, SOCKET, int, float, float);
-	void setUSER(int, float, float);
+	USER(int, float, float, int);
 	~USER();
-	void setTotal(int);
-	void setCurrent(int);
-	void setBuffer(char*, int);
-	char* getBuffer();
-	int getTotal();
-	int getCurrent();
-	bool finished();
-	void clear();
-	void UserpacketHandle();
-	void UserpacketHandle(char*, int, int);
-	bool isConnecting();
-	void ChangeState(USER::state);
-
-	//상태에 관한 정의
-	void Set_user_hp(int);
-
-	//잡큐에 관한 작업정의...
-	void UserMove();
+	void SetVelocity(float, float);
+	void ChangeState(int);
+	void USER_MOVE();
+	void USER_SET_HP(int);
+	virtual void CALCULATE_DISTANCE();
 };
 
