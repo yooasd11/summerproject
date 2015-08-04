@@ -467,8 +467,7 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 
 	
 	user->ChangeState(USER::state::ALIVE);
-	user->SetVelocity(user->vx + MovePacket.unit_vx()*USER_VELOCITY, user->vy + MovePacket.unit_vy()*USER_VELOCITY);
-
+	user->SetVelocity(MovePacket.unit_vx(),MovePacket.unit_vy());
 
 	TimerJob job;
 	job.current = job.state::UserMove;

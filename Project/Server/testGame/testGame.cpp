@@ -17,7 +17,7 @@ int _tmain()
 	serv.MakeListener(9200);
 	serv.listenClient(5);
 	CompletionPort.setServSock(serv.getSocket());
-	CompletionPort.GENERATE_NPC(1);
+	//CompletionPort.GENERATE_NPC(1);
 
 	while (1){
 		SOCKET sock;
@@ -28,10 +28,6 @@ int _tmain()
 		
 		CompletionPort.Object_Manager->REGIST(Object_USER, sock);
 		index = CompletionPort.Object_Manager->FIND_USER(sock);
-
-		//CompletionPort.cm->mapping(sock);
-		//index = CompletionPort.cm->retUser(sock);
-		//printf("%d user connected!\n", index);
 
 		handle.Copy();
 		CompletionPort.registerObject(handle);

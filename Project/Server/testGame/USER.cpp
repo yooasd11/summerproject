@@ -31,8 +31,8 @@ USER::~USER()
 void USER::SetVelocity(float _vx, float _vy)
 {
 	LOCKING(this->key);
-	this->vx = _vx;
-	this->vy = _vy;
+	this->vx = _vx * USER_VELOCITY;
+	this->vy = _vy * USER_VELOCITY;
 }
 
 void USER::ChangeState(int _state)
@@ -56,7 +56,6 @@ void USER::USER_MOVE()
 		{
 			this->x = dx;
 			this->y = dy;
-			printf("%f\n", this->x);
 		}
 		PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(this->ObjectId));
 		User_Move_Job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));

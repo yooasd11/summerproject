@@ -41,6 +41,7 @@ void BULLET::BULLET_MOVE()
 		
 		printf("%f %f\n", t_x, t_y);
 		std::shared_ptr<BULLET> Bullet = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(this->ObjectId));
+	
 		//여기가 일단 충돌처리한느 부분임....
 		//맵과의 충돌처리와 유저와의 충돌처리가 필요하다...바운더리체크..
 		if (t_x >= WIDTH || t_x < 0 || t_y >= HEIGHT || t_y < 80.0f)
@@ -108,7 +109,7 @@ void BULLET::BULLET_MOVE()
 		this->y = t_y;
 		//현재브로드 캐스팅하는 부분을 지움..
 		//PacketHandler::GetInstance()->S_SHOOT_HANDLER(Bullet);
-		bulletMoveJob.func = std::bind(&BULLET::BULLET_MOVE, Bullet);
+		bulletMoveJob.func = std::bind(&BULLET::BULLET_MOVE, std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(Bullet->ObjectId)));
 		bulletMoveJob.exectime = GetTickCount() + 30;
 		{
 			LOCKING(IocpConstructor::queueLock)
