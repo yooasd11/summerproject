@@ -276,18 +276,36 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 	TimerJob job;
 	job.exectime = GetTickCount() + 30;
 	job.func = std::bind(&BULLET::BULLET_MOVE, Bullet);  //만약에 안되면 여기 의심
-	IocpConstructor::jobs.push_back(job);
+	{
+		LOCKING(IocpConstructor::queueLock);
+		IocpConstructor::jobs.push_back(job);
+	}
+
+	Bullet->vx = Bullet->vx + Bullet->ax * 0.03f;
+	Bullet->vy = Bullet->vy + Bullet->ay * 0.03f;
+
+	Bullet->x += ((Bullet->vx*0.03f) + (0.03f * 0.03f * Bullet->ax / 2));
+	Bullet->y += ((Bullet->vy*0.03f) + (0.03f * 0.03f * Bullet->ay / 2));
+	
+
+	//AccountPacket::S_Account_List::Account *tempAccount = tempList.add_account_member();
+
 
 	type = PKT_S_SHOOT;
 	InGamePacket::S_Shoot ServerShootPacket;
 	ServerShootPacket.set_uid(index);
 	ServerShootPacket.set_damage(Bullet->damage);
 	ServerShootPacket.set_bullet_uid(Bullet->ObjectId);
-	ServerShootPacket.set_x(tempUser->x);
-	ServerShootPacket.set_y(tempUser->y);
+	ServerShootPacket.set_x(Bullet->x);
+	ServerShootPacket.set_y(Bullet->y);
 	ServerShootPacket.set_vx(Bullet->vx);
 	ServerShootPacket.set_vy(Bullet->vy);
 
+	InGamePacket::S_Acceleration *temp = ServerShootPacket.add_acceleration_list();
+	temp->set_ax(Bullet->ax);
+	temp->set_ay(Bullet->ay);
+
+	size = ServerShootPacket.ByteSize();
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerShootPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
@@ -313,6 +331,7 @@ void PacketHandler::S_SHOOT_HANDLER(std::shared_ptr<OBJECT> ob)
 	ServerShootPacket.set_vx(Bullet->vx);
 	ServerShootPacket.set_vy(Bullet->vy);
 
+	size = ServerShootPacket.ByteSize();
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerShootPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
@@ -392,8 +411,6 @@ void PacketHandler::C_STOP_HANDLER(Packet& p)
 	return;
 }
 
-
-
 void PacketHandler::S_MOVE_HANDLER(std::shared_ptr<OBJECT> ob)
 {
 	char buffer[BUFSIZE] = { 0, };
@@ -441,9 +458,10 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	job.current = job.state::UserMove;
 	job.exectime = GetTickCount() + 30;
 	job.func = std::bind(&USER::USER_MOVE, user);
-	IocpConstructor::jobs.push_back(job);
-
-
+	{
+		LOCKING(IocpConstructor::queueLock);
+		IocpConstructor::jobs.push_back(job);
+	}
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(user->ObjectId);
 	ServerMovePacket.set_vx(user->vx);

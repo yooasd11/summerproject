@@ -122,6 +122,7 @@ void IocpConstructor::JobSchedule()
 	if (f == NULL) return;
 	f();
 	return;
+
 	/*LOCKING(this->queueLock);
 	if (this->jobs.empty()) return;
 	else jobs.clear();

@@ -24,15 +24,16 @@ void ObjectManager::REGIST(int TYPE, int info)
 		//user老版快 家南锅龋甫 info..
 		this->OBJECT_MAP[this->OBJECTCOUNT++] = std::shared_ptr<USER>(new USER(TYPE, 100.0f, 100.0f, info));
 	}
-	//else if (TYPE == Object_NPC)
-	//{
-	//	this->OBJECT_MAP[this->OBJECTCOUNT++] = std::shared_ptr<NPC>(new NPC(100.0f, 100.0f, 100.0f, 100.0f));
-	//}
+	else if (TYPE == Object_NPC)
+	{
+		this->OBJECT_MAP[this->OBJECTCOUNT++] = std::shared_ptr<NPC>(new NPC(100.0f, 100.0f, 100.0f, 100.0f));
+	}
 	else return;
 }
 
 std::shared_ptr<OBJECT> ObjectManager::FIND(int _id)
 {
+	LOCKING(this->key);
 	if (this->OBJECT_MAP.count(_id) != 0)
 		return this->OBJECT_MAP[_id];
 	return NULL;
