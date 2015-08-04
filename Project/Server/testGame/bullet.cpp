@@ -39,7 +39,7 @@ void BULLET::BULLET_MOVE()
 		float t_x = this->x + t_vx * 0.03f;
 		float t_y = this->y + t_vy * 0.03f;
 		
-		printf("%f %f\n", t_x, t_y);
+		//printf("%f %f\n", t_x, t_y);
 		std::shared_ptr<BULLET> Bullet = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(this->ObjectId));
 	
 		//여기가 일단 충돌처리한느 부분임....

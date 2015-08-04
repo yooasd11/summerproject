@@ -186,9 +186,13 @@ void IocpConstructor::ThreadFunction()
 			{
 				if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
 				{
+					printf("데이터 삭제 가능\n");
 					delete tempHandle.ioinfo;
 				}
+				else{
+					printf("비정상 삭제\n");
 
+				}
 				//		//비정상으로 인지하고 종료함..
 				//		else
 				//		{

@@ -285,10 +285,8 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 		LOCKING(IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
 	}
-
 	Bullet->vx = Bullet->vx + Bullet->ax * 0.03f;
 	Bullet->vy = Bullet->vy + Bullet->ay * 0.03f;
-
 	Bullet->x += (Bullet->vx*0.03f);
 	Bullet->y += (Bullet->vy*0.03f);
 	
@@ -433,7 +431,6 @@ void PacketHandler::S_MOVE_HANDLER(std::shared_ptr<OBJECT> ob)
 
 	InGamePacket::S_Move ServerMovePacket;
 
-
 	ServerMovePacket.set_uid(ob->ObjectId);
 	ServerMovePacket.set_x(ob->x);
 	ServerMovePacket.set_y(ob->y);
@@ -485,6 +482,10 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	ServerMovePacket.set_vy(user->vy);
 	ServerMovePacket.set_x(user->x);
 	ServerMovePacket.set_y(user->y);
+
+	InGamePacket::S_Acceleration *temp = ServerMovePacket.add_acceleration_list();
+	temp->set_ax(0.0f);
+	temp->set_ay(GRAVITY);
 
 	type = PKT_S_MOVE;
 	size = ServerMovePacket.ByteSize();
