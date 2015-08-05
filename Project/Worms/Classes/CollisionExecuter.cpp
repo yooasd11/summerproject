@@ -61,7 +61,7 @@ bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
 }
 
 void CollisionExecuter::tick(float fDeltaTime){
-	/*JYObject* pOwner = this->getOwner();
+	JYObject* pOwner = this->getOwner();
 	if (pOwner == nullptr) return;
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
@@ -73,7 +73,8 @@ void CollisionExecuter::tick(float fDeltaTime){
 	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
 
 	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
- 		AccelerationExecuter* pAE = (AccelerationExecuter*)pOwner->getExecuter(__Executer::__AccelerationExecuter);
+		pCCOwner->setPosition(pCCOwner->getPosition().x, 100.0f);
+ 		/*AccelerationExecuter* pAE = (AccelerationExecuter*)pOwner->getExecuter(__Executer::__AccelerationExecuter);
 		pAE->clearAcceleration();
 		pOwner->setVelocity(0.0f, 0.0f);
 		char sendBuf[PKTBODYSIZE];
@@ -83,6 +84,6 @@ void CollisionExecuter::tick(float fDeltaTime){
 		
 		cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
 
-		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);
-	}*/
+		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);*/
+	}
 }
