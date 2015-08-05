@@ -52,6 +52,7 @@ void AssaultExecuter::onMouseDown(cocos2d::Event* pEvent){
 	cocos2d::CCProgressTimer* pCharger = (cocos2d::CCProgressTimer*)this->getOwner()->getCCObject()->getChildByName("Charger");
 	if (pCharger == nullptr) return;
 
+	this->m_fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pCCOwner, pEvent);
 	this->m_bIsCharging = true;
 	pCharger->setVisible(true);
 }
@@ -68,8 +69,7 @@ void AssaultExecuter::onMouseUp(cocos2d::Event* pEvent){
 
 	MyScene* pMyScene = GET_MYSCENE;
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
-	float fDirection = CoordinateConverter::getInstance()->getDegreeBetweenCCNodeAndMouse(pCCOwner, pEvent);
-	CCLOG("Fire direction : %.2f", fDirection);
+	CCLOG("Fire direction : %.2f", this->m_fDirection);
 
 	float fCharged = pCharger->getPercentage() * 0.05f;
 
@@ -77,8 +77,8 @@ void AssaultExecuter::onMouseUp(cocos2d::Event* pEvent){
 	InGamePacket::C_Shoot c_shoot;
 
 	c_shoot.set_uid(pOwner->getUID());
-	c_shoot.set_unit_vx(fCharged *sin(MATH_DEG_TO_RAD(fDirection)));
-	c_shoot.set_unit_vy(fCharged *cos(MATH_DEG_TO_RAD(fDirection)));
+	c_shoot.set_unit_vx(fCharged *sin(MATH_DEG_TO_RAD(this->m_fDirection)));
+	c_shoot.set_unit_vy(fCharged *cos(MATH_DEG_TO_RAD(this->m_fDirection)));
 
 	c_shoot.SerializeToArray(sendBuf, c_shoot.ByteSize());
 

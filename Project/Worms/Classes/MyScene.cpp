@@ -123,6 +123,7 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 	pDragon->setFlippedX(true);
 	pDragon->setScale(0.5);
 	pDragon->setName("Dragon");
+	//pDragon->setColor(ccColor3B::BLACK);
 	CCTMXTiledMap* pTmap = GET_TMAP;
 	pTmap->addChild(pDragon, 3);
 

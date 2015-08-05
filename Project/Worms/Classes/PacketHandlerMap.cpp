@@ -8,6 +8,7 @@
 #include "JYArm.h"
 #include "JYObjectManager.h"
 #include "AccelerationExecuter.h"
+#include "CollisionExecuter.h"
 
 void PacketHandlerMap::registHandler(PACKET_TYPE eType, PacketHandler func)
 {
@@ -143,6 +144,8 @@ void SCollisionHandler(Packet& p){
 
 	JYObject* pJYObject1 = JYObjectManager::getInstance()->findObjectByUID(nUID1);
 	if (pJYObject1 == nullptr) return;
+	CollisionExecuter* pCollisionExecuter = (CollisionExecuter*)pJYObject1->getExecuter(__Executer::__CollisionExecuter);
+	if (pCollisionExecuter == nullptr) return;
 
 	JYOBJECT_TYPE eType1 = pJYObject1->getObjectType();
 
@@ -159,6 +162,8 @@ void SCollisionHandler(Packet& p){
 			UINT nUID2 = sCollision.uid2();
 			JYObject* pJYObject2 = JYObjectManager::getInstance()->findObjectByUID(nUID2);
 			if (pJYObject2 == nullptr) return;
+			pCollisionExecuter = (CollisionExecuter*)pJYObject2->getExecuter(__Executer::__CollisionExecuter);
+			if (pCollisionExecuter == nullptr) return;
 
 			JYOBJECT_TYPE eType2 = pJYObject2->getObjectType();
 			

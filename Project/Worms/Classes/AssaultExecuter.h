@@ -11,6 +11,7 @@ private:
 	cocos2d::CCProgressTimer* m_pCCCoolTimer;
 	bool m_bIsCooling;
 	bool m_bIsCharging;
+	float m_fDirection;
 	void createCoolTimer();
 	void executeCoolTimer(float fSec);
 public:

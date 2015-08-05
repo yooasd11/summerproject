@@ -61,7 +61,7 @@ bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
 }
 
 void CollisionExecuter::tick(float fDeltaTime){
-	JYObject* pOwner = this->getOwner();
+	/*JYObject* pOwner = this->getOwner();
 	if (pOwner == nullptr) return;
 	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
 	if (pCCOwner == nullptr) return;
@@ -84,5 +84,5 @@ void CollisionExecuter::tick(float fDeltaTime){
 		cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
 
 		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);
-	}
+	}*/
 }
