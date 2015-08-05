@@ -39,6 +39,7 @@
 #define HEIGHT 700
 #define LAND 100
 #define GRAVITY -350
+#define BULLET_LAND 80
 
 ////////////////////////
 #define AI_ATTACK_DELAY 3000

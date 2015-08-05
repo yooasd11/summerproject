@@ -482,7 +482,7 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	if (user == NULL || user->CurrentState == USER::state::DEAD || user->CurrentState == USER::state::DISCONNECT) return;
 
 	user->ChangeState(USER::state::ALIVE);
-	user->SetVelocity(user->vx + MovePacket.unit_vx(), user->vy + MovePacket.unit_vy());
+	user->SetVelocity(user->vx + MovePacket.unit_vx()*USER_VELOCITY, user->vy + MovePacket.unit_vy()*USER_VELOCITY);
 
 	/*TimerJob job;
 	job.exectime = GetTickCount() + 30;

@@ -32,9 +32,8 @@ USER::~USER()
 void USER::SetVelocity(float _vx, float _vy)
 {
 	LOCKING(&this->key);
-	
-	this->vx = _vx * USER_VELOCITY;
-	this->vy = _vy * USER_VELOCITY;
+	this->vx = _vx;
+	this->vy = _vy;
 }
 
 void USER::ChangeState(int _state)
@@ -59,8 +58,8 @@ void USER::USER_MOVE()
 
 		float dx = this->x + t_vx * 0.03f;
 		float dy = this->y + t_vy * 0.03f;
-		printf("%f\n", this->y);
 	
+		printf("%f\n", t_vx);
 		//float dx = this->x + (this->vx * 0.03f);
 		//float dy = this->y + (this->vy * 0.03f);
 		/*if (dy < LAND)
@@ -72,7 +71,14 @@ void USER::USER_MOVE()
 			User_Move_Job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
 			return;
 		}*/
-		if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND))
+		if (dy < LAND)
+		{
+			this->vx = t_vx;
+			this->vy = 0;
+			this->x = dx;
+			this->y = LAND;
+		}
+		else if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND))
 		{
 			this->vx = t_vx;
 			this->vy = t_vy;

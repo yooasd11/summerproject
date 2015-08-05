@@ -35,6 +35,15 @@ int _tmain()
 		PacketHandler::GetInstance()->SendAccountPacket(sock,index);
 		PacketHandler::GetInstance()->BroadCastAccountPacket();
 
+		std::shared_ptr<USER> user= std::static_pointer_cast<USER>(CompletionPort.Object_Manager->FIND(index));
+		TimerJob job;
+		job.exectime = GetTickCount() + 30;
+		job.func = std::bind(&USER::USER_MOVE, user);
+		{
+			LOCKING(&IocpConstructor::queueLock);
+			IocpConstructor::jobs.push_back(job);
+		}
+
 		handle.ReadMode();	// °í¹ÎÇØº¼°Í
 		CompletionPort.RecvMessage(handle);
 	}
