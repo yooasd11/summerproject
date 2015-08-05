@@ -34,8 +34,10 @@ void MoveRequestExecuter::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, 
 	//JUMP!
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_SPACE){
 		//acceleration setting
-		AccelerationExecuter* pAccelerationExecuter = (AccelerationExecuter*)pOwner->getExecuter(__Executer::__AccelerationExecuter);
-		pAccelerationExecuter->addAcceleration(0.0f, 50.0f);
+		c_move.set_unit_vx(0.0f);
+		c_move.set_unit_vy(5.0f);
+		c_move.SerializeToArray(sendBuf, c_move.ByteSize());
+		ConnectionManager::getInstance()->transmit(c_move.ByteSize(), PACKET_TYPE::PKT_C_MOVE, sendBuf);
 	}
 
 }

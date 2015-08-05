@@ -19,9 +19,6 @@ public:
 		return bIsKeyPressed[(int)keyCode];
 	}
 
-	void pushObject(JYObject* pObject);
-	void popObject(JYObject* pObject);
-	
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent);
 	void onMouseMove(cocos2d::Event* pEvent);

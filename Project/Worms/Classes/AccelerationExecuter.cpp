@@ -6,6 +6,11 @@ void AccelerationExecuter::addAcceleration(const float& fAccX, const float& fAcc
 	this->m_fAccY += fAccY;
 }
 
+void AccelerationExecuter::setAcceleration(const float& fAccX, const float& fAccY){
+	this->m_fAccX = fAccX;
+	this->m_fAccY = fAccY;
+}
+
 void AccelerationExecuter::executeAcceleration(const float& fDeltaTime){
 	JYObject* pOwner = this->getOwner();
 	if (pOwner == nullptr) return;
@@ -16,6 +21,11 @@ void AccelerationExecuter::executeAcceleration(const float& fDeltaTime){
 	float fNextVy = pOwner->getVelocityY() + this->m_fAccY *fDeltaTime;
 
 	pOwner->setVelocity(fNextVx, fNextVy);
+}
+
+void AccelerationExecuter::clearAcceleration(){
+	this->m_fAccX = 0.0f;
+	this->m_fAccY = 0.0f;
 }
 
 void AccelerationExecuter::tick(float fDeltaTime){

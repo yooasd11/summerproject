@@ -3,6 +3,7 @@
 #include "MoveRequestExecuter.h"
 #include "MoveExecuter.h"
 #include "AssaultExecuter.h"
+#include "AccelerationExecuter.h"
 #include "CollisionExecuter.h"
 #include "CoordinateConverter.h"
 #include "Packet.h"
@@ -14,6 +15,7 @@ JYPlayer::JYPlayer(cocos2d::CCNode* pCCObject) : JYObject(pCCObject){
 	new MoveExecuter(this);
 	new CollisionExecuter(this);
 	new AssaultExecuter(this);
+	new AccelerationExecuter(this);
 	this->setObjectType(JYOBJECT_TYPE::JY_PLAYER);
 }
 

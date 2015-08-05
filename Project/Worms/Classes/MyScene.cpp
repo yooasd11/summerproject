@@ -95,10 +95,6 @@ void MyScene::addBackground(){
 	CCTMXTiledMap* pTmap = CCTMXTiledMap::create("TileMaps/TestMap.tmx");
 
 	pTmap->setName("Tmap");
-	/*pBackgroundNode = CCParallaxNode::create();
-	pBackgroundNode->setName("Background");
-	pBackgroundNode->addChild(pTmap, 1, ccp(1.0f, 1.0f), ccp(0, 0));
-	this->addChild(pBackgroundNode, 0);*/
 	this->addChild(pTmap);
 	CCLOG("TMAP size : (%.1f, %.1f)", pTmap->getContentSize().width, pTmap->getContentSize().height);
 }

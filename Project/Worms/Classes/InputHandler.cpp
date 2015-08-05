@@ -3,14 +3,6 @@
 #include "JYObjectManager.h"
 #include "MyScene.h"
 
-void InputHandler::pushObject(JYObject* pObject){
-	JYObjectManager::getInstance()->pushObject(pObject);
-}
-
-void InputHandler::popObject(JYObject* pObject){
-	JYObjectManager::getInstance()->popObject(pObject);
-}
-
 void InputHandler::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* pEvent){
 	bIsKeyPressed[(int)keyCode] = true;
 	MyScene* pMyScene = GET_MYSCENE;

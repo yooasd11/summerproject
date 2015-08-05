@@ -16,6 +16,8 @@ public:
 	virtual ~AccelerationExecuter() {}
 
 	void addAcceleration(const float& fAccX, const float& fAccY);
+	void setAcceleration(const float& fAccX, const float& fAccY);
 	void executeAcceleration(const float& fDeltaTime);
+	void clearAcceleration();
 	virtual void tick(float fDeltaTime);
 };

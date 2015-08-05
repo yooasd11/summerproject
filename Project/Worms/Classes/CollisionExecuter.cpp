@@ -1,4 +1,5 @@
 #include "CollisionExecuter.h"
+#include "AccelerationExecuter.h"
 #include "JYObject.h"
 #include "JYPlayer.h"
 #include "JYArm.h"
@@ -29,10 +30,12 @@ bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width - 1;
 	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height - 1;
 	//valid point
-	if (pos.x > 1 && pos.x < tmapWidth &&
-		pos.y > 80 && pos.y < tmapHeight)
-		return false;
-	return true;
+	if( pos.x < 1.0f ||
+		pos.x >= tmapWidth ||
+		pos.y < 100.0f ||
+		pos.y >= tmapHeight)
+		return true;
+	return false;
 }
 
 bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
@@ -70,6 +73,9 @@ void CollisionExecuter::tick(float fDeltaTime){
 	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
 
 	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
+ 		AccelerationExecuter* pAE = (AccelerationExecuter*)pOwner->getExecuter(__Executer::__AccelerationExecuter);
+		pAE->clearAcceleration();
+		pOwner->setVelocity(0.0f, 0.0f);
 		char sendBuf[PKTBODYSIZE];
 		InGamePacket::C_Collision cCollisionPacket;
 
