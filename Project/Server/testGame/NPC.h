@@ -6,7 +6,7 @@ class NPC_ALIVE;
 class NPC : public OBJECT
 {
 private:
-	Lock* key;
+	Lock key;
 	
 public:
 	NPC_STATE *current_state;

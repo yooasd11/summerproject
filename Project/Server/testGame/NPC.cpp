@@ -4,7 +4,7 @@
 
 NPC::NPC()
 {
-	this->key = new Lock();
+	
 	this->npc_alive = new NPC_ALIVE;
 	this->npc_dead = new NPC_DEAD;
 	this->current_state = npc_alive;
@@ -13,7 +13,7 @@ NPC::NPC()
 
 NPC::NPC(float _x, float _y, float _vx, float _vy)
 {
-	this->key = new Lock();
+	
 	this->npc_alive = new NPC_ALIVE;
 	this->npc_dead = new NPC_DEAD;
 	this->current_state = npc_alive;
@@ -27,7 +27,7 @@ NPC::NPC(float _x, float _y, float _vx, float _vy)
 
 NPC::~NPC()
 {
-	delete this->key;
+
 	delete this->npc_alive;
 	delete this->npc_dead;
 }
@@ -35,14 +35,14 @@ NPC::~NPC()
 
 void NPC::NPC_SET_HP(int _hp)
 {
-	LOCKING(this->key);
+	LOCKING(&this->key);
 	this->hp = _hp;
 	return;
 }
 
 void NPC::NPC_STATE_CHANGE(int _state)
 {
-	LOCKING(this->key);
+	LOCKING(&this->key);
 	if (this->current_state == this->npc_dead) return;
 	if (_state == NPC_STATUS_ALIVE) this->current_state = this->npc_alive;
 	else if (_state == NPC_STATUS_DEAD) this->current_state = this->npc_dead;
@@ -58,7 +58,7 @@ void NPC::NPC_INIT()
 	job2.exectime = GetTickCount() + AI_DIRECTION_DELAY;
 	job2.func = std::bind(&NPC::NPC_DIRECTION_CHANGE, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
 	{
-		LOCKING(IocpConstructor::queueLock);
+		LOCKING(&IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
 		IocpConstructor::jobs.push_back(job2);
 	}
@@ -74,13 +74,13 @@ void NPC::NPC_DESICION()
 
 void NPC::NPC_DIRECTION_CHANGE()
 {
-	LOCKING(this->key);
+	LOCKING(&this->key);
 	this->vx *= -1;
 	TimerJob job;
 	job.exectime = GetTickCount() + AI_DIRECTION_DELAY;
 	job.func = std::bind(&NPC::NPC_DIRECTION_CHANGE, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
 	{
-		LOCKING(IocpConstructor::queueLock);
+		LOCKING(&IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
 	}
 	return;

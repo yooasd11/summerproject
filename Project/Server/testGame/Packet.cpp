@@ -3,13 +3,13 @@
 
 Packet::Packet()
 {
-	this->key = new Lock();
+	
 }
 
 
 Packet::~Packet()
 {
-	delete this->key;
+	
 }
 
 void Packet::setLength(unsigned short length)
@@ -44,7 +44,7 @@ void Packet::setMsg(char *msg, int len)
 
 bool Packet::PacketSeperate(char* msg, int Len, int _socket)
 {
-	LOCKING(this->key);
+	LOCKING(&this->key);
 	this->socket = _socket;
 	memcpy(&this->Length, msg, sizeof(unsigned short));
 	memcpy(&this->Type, msg + sizeof(unsigned short), sizeof(unsigned short));

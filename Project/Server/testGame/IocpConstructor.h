@@ -10,13 +10,12 @@ private:
 	DWORD flags;
 	DWORD recvBytes;
 	
-	Lock *UserLock;
 public:
 	static ObjectManager *Object_Manager;
-	
+
 	static int ObjectCount;
-	static Lock* ObjectKey;
-	static Lock* queueLock;
+	static Lock ObjectKey;
+	static Lock queueLock;
 
 	static std::vector<TimerJob> jobs;
 	

@@ -3,7 +3,7 @@ class ObjectManager
 {
 private:
 public:
-	Lock *key;
+	Lock key;
 	static int OBJECTCOUNT;
 	std::map<int, std::shared_ptr<OBJECT>> OBJECT_MAP;
 	void REGIST(int, int);

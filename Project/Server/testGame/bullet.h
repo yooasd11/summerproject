@@ -2,7 +2,7 @@
 class BULLET : public OBJECT
 {
 private:
-	Lock* key;
+	Lock key;
 	
 public:
 	int shooter;

@@ -12,21 +12,20 @@
 ObjectManager* IocpConstructor::Object_Manager;
 std::vector<TimerJob> IocpConstructor::jobs;
 int IocpConstructor::ObjectCount;
-Lock* IocpConstructor::ObjectKey;
-Lock* IocpConstructor::queueLock;
+Lock IocpConstructor::ObjectKey;
+Lock IocpConstructor::queueLock;
+
 
 IocpConstructor::IocpConstructor()
 {
 	this->Object_Manager = new ObjectManager;
-	this->queueLock = new Lock;
-	this->UserLock = new Lock;
-	this->ObjectKey = new Lock;
 	this->flags = 0;
 	this->ComPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	this->ObjectCount = 1;
 	GetSystemInfo(&this->sysinfo);
 	for (int i = 0; i < this->sysinfo.dwNumberOfProcessors; i++)
 		_beginthreadex(NULL, 0, startThread, this, 0, NULL);
+
 	return;
 }
 
@@ -34,9 +33,6 @@ IocpConstructor::IocpConstructor()
 IocpConstructor::~IocpConstructor()
 {
 	delete this->Object_Manager;
-	delete this->queueLock;
-	delete this->UserLock;
-	delete this->ObjectKey;
 }
 
 void IocpConstructor::registerObject(ClientHandle& client)
@@ -80,7 +76,7 @@ HANDLE IocpConstructor::getPort()
 //npc를 얼마나 생성할 것인가...
 void IocpConstructor::GENERATE_NPC(int count)
 {
-	LOCKING(this->queueLock);
+	LOCKING(&this->queueLock);
 	for (int i = 0; i < count; i++)
 	{
 		std::shared_ptr<NPC> tempNPC(new NPC(100.0f*(i+1), 100.0f, 50.0f, 0.0f));  // x , y , vx, vy 
@@ -97,35 +93,35 @@ void IocpConstructor::GENERATE_NPC(int count)
 //NPC에 관한 작업과, 유저이동에 관한 'job'을 처리해 주어야한다...
 void IocpConstructor::JobSchedule()
 {
-	//TimerJob job;
-	//int index = -1;
-	//{
-	//	LOCKING(this->queueLock);
-	//	if (this->jobs.empty()){
-	//		return;
-	//	}
-	//	DWORD Minvalue = MAXGETTICK;
-	//	for (int i = 0; i < this->jobs.size(); i++)
-	//	{
-	//		if (this->jobs[i].exectime < Minvalue)
-	//		{
-	//			Minvalue = this->jobs[i].exectime;
-	//			index = i;
-	//		}
-	//	}
-	//	if (index == -1) return;
-	//	job = this->jobs[index];
-	//	if (job.exectime > GetTickCount()) return;
-	//	this->jobs.erase(this->jobs.begin() + index);
-	//}
-	//auto f = job.func;
-	//if (f == NULL) return;
-	//f();
-	//return;
+	TimerJob job;
+	int index = -1;
+	{
+		LOCKING(&this->queueLock);
+		if (this->jobs.empty()){
+			return;
+		}
+		DWORD Minvalue = MAXGETTICK;
+		for (int i = 0; i < this->jobs.size(); i++)
+		{
+			if (this->jobs[i].exectime < Minvalue)
+			{
+				Minvalue = this->jobs[i].exectime;
+				index = i;
+			}
+		}
+		if (index == -1) return;
+		job = this->jobs[index];
+		if (job.exectime > GetTickCount()) return;
+		this->jobs.erase(this->jobs.begin() + index);
+	}
+	auto f = job.func;
+	if (f == NULL) return;
+	f();
+	return;
 
-	LOCKING(this->queueLock);
-	if (this->jobs.empty()) return;
-	else jobs.clear();
+	//LOCKING(&this->queueLock);
+	//if (this->jobs.empty()) return;
+	//else jobs.clear();
 	return;
 }
 
@@ -152,10 +148,8 @@ void IocpConstructor::ThreadFunction()
 		hasJob = GetQueuedCompletionStatus(hComPort, &(tempHandle.bytesTrans), (LPDWORD)&tempHandle.handleinfo, (LPOVERLAPPED*)&(tempHandle.ioinfo), 30);
 
 		if (hasJob){
-
 			sock = tempHandle.handleinfo->ClntSock;
 			index = IocpConstructor::Object_Manager->FIND_USER(sock);
-
 
 			//if (index == -1) 예외처리하기
 			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(index));
@@ -168,7 +162,7 @@ void IocpConstructor::ThreadFunction()
 					TimerJob disConnectJob;
 					disConnectJob.exectime = GetTickCount();
 					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
-					LOCKING(this->queueLock)
+					LOCKING(&this->queueLock)
 					{
 						this->jobs.push_back(disConnectJob);
 					}
@@ -178,6 +172,8 @@ void IocpConstructor::ThreadFunction()
 
 				ReceivePacket.PacketSeperate(tempHandle.ioinfo->wsaBuf.buf, tempHandle.bytesTrans, sock);
 
+				delete tempHandle.ioinfo;
+
 				tempHandle.ReadMode();
 				this->RecvMessage(tempHandle);
 			}
@@ -186,7 +182,6 @@ void IocpConstructor::ThreadFunction()
 			{
 				if (tempHandle.ioinfo->wsaBuf.len == tempHandle.bytesTrans)
 				{
-					printf("정상삭제\n");
 					delete tempHandle.ioinfo;
 				}
 				else{

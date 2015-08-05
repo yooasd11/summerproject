@@ -5,13 +5,12 @@
 
 USER::USER()
 {
-	this->key = new Lock;
 	this->hp = 100;
 	this->CurrentState = USER::state::ALIVE;
 }
 USER::USER(int TYPE, float x, float y, int _socket)
 {
-	this->key = new Lock;
+
 	this->type = TYPE;
 	this->ObjectId = ObjectManager::OBJECTCOUNT;
 	this->x = x;
@@ -25,19 +24,20 @@ USER::USER(int TYPE, float x, float y, int _socket)
 
 USER::~USER()
 {
-	delete this->key;
+
 }
 
 void USER::SetVelocity(float _vx, float _vy)
 {
-	LOCKING(this->key);
+	LOCKING(&this->key);
+	
 	this->vx = _vx * USER_VELOCITY;
 	this->vy = _vy * USER_VELOCITY;
 }
 
 void USER::ChangeState(int _state)
 {
-	LOCKING(this->key);
+	LOCKING(&this->key);
 	if (this->CurrentState != USER::state::DISCONNECT){
 		this->CurrentState = (USER::state)_state;
 	}
@@ -47,8 +47,8 @@ void USER::ChangeState(int _state)
 void USER::USER_MOVE()
 {
 	TimerJob User_Move_Job;
-	LOCKING(this->key);
-	/*if (this->CurrentState == USER::state::ALIVE)
+	LOCKING(&this->key);
+	if (this->CurrentState == USER::state::ALIVE)
 	{
 		float dx = this->x + (this->vx * 0.03f);
 		float dy = this->y + (this->vy * 0.03f);
@@ -61,16 +61,16 @@ void USER::USER_MOVE()
 		User_Move_Job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
 		User_Move_Job.exectime = GetTickCount() + 30;
 		{
-			LOCKING(IocpConstructor::queueLock)
+			LOCKING(&IocpConstructor::queueLock)
 			IocpConstructor::jobs.push_back(User_Move_Job);
 		}
-	}*/
+	}
 	return;
 }
 
 void USER::USER_SET_HP(int _hp)
 {
-	LOCKING(this->key);
+	LOCKING(&this->key);
 	this->hp = _hp;
 	return;
 }

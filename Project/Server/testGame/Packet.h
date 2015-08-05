@@ -27,7 +27,7 @@ class Packet
 {
 private:
 	
-	Lock* key;
+	Lock key;
 public:
 	
 	unsigned short Length;

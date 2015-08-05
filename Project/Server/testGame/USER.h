@@ -2,8 +2,7 @@
 class USER : public OBJECT
 {
 private:
-	Lock* key;
-	
+	Lock key;
 public:
 	int socket;
 	enum state{
@@ -12,6 +11,9 @@ public:
 		DISCONNECT,
 		STOP,
 	};
+
+	Lock user_buffer_key;
+	char user_buffer[BUFSIZE];
 	enum state CurrentState;
 	USER();
 	USER(int, float, float, int);

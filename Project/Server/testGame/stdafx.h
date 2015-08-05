@@ -9,7 +9,7 @@
 
 #define _WINSOCKAPI_
 
-#define BUFSIZE (1<<16)
+#define BUFSIZE (1<<10)
 #define READ 3
 #define WRITE 5
 #define ACCOUNT 2
@@ -22,13 +22,17 @@
 #define Object_NPC 3
 
 /////////////////////게임내부
-#define DISTANCE 10
-#define DAMAGE_DISTANCE 50
+#define DISTANCE 200
+#define DAMAGE_DISTANCE 30
 #define BULLET_VELOCITY 200
 #define BULLET_DAMAGE_1 50
 #define AI_NEXT_TICK 3000
 #define BULLETNEXTTICK 30
 #define NEXT_TICK 30
+#define BULLET_VX_DIRECTION 0.5
+
+//////////////패킷
+#define CLIENT_MAX 100
 
 ///////////////맵
 #define WIDTH 1500

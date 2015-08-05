@@ -2,6 +2,7 @@
 class NPC_STATE
 {
 public:
+	Lock key;
 	NPC_STATE();
 	~NPC_STATE();
 	virtual void NPC_Action(std::shared_ptr<NPC>);

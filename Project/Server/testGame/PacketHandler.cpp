@@ -35,22 +35,31 @@ void PacketHandler::SendAccountPacket(SOCKET clnt, int index)
 {
 	ClientHandle tempHandle;
 	char buffer[BUFSIZE] = { 0, };
+	int Current_send_count;
+
 	memset(buffer, 0, sizeof(buffer));
 	unsigned short size, type;
 	size = sizeof(SOCKET);
 	type = PKT_ACCOUNT;
+
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	memcpy(buffer + sizeof(size)+sizeof(type), &index, sizeof(int));
 
-	
 	//비동기식으로 데이터를 전송
 	tempHandle.ioinfo = new IoData;
 	memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
 	tempHandle.ioinfo->wsaBuf.len = sizeof(SOCKET)+sizeof(unsigned short)* 2;
-	tempHandle.ioinfo->wsaBuf.buf = buffer;
-	tempHandle.ioinfo->rwMode = WRITE;
-	WSASend(clnt, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
+
+	std::shared_ptr<USER> user = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(index));
+	{
+		LOCKING(&user->user_buffer_key)
+		memset(user->user_buffer, 0, sizeof(user->user_buffer));
+		memcpy(user->user_buffer, buffer, sizeof(SOCKET)+sizeof(unsigned short)* 2);
+		tempHandle.ioinfo->wsaBuf.buf = user->user_buffer;
+		tempHandle.ioinfo->rwMode = WRITE;
+		WSASend(clnt, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
+	}
 	return;
 }
 
@@ -65,7 +74,10 @@ void PacketHandler::BroadCastAccountPacket()
 	type = PKT_ACCOUNT_LIST;
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	current = (sizeof(unsigned short)*2);
-	for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
+
+	std::map<int, std::shared_ptr<OBJECT>> Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
+	//for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
+	for (auto it : Instance_map)
 	{
 		if (it.second->type == Object_USER || it.second->type == Object_NPC)
 		{
@@ -75,7 +87,6 @@ void PacketHandler::BroadCastAccountPacket()
 			tempAccount->set_x(it.second->x);
 			tempAccount->set_y(it.second->y);
 		}
-
 	}
 	size = tempList.ByteSize();
 	memcpy(buffer, &size, sizeof(size));
@@ -84,9 +95,12 @@ void PacketHandler::BroadCastAccountPacket()
 	return;
 }
 
+
 void PacketHandler::BroadCast(char *buffer, int size)
 {
-	for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
+	std::map<int, std::shared_ptr<OBJECT>> Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
+	//for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
+	for (auto it : Instance_map)
 	{
 		if (it.second->type == Object_USER)
 		{
@@ -95,10 +109,15 @@ void PacketHandler::BroadCast(char *buffer, int size)
 			tempHandle.ioinfo = new IoData;
 			memset(&tempHandle.ioinfo->overlapped, 0, sizeof(OVERLAPPED));
 			tempHandle.ioinfo->wsaBuf.len = size;
-			tempHandle.ioinfo->wsaBuf.buf = buffer;
-			tempHandle.ioinfo->rwMode = WRITE;
-			if (tempUser->CurrentState != USER::state::DISCONNECT){
-				WSASend(tempUser->socket, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
+			{
+				LOCKING(&tempUser->user_buffer_key);
+				memset(tempUser->user_buffer, 0, sizeof(tempUser->user_buffer));
+				memcpy(tempUser->user_buffer, buffer, size);
+				tempHandle.ioinfo->wsaBuf.buf = tempUser->user_buffer;
+				tempHandle.ioinfo->rwMode = WRITE;
+				if (tempUser->CurrentState != USER::state::DISCONNECT){
+					WSASend(tempUser->socket, &(tempHandle.ioinfo->wsaBuf), 1, NULL, 0, &(tempHandle.ioinfo->overlapped), NULL);
+				}
 			}
 		}
 	}
@@ -281,7 +300,7 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 	job.exectime = GetTickCount() + 30;
 	job.func = std::bind(&BULLET::BULLET_MOVE, Bullet);  //만약에 안되면 여기 의심
 	{
-		LOCKING(IocpConstructor::queueLock);
+		LOCKING(&IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
 	}
 	Bullet->vx = Bullet->vx + Bullet->ax * 0.03f;
@@ -292,8 +311,6 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 
 	//AccountPacket::S_Account_List::Account *tempAccount = tempList.add_account_member();
 
-
-	
 	InGamePacket::S_Shoot ServerShootPacket;
 	ServerShootPacket.set_uid(index);
 	ServerShootPacket.set_damage(Bullet->damage);
@@ -466,14 +483,15 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	user->ChangeState(USER::state::ALIVE);
 	user->SetVelocity(MovePacket.unit_vx(),MovePacket.unit_vy());
 
-	//TimerJob job;
-	//job.current = job.state::UserMove;
-	//job.exectime = GetTickCount() + 30;
-	//job.func = std::bind(&USER::USER_MOVE, user);
-	//{
-	//	LOCKING(IocpConstructor::queueLock);
-	//	IocpConstructor::jobs.push_back(job);
-	//}
+	TimerJob job;
+	job.current = job.state::UserMove;
+	job.exectime = GetTickCount() + 30;
+	job.func = std::bind(&USER::USER_MOVE, user);
+	{
+		LOCKING(&IocpConstructor::queueLock);
+		IocpConstructor::jobs.push_back(job);
+	}
+
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(user->ObjectId);
 	ServerMovePacket.set_vx(user->vx);
