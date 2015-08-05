@@ -5,13 +5,14 @@ private:
 	Lock key;
 public:
 	int socket;
+	float ax;
+	float ay;
 	enum state{
 		ALIVE = 1,
 		DEAD,
 		DISCONNECT,
 		STOP,
 	};
-
 	Lock user_buffer_key;
 	char user_buffer[BUFSIZE];
 	enum state CurrentState;

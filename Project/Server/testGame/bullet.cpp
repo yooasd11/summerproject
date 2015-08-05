@@ -46,14 +46,12 @@ void BULLET::BULLET_MOVE()
 		if (t_x >= WIDTH || t_x < 0 || t_y >= HEIGHT || t_y < LAND)
 		{
 			this->CurrentState = BULLET::state::DISABLE;
-			////이부분도수정.~
 			PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet,nullptr);
 			IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
 			return;
 		}
 
 		std::map<int, std::shared_ptr<OBJECT>> Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
-
 		for (auto ob : Instance_map)
 		{
 			float o_dx = ob.second->x; float o_dy = ob.second->y;

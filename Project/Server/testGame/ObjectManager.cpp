@@ -22,11 +22,16 @@ void ObjectManager::REGIST(int TYPE, int info)
 	if (TYPE == Object_USER)
 	{
 		//user老版快 家南锅龋甫 info..
-		this->OBJECT_MAP[this->OBJECTCOUNT++] = std::shared_ptr<USER>(new USER(TYPE, 100.0f, 100.0f, info));
-	}
-	else if (TYPE == Object_NPC)
-	{
-		this->OBJECT_MAP[this->OBJECTCOUNT++] = std::shared_ptr<NPC>(new NPC(100.0f, 100.0f, 100.0f, 100.0f));
+		std::shared_ptr<USER> Instance(new USER(TYPE, 100.0f, 100.0f, info));
+		this->OBJECT_MAP[this->OBJECTCOUNT] = Instance;
+		TimerJob job;
+		job.exectime = GetTickCount() + 30;
+		job.func = std::bind(&USER::USER_MOVE, Instance);
+		{
+			LOCKING(&IocpConstructor::queueLock);
+			IocpConstructor::jobs.push_back(job);
+		}
+		OBJECTCOUNT++;
 	}
 	else return;
 }

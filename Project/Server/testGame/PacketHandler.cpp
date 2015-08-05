@@ -452,6 +452,7 @@ void PacketHandler::S_MOVE_HANDLER(std::shared_ptr<OBJECT> ob)
 	ServerMovePacket.set_y(ob->y);
 	ServerMovePacket.set_vx(ob->vx);
 	ServerMovePacket.set_vy(ob->vy);
+	
 
 	InGamePacket::S_Acceleration *temp = ServerMovePacket.add_acceleration_list();
 	temp->set_ax(0.0f);
@@ -481,17 +482,15 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	if (user == NULL || user->CurrentState == USER::state::DEAD || user->CurrentState == USER::state::DISCONNECT) return;
 
 	user->ChangeState(USER::state::ALIVE);
-	user->SetVelocity(MovePacket.unit_vx(),MovePacket.unit_vy());
+	user->SetVelocity(user->vx + MovePacket.unit_vx(), user->vy + MovePacket.unit_vy());
 
-	TimerJob job;
-	job.current = job.state::UserMove;
+	/*TimerJob job;
 	job.exectime = GetTickCount() + 30;
 	job.func = std::bind(&USER::USER_MOVE, user);
 	{
 		LOCKING(&IocpConstructor::queueLock);
 		IocpConstructor::jobs.push_back(job);
-	}
-
+	}*/
 	InGamePacket::S_Move ServerMovePacket;
 	ServerMovePacket.set_uid(user->ObjectId);
 	ServerMovePacket.set_vx(user->vx);

@@ -37,7 +37,7 @@
 ///////////////¸Ê
 #define WIDTH 1500
 #define HEIGHT 700
-#define LAND 80
+#define LAND 100
 #define GRAVITY -350
 
 ////////////////////////

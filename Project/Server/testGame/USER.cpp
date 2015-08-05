@@ -20,6 +20,8 @@ USER::USER(int TYPE, float x, float y, int _socket)
 	this->socket = _socket;
 	this->vx = 0.0f;
 	this->vy = 0.0f;
+	this->ax = 0.0f;
+	this->ay = GRAVITY;
 }
 
 USER::~USER()
@@ -46,14 +48,34 @@ void USER::ChangeState(int _state)
 
 void USER::USER_MOVE()
 {
+
 	TimerJob User_Move_Job;
 	LOCKING(&this->key);
 	if (this->CurrentState == USER::state::ALIVE)
 	{
-		float dx = this->x + (this->vx * 0.03f);
-		float dy = this->y + (this->vy * 0.03f);
+		
+		float t_vx = this->vx + this->ax * 0.03f;
+		float t_vy = this->vy + this->ay * 0.03f;
+
+		float dx = this->x + t_vx * 0.03f;
+		float dy = this->y + t_vy * 0.03f;
+		printf("%f\n", this->y);
+	
+		//float dx = this->x + (this->vx * 0.03f);
+		//float dy = this->y + (this->vy * 0.03f);
+		/*if (dy < LAND)
+		{
+			this->vy = 0;
+			this->vx = 0;
+			this->CurrentState = USER::state::STOP;
+			PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(this->ObjectId));
+			User_Move_Job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
+			return;
+		}*/
 		if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND))
 		{
+			this->vx = t_vx;
+			this->vy = t_vy;
 			this->x = dx;
 			this->y = dy;
 		}
@@ -74,6 +96,7 @@ void USER::USER_SET_HP(int _hp)
 	this->hp = _hp;
 	return;
 }
+
 
 void USER::CALCULATE_DISTANCE()
 {
