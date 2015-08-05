@@ -66,13 +66,13 @@ void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(it.second);
 			if ((sqrt((Npc->x - dx)*(Npc->x - dx) + (Npc->y - dy)*(Npc->y - dy)) < DISTANCE) && ((User->CurrentState == USER::state::ALIVE) || User->CurrentState == USER::state::STOP))
 			{
-				printf("적발견\n");
+				printf("%f NPC %f\n", dx, Npc->x);
 				//총알을 어떻게 발사할건지 결정해줘야함...
-				float bullet_vy = Calculate(Npc->x, Npc->y, dx, dy);
-				float bullet_vx = BULLET_VX_DIRECTION;
-				if (Npc->x > dx) bullet_vx *= -1;
+				float bullet_vy = (dy - Npc->y) - GRAVITY / 2;
+				float bullet_vx = (dx - Npc->x);
+				//if (Npc->x > dx) bullet_vx *= -1;
 
-				std::shared_ptr<BULLET> Bullet(new BULLET(Npc->x, Npc->y, bullet_vx, bullet_vy / BULLET_VELOCITY , Npc->ObjectId));
+				std::shared_ptr<BULLET> Bullet(new BULLET(Npc->x, Npc->y, bullet_vx, bullet_vy  , Npc->ObjectId));
 				IocpConstructor::Object_Manager->REGIST_BULLET(Bullet);
 
 				TimerJob job, job2;

@@ -59,7 +59,6 @@ void USER::USER_MOVE()
 		float dx = this->x + t_vx * 0.03f;
 		float dy = this->y + t_vy * 0.03f;
 	
-		printf("%f\n", t_vx);
 		//float dx = this->x + (this->vx * 0.03f);
 		//float dy = this->y + (this->vy * 0.03f);
 		/*if (dy < LAND)

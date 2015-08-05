@@ -23,8 +23,8 @@ BULLET::BULLET(float _x, float _y, float _vx, float _vy, int _shooter) : BULLET(
 {
 	this->x = _x;
 	this->y = _y;
-	this->vx = _vx * BULLET_VELOCITY;
-	this->vy = _vy * BULLET_VELOCITY;
+	this->vx = _vx;
+	this->vy = _vy;
 	this->shooter = _shooter;
 }
 

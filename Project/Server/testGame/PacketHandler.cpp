@@ -291,7 +291,7 @@ void PacketHandler::C_SHOOT_HANDLER(Packet& p)
 	{
 		index = IocpConstructor::Object_Manager->FIND_USER(p.socket);
 		tempUser = std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(index));
-		std::shared_ptr<BULLET> tempBullet(new BULLET(tempUser->x, tempUser->y, ClientBullet.unit_vx(), ClientBullet.unit_vy(), index));
+		std::shared_ptr<BULLET> tempBullet(new BULLET(tempUser->x, tempUser->y, ClientBullet.unit_vx()*BULLET_VELOCITY, ClientBullet.unit_vy()*BULLET_VELOCITY, index));
 		Bullet = tempBullet;
 		IocpConstructor::Object_Manager->REGIST_BULLET(Bullet);
 	}
