@@ -38,7 +38,6 @@ Scene* MyScene::createScene()
 void MyScene::onEnter(){
 	CCLayer::onEnter();
 
-	ConnectionManager::getInstance()->accountTo(SERVER_IP_ADDRESS, SERVER_PORT_NUMBER);
 	ConnectionManager::getInstance()->receive();
 
 	EventListenerTouchOneByOne* touchListener = EventListenerTouchOneByOne::create();
@@ -117,13 +116,17 @@ JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sA
 		animation->addSpriteFrameWithTexture(texture, Rect(index * 130, rowIndex * 140, 130, 140));
 	}
 
+	float fR = rand() % 255;
+	float fG = rand() % 255;
+	float fB = rand() % 255;
+
 	//Create CCSprite dragon, and add to Tiled map
 	CCSprite* pDragon = CCSprite::createWithTexture(texture, Rect(0, 0, 130, 140));
 	pDragon->setPosition(ccp(fX,fY));
 	pDragon->setFlippedX(true);
 	pDragon->setScale(0.5);
+	pDragon->setColor(ccc3(fR, fG, fB));
 	pDragon->setName("Dragon");
-	//pDragon->setColor(ccColor3B::BLACK);
 	CCTMXTiledMap* pTmap = GET_TMAP;
 	pTmap->addChild(pDragon, 3);
 

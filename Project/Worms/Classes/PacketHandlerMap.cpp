@@ -83,7 +83,12 @@ void SMovePacketHandler(Packet& p){
 	if (pCCOwner == nullptr) return;
 
 	pJYObject->setVelocity(fVx, fVy);
-	pCCOwner->setPosition(fX, fY);
+	float fCurrentX = pCCOwner->getPosition().x;
+	float fCurrentY = pCCOwner->getPosition().y;
+
+	float fDiff = (fCurrentX - fX) * (fCurrentX - fX) + (fCurrentY - fY) * (fCurrentY - fY);
+	if (fDiff >= 1.0f)
+		pCCOwner->setPosition(fX, fY);
 
 	if (fVx < 0.0f){
 		pCCOwner->setFlippedX(false);
