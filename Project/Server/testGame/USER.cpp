@@ -29,6 +29,12 @@ USER::~USER()
 
 }
 
+void USER::SetAccelate(float _ax, float _ay)
+{
+	LOCKING(&this->key);
+	this->ax = _ax;
+	this->ay = _ay;
+}
 void USER::SetVelocity(float _vx, float _vy)
 {
 	LOCKING(&this->key);
@@ -52,19 +58,32 @@ void USER::USER_MOVE()
 	LOCKING(&this->key);
 	if (this->CurrentState == USER::state::ALIVE)
 	{
-		
 		float t_vx = this->vx + this->ax * 0.03f;
-		float t_vy = this->vy + this->ay * 0.03f;
-
 		float dx = this->x + t_vx * 0.03f;
+
+		float t_vy = this->vy + this->ay * 0.03f;
 		float dy = this->y + t_vy * 0.03f;
-	
-		if (dy < LAND)
+		
+
+		if (dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND){
+			this->vy = 0.0f;
+			this->ay = 0.0f;
+			if (dy > HEIGHT)
+				this->ay = GRAVITY;
+		}
+	/*	if (this->vy == 0.0f){
+			this->ay = 0;
+			this->vy = 0;
+			this->vx = t_vx;
+			this->x = dx;
+		}*/
+
+		/*if (dy < LAND)
 		{
 			this->vx = t_vx;
 			this->vy = 0;
-			this->x = dx;
-			this->y = LAND;
+			this->x = this->x;
+			this->y = LAND + 1;
 		}
 		else if (dy > HEIGHT)
 		{
@@ -73,7 +92,7 @@ void USER::USER_MOVE()
 			this->x = dx;
 			this->y = HEIGHT - 10;
 
-		}
+		}*/
 		else if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND))
 		{
 			this->vx = t_vx;

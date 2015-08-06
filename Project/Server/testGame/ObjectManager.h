@@ -12,6 +12,7 @@ public:
 	std::shared_ptr<OBJECT> FIND(int);
 	void REMOVE(int);
 	int FIND_USER(int);
+	void REMOVE_JOB(int);
 
 	ObjectManager();
 	~ObjectManager();

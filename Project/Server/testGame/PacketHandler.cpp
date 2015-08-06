@@ -511,8 +511,15 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	ServerMovePacket.set_y(user->y);
 
 	InGamePacket::S_Acceleration *temp = ServerMovePacket.add_acceleration_list();
+	//temp->set_ax(0.0f);
+	//if (MovePacket.unit_vy() != 0.0f)
+	//	temp->set_ay(GRAVITY);
+	//else temp->set_ay(0.0f);
+
+	//user->SetAccelate(temp->ax(), temp->ay());
 	temp->set_ax(0.0f);
 	temp->set_ay(GRAVITY);
+	user->SetAccelate(temp->ax(), temp->ay());
 
 	type = PKT_S_MOVE;
 	size = ServerMovePacket.ByteSize();
@@ -520,7 +527,7 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	memcpy(buffer, &size, sizeof(size));
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
 	ServerMovePacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
-	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	//BroadCast(buffer, size + sizeof(unsigned short)* 2);
 	return;
 }
 

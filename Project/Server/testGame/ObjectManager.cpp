@@ -39,13 +39,47 @@ std::shared_ptr<OBJECT> ObjectManager::FIND(int _id)
 
 void ObjectManager::REMOVE(int _id)
 {
-	//LOCKING(&this->key);
 	LOCKING(&IocpConstructor::ObjectKey);
 	if (this->OBJECT_MAP.count(_id) != 0){
 		if (this->OBJECT_MAP[_id]->type == Object_USER){
 			printf("%d user disconnected..\n", _id);
 		}
 		this->OBJECT_MAP.erase(_id);
+	}
+	return;
+	/*LOCKING(&IocpConstructor::ObjectKey);
+	if (this->OBJECT_MAP.count(_id) != 0){
+		TimerJob job;
+		job.exectime = GetTickCount() + 30;
+		job.func = std::bind(&ObjectManager::REMOVE_JOB, this, _id);
+		{
+			LOCKING(&IocpConstructor::queueLock);
+			IocpConstructor::jobs.push_back(job);
+		}
+	}
+	return;*/
+}
+
+
+void ObjectManager::REMOVE_JOB(int _id)
+{
+	LOCKING(&IocpConstructor::ObjectKey);
+	if (this->OBJECT_MAP[_id] != 0){
+		if (this->OBJECT_MAP[_id].unique())
+		{
+			if (this->OBJECT_MAP[_id]->type == Object_USER)
+				printf("%d user disconnected..\n", _id);
+			this->OBJECT_MAP.erase(_id);
+		}
+		else{
+			TimerJob job;
+			job.exectime = GetTickCount() + 30;
+			job.func = std::bind(&ObjectManager::REMOVE_JOB, this, _id);
+			{
+				LOCKING(&IocpConstructor::queueLock);
+				IocpConstructor::jobs.push_back(job);
+			}
+		}
 	}
 	return;
 }

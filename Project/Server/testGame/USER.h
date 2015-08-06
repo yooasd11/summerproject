@@ -20,6 +20,7 @@ public:
 	USER(int, float, float, int);
 	~USER();
 	void SetVelocity(float, float);
+	void SetAccelate(float, float); 
 	void ChangeState(int);
 	void USER_MOVE();
 	void USER_SET_HP(int);
