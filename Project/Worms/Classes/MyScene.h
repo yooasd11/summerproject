@@ -42,7 +42,7 @@ public:
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* pEvent);
 	void addBackground();
 	JYObject* createBullet(const InGamePacket::S_Shoot& sShootPacket);
-	JYObject* createDragon(const AccountPacket::S_Account_List::Account& sAccountPacket);
+	JYObject* createDragon(const UINT& nUID, const UINT& nHP, const float& fX, const float& fY);
 	void deleteDragon(const UINT& nUID);
 	void makePlayer(JYObject* const pJYPlayer);
 	void setViewPointCenter(CCPoint pos);

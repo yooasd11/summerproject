@@ -7,7 +7,6 @@ class JYLocalTimer;
 class AssaultExecuter : public BaseExecuter{
 	GENERATE_FUNC(AssaultExecuter)
 private:
-	JYLocalTimer m_JYLocalTimer;
 	cocos2d::CCProgressTimer* m_pCCCoolTimer;
 	bool m_bIsCooling;
 	bool m_bIsCharging;

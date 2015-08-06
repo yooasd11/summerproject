@@ -3,7 +3,10 @@
 
 class JYPlayer : public JYObject{
 private:
+	cocos2d::CCProgressTimer* m_pCCRespawnTimer;
 	UINT m_nHP;
+	void createRespawnTimer();
+	void executeRespawnTimer(const float& fSec);
 public:
 	JYPlayer(cocos2d::CCNode* pCCObject);
 
@@ -15,4 +18,9 @@ public:
 	virtual	void onMouseMove(cocos2d::Event* pEvent);
 	virtual void onMouseDown(cocos2d::Event* pEvent);
 	virtual void onMouseUp(cocos2d::Event* pEvent);
+	virtual void tick(float fDeltaTime){
+		JYObject::tick(fDeltaTime);
+	}
+	bool respawnDeltaTimeFunc(const float& fDeltaTime);
+	bool respawnCallBackFunc();
 };

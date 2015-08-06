@@ -10,4 +10,5 @@ void BaseExecuter::regist(){
 }
 
 void BaseExecuter::tick(float fDeltaTime){
+	this->m_JYLocalTimer.tick(fDeltaTime);
 }

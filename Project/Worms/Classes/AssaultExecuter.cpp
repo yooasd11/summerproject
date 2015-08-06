@@ -14,7 +14,6 @@ void AssaultExecuter::createCoolTimer(){
 	cocos2d::CCSprite* pCCSpriteTimer = cocos2d::CCSprite::create("timer.png");
 	this->m_pCCCoolTimer = cocos2d::CCProgressTimer::create(pCCSpriteTimer);
 	this->m_pCCCoolTimer->setType(CCProgressTimer::Type::RADIAL);
-	this->m_pCCCoolTimer->setName("CoolTimer");
 	pCCOwner->addChild(this->m_pCCCoolTimer);
 	this->m_pCCCoolTimer->setPosition(cocos2d::ccp(pCCOwner->getContentSize().width / 2, 0.0f));
 }
@@ -100,7 +99,7 @@ void AssaultExecuter::executeCoolTimer(float fSec){
 	this->m_pCCCoolTimer->setVisible(true);
 	m_pCCCoolTimer->setPercentage(0.0f);
 
-	this->m_JYLocalTimer.pushTimer(
+	this->getLocalTimer()->pushTimer(
 		fSec,
 		std::bind(&AssaultExecuter::coolTimeCallBackFunc, this),
 		std::bind(&AssaultExecuter::coolTimeDeltaFunc, this, std::placeholders::_1)
@@ -124,7 +123,7 @@ bool AssaultExecuter::coolTimeDeltaFunc(const float& fDeltaTime){
 
 
 void AssaultExecuter::tick(float fDeltaTime){
-	this->m_JYLocalTimer.tick(fDeltaTime);
+	BaseExecuter::tick(fDeltaTime);
 	if (this->m_bIsCharging == true){
 		cocos2d::CCProgressTimer* pCharger = (cocos2d::CCProgressTimer*)this->getOwner()->getCCObject()->getChildByName("Charger");
 		if (pCharger == nullptr) return;

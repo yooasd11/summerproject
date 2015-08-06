@@ -81,11 +81,11 @@
     <ClCompile Include="..\Classes\MoveRequestExecuter.cpp">
       <Filter>src\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\InGamePacket.pb.cc">
-      <Filter>src\Network\Packets</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\AccelerationExecuter.cpp">
       <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\InGamePacket.pb.cc">
+      <Filter>src\Network\Packets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,14 +158,14 @@
     <ClInclude Include="..\Classes\MoveRequestExecuter.h">
       <Filter>src\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\InGamePacket.pb.h">
-      <Filter>src\Network\Packets</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\JYLocalTimer.h">
       <Filter>src\Utility</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AccelerationExecuter.h">
       <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\InGamePacket.pb.h">
+      <Filter>src\Network\Packets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

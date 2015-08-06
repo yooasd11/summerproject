@@ -38,7 +38,7 @@ bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 		pos.y >= tmapHeight)
 		return true;
 	JYOBJECT_TYPE eType = pOwner->getObjectType();
-	if ((eType == JYOBJECT_TYPE::JY_PLAYER && pos.y < 95.0f) ||
+	if ((eType == JYOBJECT_TYPE::JY_PLAYER && pos.y < 100.0f) ||
 		(eType == JYOBJECT_TYPE::JY_ARM && pos.y < 80.0f))
 		return true;
 	return false;

@@ -56,11 +56,16 @@ void AccountListPacketHandler(Packet& p){
 	char* PktBody = p.getMsg();
 	AccountPacket::S_Account_List sAccountList;
 	sAccountList.ParseFromArray(PktBody, p.getLength());
+	MyScene* pMyScene = GET_MYSCENE;
 	USHORT nSize = sAccountList.account_member_size();
+
 	for (USHORT i = 0; i < nSize; ++i){
 		AccountPacket::S_Account_List::Account mAccount = sAccountList.account_member(i);
-		MyScene* pMyScene = GET_MYSCENE;
-		pMyScene->createDragon(mAccount);
+		UINT nUID = mAccount.uid();
+		float fX = mAccount.x();
+		float fY = mAccount.y();
+		UINT nHP = mAccount.hp();
+		pMyScene->createDragon(nUID, nHP, fX, fY);
 	}
 }
 
@@ -89,7 +94,7 @@ void SMovePacketHandler(Packet& p){
 
 	if (fDiff >= 50.0f)
 		pCCOwner->setPosition(fX, fY);
-	
+
 	if (fVx <= 0.0f){
 		pCCOwner->setFlippedX(false);
 	}
@@ -171,7 +176,7 @@ void SCollisionHandler(Packet& p){
 			if (pCollisionExecuter == nullptr) return;
 
 			JYOBJECT_TYPE eType2 = pJYObject2->getObjectType();
-			
+
 			//bullet - player
 			if (eType2 == JYOBJECT_TYPE::JY_PLAYER){
 				UINT nHP = sCollision.hp();
@@ -191,16 +196,35 @@ void SDisconnectHandler(Packet& p){
 	char* PktBody = p.getMsg();
 	AccountPacket::S_Account_List::Disconnect sDisconnect;
 	sDisconnect.ParseFromArray(PktBody, p.getLength());
-	
+
 	UINT nUID = sDisconnect.uid();
-	
+
 	JYObject* pTarget = JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pTarget != nullptr){
 		JYObjectManager::getInstance()->removeObject(pTarget);
 	}
 }
 
+REGIST_HANDLER(PACKET_TYPE::PKT_S_RESPAWN, SRespawnHandler);
+void SRespawnHandler(Packet& p){
+	char* PktBody = p.getMsg();
+	InGamePacket::S_Respawn sRespawn;
+	sRespawn.ParseFromArray(PktBody, p.getLength());
+
+	UINT nUID = sRespawn.uid();
+	float fX = sRespawn.x();
+	float fY = sRespawn.y();
+	UINT nHP = sRespawn.hp();
+
+	JYObject* pTarget = JYObjectManager::getInstance()->findObjectByUID(nUID);
+	if (pTarget == nullptr) return;
+	JYObjectManager::getInstance()->removeObject(pTarget);
+
+	MyScene* pMyScene = GET_MYSCENE;
+	pMyScene->createDragon(nUID, nHP, fX, fY);
+}
+
 REGIST_HANDLER(PACKET_TYPE::PKT_END, EndHandler);
 void EndHandler(Packet& p){
-	
+
 }

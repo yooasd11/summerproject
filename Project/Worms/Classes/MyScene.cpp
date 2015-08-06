@@ -94,12 +94,7 @@ void MyScene::addBackground(){
 	CCLOG("TMAP size : (%.1f, %.1f)", pTmap->getContentSize().width, pTmap->getContentSize().height);
 }
 
-JYObject* MyScene::createDragon(const AccountPacket::S_Account_List::Account& sAccountPacket){
-	UINT nUID = sAccountPacket.uid();
-	UINT nHP = sAccountPacket.hp();
-	float fX = sAccountPacket.x();
-	float fY = sAccountPacket.y();
-
+JYObject* MyScene::createDragon(const UINT& nUID, const UINT& nHP, const float& fX, const float& fY){
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nUID);
 	if (pJYPlayer != nullptr) return nullptr;		//already created
 
@@ -162,7 +157,7 @@ JYObject* MyScene::createBullet(const InGamePacket::S_Shoot& sShootPacket){
 	float fVx = sShootPacket.vx();
 	float fVy = sShootPacket.vy();
 	float fDamage = sShootPacket.damage();
-
+	
 	JYPlayer* pJYPlayer = (JYPlayer*)JYObjectManager::getInstance()->findObjectByUID(nShooterUID);
 	if (pJYPlayer == nullptr) return nullptr;
 	JYArm* pJYBullet = (JYArm*)JYObjectManager::getInstance()->findObjectByUID(nBulletUID);

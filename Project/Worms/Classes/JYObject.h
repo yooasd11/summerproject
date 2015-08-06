@@ -3,9 +3,11 @@
 #include "ExecuterList.h"
 #include "BaseExecuter.h"
 #include "JYObjectList.h"
+#include "JYLocalTimer.h"
 
 class JYObject{
 private:
+	JYLocalTimer m_JYLocalTimer;
 	JYOBJECT_TYPE m_nObjectType;
 	UINT m_nUID;
 	UINT m_nTag;
@@ -40,6 +42,8 @@ public:
 	void releaseAllExecuters();
 	cocos2d::CCNode* getCCObject() { return m_pCCObject; }
 	void setCCObject(cocos2d::CCNode* ccOb) { m_pCCObject = ccOb; }
+
+	JYLocalTimer* getLocalTimer() { return &this->m_JYLocalTimer; }
 
 	void setName(const std::string& sName) { m_sName = sName; }
 	std::string getName() { return m_sName; }
