@@ -64,3 +64,14 @@ message S_Collision{
 	optional float x=4;
 	optional float y=5;
 }
+
+message C_Respawn{
+	required uint32 uid=1;
+}
+
+message S_Respawn{
+	required uint32 uid=1;
+	required float x=2;
+	required float y=3;
+	required uint32 hp=4;
+}

@@ -45,6 +45,8 @@ class C_Shoot;
 class S_Shoot;
 class C_Collision;
 class S_Collision;
+class C_Respawn;
+class S_Respawn;
 
 // ===================================================================
 
@@ -1134,6 +1136,217 @@ class S_Collision : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static S_Collision* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class C_Respawn : public ::google::protobuf::Message {
+ public:
+  C_Respawn();
+  virtual ~C_Respawn();
+
+  C_Respawn(const C_Respawn& from);
+
+  inline C_Respawn& operator=(const C_Respawn& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const C_Respawn& default_instance();
+
+  void Swap(C_Respawn* other);
+
+  // implements Message ----------------------------------------------
+
+  inline C_Respawn* New() const { return New(NULL); }
+
+  C_Respawn* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const C_Respawn& from);
+  void MergeFrom(const C_Respawn& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(C_Respawn* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 uid = 1;
+  bool has_uid() const;
+  void clear_uid();
+  static const int kUidFieldNumber = 1;
+  ::google::protobuf::uint32 uid() const;
+  void set_uid(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:InGamePacket.C_Respawn)
+ private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 uid_;
+  friend void  protobuf_AddDesc_InGamePacket_2eproto();
+  friend void protobuf_AssignDesc_InGamePacket_2eproto();
+  friend void protobuf_ShutdownFile_InGamePacket_2eproto();
+
+  void InitAsDefaultInstance();
+  static C_Respawn* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class S_Respawn : public ::google::protobuf::Message {
+ public:
+  S_Respawn();
+  virtual ~S_Respawn();
+
+  S_Respawn(const S_Respawn& from);
+
+  inline S_Respawn& operator=(const S_Respawn& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const S_Respawn& default_instance();
+
+  void Swap(S_Respawn* other);
+
+  // implements Message ----------------------------------------------
+
+  inline S_Respawn* New() const { return New(NULL); }
+
+  S_Respawn* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const S_Respawn& from);
+  void MergeFrom(const S_Respawn& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(S_Respawn* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 uid = 1;
+  bool has_uid() const;
+  void clear_uid();
+  static const int kUidFieldNumber = 1;
+  ::google::protobuf::uint32 uid() const;
+  void set_uid(::google::protobuf::uint32 value);
+
+  // required float x = 2;
+  bool has_x() const;
+  void clear_x();
+  static const int kXFieldNumber = 2;
+  float x() const;
+  void set_x(float value);
+
+  // required float y = 3;
+  bool has_y() const;
+  void clear_y();
+  static const int kYFieldNumber = 3;
+  float y() const;
+  void set_y(float value);
+
+  // required uint32 hp = 4;
+  bool has_hp() const;
+  void clear_hp();
+  static const int kHpFieldNumber = 4;
+  ::google::protobuf::uint32 hp() const;
+  void set_hp(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:InGamePacket.S_Respawn)
+ private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_hp();
+  inline void clear_has_hp();
+
+  // helper for ByteSize()
+  int RequiredFieldsByteSizeFallback() const;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 uid_;
+  float x_;
+  float y_;
+  ::google::protobuf::uint32 hp_;
+  friend void  protobuf_AddDesc_InGamePacket_2eproto();
+  friend void protobuf_AssignDesc_InGamePacket_2eproto();
+  friend void protobuf_ShutdownFile_InGamePacket_2eproto();
+
+  void InitAsDefaultInstance();
+  static S_Respawn* default_instance_;
+};
 // ===================================================================
 
 
@@ -2026,7 +2239,139 @@ inline void S_Collision::set_y(float value) {
   // @@protoc_insertion_point(field_set:InGamePacket.S_Collision.y)
 }
 
+// -------------------------------------------------------------------
+
+// C_Respawn
+
+// required uint32 uid = 1;
+inline bool C_Respawn::has_uid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void C_Respawn::set_has_uid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void C_Respawn::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void C_Respawn::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+inline ::google::protobuf::uint32 C_Respawn::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.C_Respawn.uid)
+  return uid_;
+}
+inline void C_Respawn::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.C_Respawn.uid)
+}
+
+// -------------------------------------------------------------------
+
+// S_Respawn
+
+// required uint32 uid = 1;
+inline bool S_Respawn::has_uid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void S_Respawn::set_has_uid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void S_Respawn::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void S_Respawn::clear_uid() {
+  uid_ = 0u;
+  clear_has_uid();
+}
+inline ::google::protobuf::uint32 S_Respawn::uid() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Respawn.uid)
+  return uid_;
+}
+inline void S_Respawn::set_uid(::google::protobuf::uint32 value) {
+  set_has_uid();
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Respawn.uid)
+}
+
+// required float x = 2;
+inline bool S_Respawn::has_x() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void S_Respawn::set_has_x() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void S_Respawn::clear_has_x() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void S_Respawn::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline float S_Respawn::x() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Respawn.x)
+  return x_;
+}
+inline void S_Respawn::set_x(float value) {
+  set_has_x();
+  x_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Respawn.x)
+}
+
+// required float y = 3;
+inline bool S_Respawn::has_y() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void S_Respawn::set_has_y() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void S_Respawn::clear_has_y() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void S_Respawn::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline float S_Respawn::y() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Respawn.y)
+  return y_;
+}
+inline void S_Respawn::set_y(float value) {
+  set_has_y();
+  y_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Respawn.y)
+}
+
+// required uint32 hp = 4;
+inline bool S_Respawn::has_hp() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void S_Respawn::set_has_hp() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void S_Respawn::clear_has_hp() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void S_Respawn::clear_hp() {
+  hp_ = 0u;
+  clear_has_hp();
+}
+inline ::google::protobuf::uint32 S_Respawn::hp() const {
+  // @@protoc_insertion_point(field_get:InGamePacket.S_Respawn.hp)
+  return hp_;
+}
+inline void S_Respawn::set_hp(::google::protobuf::uint32 value) {
+  set_has_hp();
+  hp_ = value;
+  // @@protoc_insertion_point(field_set:InGamePacket.S_Respawn.hp)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
