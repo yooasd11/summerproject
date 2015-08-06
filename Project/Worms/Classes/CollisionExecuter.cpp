@@ -61,29 +61,29 @@ bool CollisionExecuter::objectCollisionChecker(cocos2d::CCPoint& pos){
 }
 
 void CollisionExecuter::tick(float fDeltaTime){
-	JYObject* pOwner = this->getOwner();
-	if (pOwner == nullptr) return;
-	cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
-	if (pCCOwner == nullptr) return;
+	//JYObject* pOwner = this->getOwner();
+	//if (pOwner == nullptr) return;
+	//cocos2d::CCSprite* pCCOwner = (cocos2d::CCSprite*)pOwner->getCCObject();
+	//if (pCCOwner == nullptr) return;
 
-	MyScene* pMyScene = GET_MYSCENE;
-	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
-	cocos2d::CCPoint currentWorldPos = pCCOwner->getParent()->convertToWorldSpace(pCCOwner->getPosition());
-	cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(currentWorldPos);
-	cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
+	//MyScene* pMyScene = GET_MYSCENE;
+	//cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
+	//cocos2d::CCPoint currentWorldPos = pCCOwner->getParent()->convertToWorldSpace(pCCOwner->getPosition());
+	//cocos2d::CCPoint currentPos = pTmap->convertToNodeSpace(currentWorldPos);
+	//cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
 
-	if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
-		pCCOwner->setPosition(pCCOwner->getPosition().x, 100.0f);
- 		/*AccelerationExecuter* pAE = (AccelerationExecuter*)pOwner->getExecuter(__Executer::__AccelerationExecuter);
-		pAE->clearAcceleration();
-		pOwner->setVelocity(0.0f, 0.0f);
-		char sendBuf[PKTBODYSIZE];
-		InGamePacket::C_Collision cCollisionPacket;
+	//if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
+	//	pCCOwner->setPosition(pCCOwner->getPosition().x, 100.0f);
+ //		/*AccelerationExecuter* pAE = (AccelerationExecuter*)pOwner->getExecuter(__Executer::__AccelerationExecuter);
+	//	pAE->clearAcceleration();
+	//	pOwner->setVelocity(0.0f, 0.0f);
+	//	char sendBuf[PKTBODYSIZE];
+	//	InGamePacket::C_Collision cCollisionPacket;
 
-		cCollisionPacket.set_uid1(pOwner->getUID());
-		
-		cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
+	//	cCollisionPacket.set_uid1(pOwner->getUID());
+	//	
+	//	cCollisionPacket.SerializeToArray(sendBuf, cCollisionPacket.ByteSize());
 
-		ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);*/
-	}
+	//	ConnectionManager::getInstance()->transmit(cCollisionPacket.ByteSize(), PACKET_TYPE::PKT_C_COLLISION, sendBuf);*/
+	//}
 }
