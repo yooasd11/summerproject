@@ -55,6 +55,7 @@ void USER::USER_RESPAWN()
 {
 	LOCKING(&this->key);
 	this->CurrentState = USER::state::ALIVE;
+	this->hp = 100;
 	TimerJob job;
 	job.exectime = GetTickCount();
 	job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));

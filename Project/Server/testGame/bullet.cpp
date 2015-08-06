@@ -71,6 +71,8 @@ void BULLET::BULLET_MOVE()
 						if (User->hp <= 0)
 						{
 							User->ChangeState(USER::state::DEAD);
+
+							//새로 추가된 부분
 							TimerJob job;
 							job.exectime = GetTickCount() + 5000;
 							job.func = std::bind(&USER::USER_RESPAWN, User);
