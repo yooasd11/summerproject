@@ -54,8 +54,6 @@ void USER::ChangeState(int _state)
 void USER::USER_RESPAWN()
 {
 	LOCKING(&this->key);
-	
-
 	this->CurrentState = USER::state::ALIVE;
 	this->hp = 100;
 	this->vx = 0.0f;
@@ -88,8 +86,10 @@ void USER::USER_MOVE()
 		if (dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND){
 			this->vy = 0.0f;
 			this->ay = 0.0f;
-			if (dy > HEIGHT)
+			if (dy > HEIGHT){
 				this->ay = GRAVITY;
+				this->y = HEIGHT - 10;
+			}
 		}
 	/*	if (this->vy == 0.0f){
 			this->ay = 0;

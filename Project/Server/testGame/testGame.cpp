@@ -17,7 +17,7 @@ int _tmain()
 	serv.MakeListener(9200);
 	serv.listenClient(5);
 	CompletionPort.setServSock(serv.getSocket());
-	CompletionPort.GENERATE_NPC(3);
+	//CompletionPort.GENERATE_NPC(3);
 
 	while (1){
 		SOCKET sock;
@@ -43,7 +43,6 @@ int _tmain()
 			LOCKING(&IocpConstructor::queueLock);
 			IocpConstructor::jobs.push_back(job);
 		}
-
 		handle.ReadMode();	// °í¹ÎÇØº¼°Í
 		CompletionPort.RecvMessage(handle);
 	}

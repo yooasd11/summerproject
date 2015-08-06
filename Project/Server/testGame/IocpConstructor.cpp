@@ -125,8 +125,6 @@ void IocpConstructor::JobSchedule()
 	return;
 }
 
-
-
 void IocpConstructor::closeSocket(SOCKET sock)
 {
 	int index = IocpConstructor::Object_Manager->FIND_USER(sock);
@@ -160,6 +158,8 @@ void IocpConstructor::ThreadFunction()
 				if (tempHandle.bytesTrans == 0)
 				{
 					User->ChangeState(USER::state::DISCONNECT);
+					delete tempHandle.handleinfo;
+					delete tempHandle.ioinfo;
 					closeSocket(sock);
 					/*TimerJob disConnectJob;
 					disConnectJob.exectime = GetTickCount();
