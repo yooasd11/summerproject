@@ -18,7 +18,8 @@ ObjectManager::~ObjectManager()
 
 void ObjectManager::REGIST(int TYPE, int info)
 {
-	LOCKING(&this->key);
+	//LOCKING(&this->key);
+	LOCKING(&IocpConstructor::ObjectKey);
 	if (TYPE == Object_USER)
 	{
 		//user老版快 家南锅龋甫 info..
@@ -29,7 +30,8 @@ void ObjectManager::REGIST(int TYPE, int info)
 
 std::shared_ptr<OBJECT> ObjectManager::FIND(int _id)
 {
-	LOCKING(&this->key);
+	//LOCKING(&this->key);
+	LOCKING(&IocpConstructor::ObjectKey);
 	if (this->OBJECT_MAP.count(_id) != 0)
 		return this->OBJECT_MAP[_id];
 	return NULL;
@@ -37,7 +39,8 @@ std::shared_ptr<OBJECT> ObjectManager::FIND(int _id)
 
 void ObjectManager::REMOVE(int _id)
 {
-	LOCKING(&this->key);
+	//LOCKING(&this->key);
+	LOCKING(&IocpConstructor::ObjectKey);
 	if (this->OBJECT_MAP.count(_id) != 0){
 		if (this->OBJECT_MAP[_id]->type == Object_USER){
 			printf("%d user disconnected..\n", _id);
@@ -49,6 +52,7 @@ void ObjectManager::REMOVE(int _id)
 
 int ObjectManager::FIND_USER(int _socket)
 {
+	LOCKING(&IocpConstructor::ObjectKey);
 	for (auto user : this->OBJECT_MAP)
 	{
 		if (user.second->type == Object_USER)
@@ -62,7 +66,8 @@ int ObjectManager::FIND_USER(int _socket)
 
 void ObjectManager::REGIST_BULLET(std::shared_ptr<BULLET> Bullet)
 {
-	LOCKING(&this->key);
+	//LOCKING(&this->key);
+	LOCKING(&IocpConstructor::ObjectKey);
 	Bullet->ObjectId = OBJECTCOUNT;
 	this->OBJECT_MAP[this->OBJECTCOUNT++] = Bullet;
 	return;
@@ -70,7 +75,8 @@ void ObjectManager::REGIST_BULLET(std::shared_ptr<BULLET> Bullet)
 
 void ObjectManager::REGIST_NPC(std::shared_ptr<NPC> Npc)
 {
-	LOCKING(&this->key);
+	//LOCKING(&this->key);
+	LOCKING(&IocpConstructor::ObjectKey);
 	Npc->ObjectId = OBJECTCOUNT;
 	this->OBJECT_MAP[this->OBJECTCOUNT++] = Npc;
 	return;

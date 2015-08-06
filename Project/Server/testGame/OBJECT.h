@@ -13,5 +13,8 @@ public:
 	virtual void CALCULATE_DISTANCE();
 	OBJECT();
 	~OBJECT();
+
+public:
+	int refCount = 0;
 };
 

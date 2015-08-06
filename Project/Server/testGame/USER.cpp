@@ -59,23 +59,20 @@ void USER::USER_MOVE()
 		float dx = this->x + t_vx * 0.03f;
 		float dy = this->y + t_vy * 0.03f;
 	
-		//float dx = this->x + (this->vx * 0.03f);
-		//float dy = this->y + (this->vy * 0.03f);
-		/*if (dy < LAND)
-		{
-			this->vy = 0;
-			this->vx = 0;
-			this->CurrentState = USER::state::STOP;
-			PacketHandler::GetInstance()->S_MOVE_HANDLER(IocpConstructor::Object_Manager->FIND(this->ObjectId));
-			User_Move_Job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
-			return;
-		}*/
 		if (dy < LAND)
 		{
 			this->vx = t_vx;
 			this->vy = 0;
 			this->x = dx;
 			this->y = LAND;
+		}
+		else if (dy > HEIGHT)
+		{
+			this->vx = t_vx;
+			this->vy = 0;
+			this->x = dx;
+			this->y = HEIGHT - 10;
+
 		}
 		else if (!(dx > WIDTH || dx < 0.0f || dy > HEIGHT || dy < LAND))
 		{

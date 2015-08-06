@@ -4,7 +4,6 @@
 
 BULLET::BULLET()
 {
-	
 	this->damage = BULLET_DAMAGE_1;
 	this->type = Object_BULLET;
 	this->ay = GRAVITY;
@@ -51,9 +50,15 @@ void BULLET::BULLET_MOVE()
 			return;
 		}
 
-		std::map<int, std::shared_ptr<OBJECT>> Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
+		std::map<int, std::shared_ptr<OBJECT>> Instance_map;
+		{
+			LOCKING(&IocpConstructor::ObjectKey);
+			Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
+		}
+
 		for (auto ob : Instance_map)
 		{
+			if (ob.second == nullptr) continue;
 			float o_dx = ob.second->x; float o_dy = ob.second->y;
 			if (sqrt((t_x - o_dx)*(t_x - o_dx) + (t_y - o_dy)*(t_y - o_dy)) < DAMAGE_DISTANCE)
 			{
@@ -89,14 +94,14 @@ void BULLET::BULLET_MOVE()
 					}
 
 				}
-				else if (ob.second->type == Object_BULLET && this->ObjectId != ob.second->ObjectId)
-				{
-					std::shared_ptr<BULLET> Bullet_2 = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(ob.second->ObjectId));
-					PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, Bullet_2);
-					IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
-					IocpConstructor::Object_Manager->REMOVE(Bullet_2->ObjectId);
-					return;
-				}
+				//else if (ob.second->type == Object_BULLET && this->ObjectId != ob.second->ObjectId)
+				//{
+				//	std::shared_ptr<BULLET> Bullet_2 = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(ob.second->ObjectId));
+				//	PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, Bullet_2);
+				//	//IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);
+				//	IocpConstructor::Object_Manager->REMOVE(Bullet_2->ObjectId);
+				//	return;
+				//}
 			}
 		}
 		TimerJob bulletMoveJob;
@@ -106,6 +111,9 @@ void BULLET::BULLET_MOVE()
 		this->y = t_y;
 		//현재브로드 캐스팅하는 부분을 지움..
 		//PacketHandler::GetInstance()->S_SHOOT_HANDLER(Bullet);
+		
+		Bullet = std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(this->ObjectId));
+		if (Bullet == nullptr) return;
 		bulletMoveJob.func = std::bind(&BULLET::BULLET_MOVE, std::static_pointer_cast<BULLET>(IocpConstructor::Object_Manager->FIND(Bullet->ObjectId)));
 		bulletMoveJob.exectime = GetTickCount() + 30;
 		{

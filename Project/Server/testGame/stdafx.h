@@ -49,7 +49,7 @@
 #define AI_DIRECTION_DELAY 10000
 #define NPC_STATUS_ALIVE 1
 #define NPC_STATUS_DEAD 2
-#define USER_VELOCITY 50
+#define USER_VELOCITY 80
 #define LOCKING(key) LockHelper lockHelper (key);
 //#define LOCK(key) LockHelper lockHelper (key);
 

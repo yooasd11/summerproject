@@ -73,12 +73,17 @@ void PacketHandler::BroadCastAccountPacket()
 
 	type = PKT_ACCOUNT_LIST;
 	memcpy(buffer + sizeof(size), &type, sizeof(type));
-	current = (sizeof(unsigned short)*2);
+	current = (sizeof(unsigned short)* 2);
 
-	std::map<int, std::shared_ptr<OBJECT>> Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
-	//for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
+	std::map<int, std::shared_ptr<OBJECT>> Instance_map;
+	{
+		LOCKING(&IocpConstructor::ObjectKey);
+		Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
+	}
+
 	for (auto it : Instance_map)
 	{
+		if (it.second == nullptr) continue;
 		if (it.second->type == Object_USER || it.second->type == Object_NPC)
 		{
 			AccountPacket::S_Account_List::Account *tempAccount = tempList.add_account_member();
@@ -98,10 +103,15 @@ void PacketHandler::BroadCastAccountPacket()
 
 void PacketHandler::BroadCast(char *buffer, int size)
 {
-	std::map<int, std::shared_ptr<OBJECT>> Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
-	//for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
+	std::map<int, std::shared_ptr<OBJECT>> Instance_map;
+	{
+		LOCKING(&IocpConstructor::ObjectKey);
+		Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
+	}
+
 	for (auto it : Instance_map)
 	{
+		if (it.second == nullptr) continue;
 		if (it.second->type == Object_USER)
 		{
 			std::shared_ptr<USER> tempUser = std::static_pointer_cast<USER>(it.second);
@@ -238,6 +248,8 @@ void PacketHandler::C_COLLISION_HANDLER(Packet& p)
 
 void PacketHandler::S_COLLISION_HANDLER(std::shared_ptr<OBJECT> ob_1, std::shared_ptr<OBJECT> ob_2)
 {
+	auto instancePtr1 = ob_1, instancePtr2 = ob_2;
+	
 	char buffer[BUFSIZE] = { 0, };
 	unsigned short size = 0, type = 0;
 

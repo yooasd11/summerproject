@@ -159,14 +159,16 @@ void IocpConstructor::ThreadFunction()
 				//접속종료에 대한 완료 통지
 				if (tempHandle.bytesTrans == 0)
 				{
-					TimerJob disConnectJob;
+					User->ChangeState(USER::state::DISCONNECT);
+					closeSocket(sock);
+					/*TimerJob disConnectJob;
 					disConnectJob.exectime = GetTickCount();
 					disConnectJob.func = std::bind(&IocpConstructor::closeSocket, this, sock);
 					LOCKING(&this->queueLock)
 					{
 						this->jobs.push_back(disConnectJob);
 					}
-					User->ChangeState(USER::state::DISCONNECT);
+					User->ChangeState(USER::state::DISCONNECT);*/
 					continue;
 				}
 

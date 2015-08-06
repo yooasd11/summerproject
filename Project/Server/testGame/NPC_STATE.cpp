@@ -53,12 +53,16 @@ void NPC_DEAD::NPC_Action(std::shared_ptr<NPC> Npc)
 void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 {
 	//공격을 했음..락을 어떻게 걸지..
-	//LOCKING(&this->key);
+	LOCKING(&this->key);
 	std::shared_ptr<BULLET> Bullet;
-	std::map<int, std::shared_ptr<OBJECT>> Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
-	//for (auto it : IocpConstructor::Object_Manager->OBJECT_MAP)
+	std::map<int, std::shared_ptr<OBJECT>> Instance_map;
+	{
+		LOCKING(&IocpConstructor::ObjectKey);
+		Instance_map = IocpConstructor::Object_Manager->OBJECT_MAP;
+	}
 	for (auto it : Instance_map)
 	{
+		if (it.second == nullptr) continue;
 		float dx = it.second->x;
 		float dy = it.second->y;
 		if (it.second->type == Object_USER)
@@ -66,13 +70,12 @@ void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 			std::shared_ptr<USER> User = std::static_pointer_cast<USER>(it.second);
 			if ((sqrt((Npc->x - dx)*(Npc->x - dx) + (Npc->y - dy)*(Npc->y - dy)) < DISTANCE) && ((User->CurrentState == USER::state::ALIVE) || User->CurrentState == USER::state::STOP))
 			{
-				printf("%f NPC %f\n", dx, Npc->x);
+				//printf("%f NPC %f\n", dx, Npc->x);
 				//총알을 어떻게 발사할건지 결정해줘야함...
 				float bullet_vy = (dy - Npc->y) - GRAVITY / 2;
 				float bullet_vx = (dx - Npc->x);
-				//if (Npc->x > dx) bullet_vx *= -1;
 
-				std::shared_ptr<BULLET> Bullet(new BULLET(Npc->x, Npc->y, bullet_vx, bullet_vy  , Npc->ObjectId));
+				std::shared_ptr<BULLET> Bullet(new BULLET(Npc->x, Npc->y, bullet_vx, bullet_vy , Npc->ObjectId));
 				IocpConstructor::Object_Manager->REGIST_BULLET(Bullet);
 
 				TimerJob job, job2;
@@ -95,6 +98,14 @@ void NPC_ALIVE::NPC_Action(std::shared_ptr<NPC> Npc)
 	Npc->x += Npc->vx * 0.03f;
 	Npc->y += Npc->vy * 0.03f;
 
+	float temp_npc_x = Npc->x + Npc->vx * 0.03f;
+	float temp_npc_y = Npc->y + Npc->vy * 0.03f;
+
+	if (temp_npc_x < 0 || temp_npc_x > WIDTH) Npc->NPC_DIRECTION_CHANGE();
+	else{
+		Npc->x = temp_npc_x;
+		Npc->y = temp_npc_y;
+	}
 	TimerJob job;
 	job.exectime = GetTickCount() + AI_MOVE_DELAY;
 	job.func = std::bind(&NPC::NPC_DESICION, std::static_pointer_cast<NPC>(IocpConstructor::Object_Manager->FIND(Npc->ObjectId)));
