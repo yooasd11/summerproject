@@ -29,11 +29,17 @@ bool CollisionExecuter::boundaryCollisionChecker(cocos2d::CCPoint& pos){
 	cocos2d::CCTMXTiledMap* pTmap = GET_TMAP;
 	float tmapWidth = pTmap->getMapSize().width * pTmap->getTileSize().width - 1;
 	float tmapHeight = pTmap->getMapSize().height * pTmap->getTileSize().height - 1;
-	//valid point
+
+	JYObject* pOwner = this->getOwner();
+
+	//non-valid point
 	if( pos.x < 1.0f ||
 		pos.x >= tmapWidth ||
-		pos.y < 100.0f ||
 		pos.y >= tmapHeight)
+		return true;
+	JYOBJECT_TYPE eType = pOwner->getObjectType();
+	if ((eType == JYOBJECT_TYPE::JY_PLAYER && pos.y < 95.0f) ||
+		(eType == JYOBJECT_TYPE::JY_ARM && pos.y < 80.0f))
 		return true;
 	return false;
 }
@@ -73,7 +79,11 @@ void CollisionExecuter::tick(float fDeltaTime){
 	//cocos2d::CCPoint nextPos = this->getNextPos(currentPos, fDeltaTime);
 
 	//if (boundaryCollisionChecker(nextPos) == true || objectCollisionChecker(nextPos) == true){
-	//	pCCOwner->setPosition(pCCOwner->getPosition().x, 100.0f);
+	//	JYOBJECT_TYPE eType = pOwner->getObjectType();
+	//	if (eType == JYOBJECT_TYPE::JY_PLAYER)
+	//		pCCOwner->setPosition(pCCOwner->getPosition().x, 100.0f);
+	//	else if (eType == JYOBJECT_TYPE::JY_ARM)
+	//		pCCOwner->setPosition(pCCOwner->getPosition().x, 80.0f);
  //		/*AccelerationExecuter* pAE = (AccelerationExecuter*)pOwner->getExecuter(__Executer::__AccelerationExecuter);
 	//	pAE->clearAcceleration();
 	//	pOwner->setVelocity(0.0f, 0.0f);

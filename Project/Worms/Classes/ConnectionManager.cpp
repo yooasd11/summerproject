@@ -36,6 +36,11 @@ int ConnectionManager::accountTo(char* ip, int port){
 		errorHandling("connect() error");
 		return -3;
 	}
+	bool opt = true;
+	if (setsockopt(m_servSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(opt)) == -1){
+		errorHandling("setsockopt() error");
+		return -4;
+	}
 	fflush(stdin);
 	FD_ZERO(&m_reads);
 	FD_SET(m_servSocket, &m_reads);

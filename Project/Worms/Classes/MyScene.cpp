@@ -16,10 +16,6 @@
 #include "CoordinateConverter.h"
 #include "AccelerationExecuter.h"
 
-//#define SERVER_IP_ADDRESS "10.1.4.85"
-#define SERVER_IP_ADDRESS "localhost"
-#define SERVER_PORT_NUMBER 9200
-
 Scene* MyScene::createScene()
 {
 	// 'scene' is an autorelease object

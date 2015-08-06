@@ -27,7 +27,7 @@ void MoveExecuter::tick(float fDeltaTime){
 	float fDX = pOwner->getVelocityX() * fDeltaTime;
 	float fDY = pOwner->getVelocityY() * fDeltaTime;
 
-	cocos2d::CCPoint nextPos = pCCOwner->getPosition() + cocos2d::ccp(fDX, fDY);
+	cocos2d::CCPoint nextPos = currPos + cocos2d::ccp(fDX, fDY);
 	pCCOwner->setPosition(nextPos);
 }
 
