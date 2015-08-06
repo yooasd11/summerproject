@@ -54,6 +54,8 @@ void USER::ChangeState(int _state)
 void USER::USER_RESPAWN()
 {
 	LOCKING(&this->key);
+	
+
 	this->CurrentState = USER::state::ALIVE;
 	this->hp = 100;
 	this->vx = 0.0f;
