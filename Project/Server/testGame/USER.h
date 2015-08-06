@@ -24,6 +24,7 @@ public:
 	void ChangeState(int);
 	void USER_MOVE();
 	void USER_SET_HP(int);
+	void USER_RESPAWN();
 	virtual void CALCULATE_DISTANCE();
 };
 

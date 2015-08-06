@@ -126,7 +126,9 @@
     <ClCompile Include="testGame.cpp" />
     <ClCompile Include="TimerJob.cpp" />
     <ClCompile Include="USER.cpp" />
-    <ClCompile Include="PacketHandler.cpp" />
+    <ClCompile Include="PacketHandler.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

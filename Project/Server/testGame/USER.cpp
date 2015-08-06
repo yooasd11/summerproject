@@ -51,6 +51,21 @@ void USER::ChangeState(int _state)
 	return;
 }
 
+void USER::USER_RESPAWN()
+{
+	LOCKING(&this->key);
+	this->CurrentState = USER::state::ALIVE;
+	TimerJob job;
+	job.exectime = GetTickCount();
+	job.func = std::bind(&USER::USER_MOVE, std::static_pointer_cast<USER>(IocpConstructor::Object_Manager->FIND(this->ObjectId)));
+	{
+		LOCKING(&IocpConstructor::queueLock);
+		IocpConstructor::jobs.push_back(job);
+	}
+	PacketHandler::GetInstance()->S_RESPAWN_HANDLER(IocpConstructor::Object_Manager->FIND(this->ObjectId));
+	return;
+}
+
 void USER::USER_MOVE()
 {
 

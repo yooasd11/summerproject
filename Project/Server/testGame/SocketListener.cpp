@@ -15,7 +15,9 @@ SocketListener::~SocketListener()
 
 void SocketListener::MakeListener(int port)
 {
+	bool opt = true;
 	this->Sock = WSASocket(PF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+	setsockopt(this->Sock, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(opt));
 
 	memset(&(this->Adr), 0, sizeof(this->Adr));
 	this->Adr.sin_family = AF_INET;

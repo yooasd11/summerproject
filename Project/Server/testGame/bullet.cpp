@@ -71,6 +71,13 @@ void BULLET::BULLET_MOVE()
 						if (User->hp <= 0)
 						{
 							User->ChangeState(USER::state::DEAD);
+							TimerJob job;
+							job.exectime = GetTickCount() + 5000;
+							job.func = std::bind(&USER::USER_RESPAWN, User);
+							{
+								LOCKING(&IocpConstructor::queueLock);
+								IocpConstructor::jobs.push_back(job);
+							}
 						}
 						PacketHandler::GetInstance()->S_COLLISION_HANDLER(Bullet, User);
 						IocpConstructor::Object_Manager->REMOVE(Bullet->ObjectId);

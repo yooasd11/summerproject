@@ -531,6 +531,30 @@ void PacketHandler::C_MOVE_HANDLER(Packet& p)
 	return;
 }
 
+
+void PacketHandler::S_RESPAWN_HANDLER(std::shared_ptr<OBJECT> ob)
+{
+	char buffer[BUFSIZE] = { 0, };
+	memset(buffer, 0, sizeof(buffer));
+	unsigned short size = 0, type, current = 0;
+
+	InGamePacket::S_Respawn ServerRespawnPacket;
+	std::shared_ptr<USER> User = std::static_pointer_cast<USER>(ob);
+
+	ServerRespawnPacket.set_uid(User->ObjectId);
+	ServerRespawnPacket.set_hp(100);
+	ServerRespawnPacket.set_x(User->x);
+	ServerRespawnPacket.set_y(User->y);
+
+	size = ServerRespawnPacket.ByteSize();
+	type = PKT_S_RESPAWN;
+
+	memcpy(buffer, &size, sizeof(size));
+	memcpy(buffer + sizeof(size), &type, sizeof(type));
+	ServerRespawnPacket.SerializeToArray(buffer + sizeof(unsigned short)* 2, size);
+	BroadCast(buffer, size + sizeof(unsigned short)* 2);
+	return;
+}
 bool PacketHandler::HandlePacket(Packet& p){
 
 	if (p.getType() == PKT_C_MOVE){

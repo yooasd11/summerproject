@@ -87,7 +87,7 @@ void SMovePacketHandler(Packet& p){
 	float fCurrentY = pCCOwner->getPosition().y;
 	float fDiff = (fCurrentX - fX) * (fCurrentX - fX) + (fCurrentY - fY) * (fCurrentY - fY);
 
-	if (fDiff >= 10.0f)
+	if (fDiff >= 50.0f)
 		pCCOwner->setPosition(fX, fY);
 	
 	if (fVx <= 0.0f){

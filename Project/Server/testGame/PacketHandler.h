@@ -30,6 +30,8 @@ public:
 	
 	void S_COLLISION_HANDLER(std::shared_ptr<OBJECT>, std::shared_ptr<OBJECT>);
 	void C_COLLISION_HANDLER(Packet&);
+
+	void S_RESPAWN_HANDLER(std::shared_ptr<OBJECT>);
 };
 
 class HandlerRegistHelper
