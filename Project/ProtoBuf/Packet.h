@@ -21,7 +21,9 @@ enum PACKET_TYPE
 	PKT_S_DISCONNECT,	//10
 	PKT_C_COLLISION,	//11
 	PKT_S_COLLISION,	//12
-	PKT_END,			//13
+	PKT_C_RESPAWN,		//13
+	PKT_S_RESPAWN,		//14
+	PKT_END,			//15
 };
 
 class Packet{
@@ -57,3 +59,5 @@ public:
 	}
 };
 
+//어떤 패킷이 응답으로 올지 명시
+#define WAITING_FOR(PacketName)
